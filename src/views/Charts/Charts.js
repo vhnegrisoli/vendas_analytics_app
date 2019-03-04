@@ -46,25 +46,14 @@ const bar = {
 };
 
 const doughnut = {
-  labels: [
-    'Red',
-    'Green',
-    'Yellow',
-  ],
+  labels: ['Red', 'Green', 'Yellow'],
   datasets: [
     {
       data: [300, 50, 100],
-      backgroundColor: [
-        '#FF6384',
-        '#36A2EB',
-        '#FFCE56',
-      ],
-      hoverBackgroundColor: [
-        '#FF6384',
-        '#36A2EB',
-        '#FFCE56',
-      ],
-    }],
+      backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+      hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+    },
+  ],
 };
 
 const radar = {
@@ -94,62 +83,34 @@ const radar = {
 };
 
 const pie = {
-  labels: [
-    'Red',
-    'Green',
-    'Yellow',
-  ],
+  labels: ['Red', 'Green', 'Yellow'],
   datasets: [
     {
       data: [300, 50, 100],
-      backgroundColor: [
-        '#FF6384',
-        '#36A2EB',
-        '#FFCE56',
-      ],
-      hoverBackgroundColor: [
-        '#FF6384',
-        '#36A2EB',
-        '#FFCE56',
-      ],
-    }],
+      backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+      hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+    },
+  ],
 };
 
 const polar = {
   datasets: [
     {
-      data: [
-        11,
-        16,
-        7,
-        3,
-        14,
-      ],
-      backgroundColor: [
-        '#FF6384',
-        '#4BC0C0',
-        '#FFCE56',
-        '#E7E9ED',
-        '#36A2EB',
-      ],
-      label: 'My dataset' // for legend
-    }],
-  labels: [
-    'Red',
-    'Green',
-    'Yellow',
-    'Grey',
-    'Blue',
+      data: [11, 16, 7, 3, 14],
+      backgroundColor: ['#FF6384', '#4BC0C0', '#FFCE56', '#E7E9ED', '#36A2EB'],
+      label: 'My dataset', // for legend
+    },
   ],
+  labels: ['Red', 'Green', 'Yellow', 'Grey', 'Blue'],
 };
 
 const options = {
   tooltips: {
     enabled: false,
-    custom: CustomTooltips
+    custom: CustomTooltips,
   },
-  maintainAspectRatio: false
-}
+  maintainAspectRatio: false,
+};
 
 class Charts extends Component {
   render() {
@@ -242,7 +203,7 @@ class Charts extends Component {
             </CardHeader>
             <CardBody>
               <div className="chart-wrapper">
-                <Polar data={polar} options={options}/>
+                <Polar data={polar} options={options} />
               </div>
             </CardBody>
           </Card>

@@ -40,16 +40,6 @@ export default {
       icon: 'icon-cloud-download',
     },
     {
-      name: 'Colors',
-      url: '/theme/colors',
-      icon: 'icon-drop',
-    },
-    {
-      name: 'Typography',
-      url: '/theme/typography',
-      icon: 'icon-pencil',
-    },
-    {
       title: true,
       name: 'Gestão do Sistema',
       wrapper: {
@@ -142,6 +132,7 @@ export default {
         },
       ],
     },
+    /*
     {
       name: 'Buttons',
       url: '/buttons',
@@ -169,12 +160,13 @@ export default {
         },
       ],
     },
+    */
     {
-      name: 'Charts',
+      name: 'Analytics',
       url: '/charts',
       icon: 'icon-pie-chart',
     },
-    {
+    /*{
       name: 'Icons',
       url: '/icons',
       icon: 'icon-star',
@@ -294,6 +286,12 @@ export default {
       icon: 'icon-layers',
       variant: 'danger',
       attributes: { target: '_blank', rel: 'noopener' },
+    },
+    */
+    {
+      name: 'Sair',
+      url: '/pages',
+      icon: 'icon-logout',
     },
   ],
 };
