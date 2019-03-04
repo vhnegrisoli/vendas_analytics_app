@@ -3,20 +3,41 @@ export default {
     {
       name: 'Dashboard',
       url: '/dashboard',
-      icon: 'icon-speedometer',
+      icon: 'cui-dashboard',
       badge: {
         variant: 'info',
-        text: 'NEW',
       },
     },
     {
       title: true,
       name: 'Vendas',
-      wrapper: {            // optional wrapper object
-        element: '',        // required valid HTML5 element tag
-        attributes: {}        // optional valid JS object with JS API naming ex: { className: "my-class", style: { fontFamily: "Verdana" }, id: "my-id"}
+      wrapper: {
+        // optional wrapper object
+        element: '', // required valid HTML5 element tag
+        attributes: {}, // optional valid JS object with JS API naming ex: { className: "my-class", style: { fontFamily: "Verdana" }, id: "my-id"}
       },
-      class: ''             // optional class names space delimited list for title item ex: "text-center"
+      class: '', // optional class names space delimited list for title item ex: "text-center"
+    },
+    {
+      name: 'Tratar Venda',
+      url: '/theme/colors',
+      icon: 'cui-cart',
+    },
+    {
+      name: 'Histórico de Vendas',
+      url: '/theme/colors',
+      icon: 'icon-list',
+    },
+
+    {
+      name: 'Tratar Venda',
+      url: '/theme/colors',
+      icon: 'cui-cart',
+    },
+    {
+      name: 'Exportar Relatórios',
+      url: '/theme/colors',
+      icon: 'icon-cloud-download',
     },
     {
       name: 'Colors',
@@ -50,7 +71,75 @@ export default {
           name: 'Listar',
           url: '/base/list-groups',
           icon: 'icon-list',
-        }
+        },
+      ],
+    },
+    {
+      name: 'Produtos',
+      url: '/base',
+      icon: 'icon-basket-loaded',
+      children: [
+        {
+          name: 'Cadastrar',
+          url: '/base/forms',
+          icon: 'icon-check',
+        },
+        {
+          name: 'Listar',
+          url: '/base/list-groups',
+          icon: 'icon-list',
+        },
+      ],
+    },
+    {
+      name: 'Fornecedores',
+      url: '/base',
+      icon: 'icon-briefcase',
+      children: [
+        {
+          name: 'Cadastrar',
+          url: '/base/forms',
+          icon: 'icon-user',
+        },
+        {
+          name: 'Listar',
+          url: '/base/list-groups',
+          icon: 'icon-list',
+        },
+      ],
+    },
+    {
+      name: 'Categorias',
+      url: '/base',
+      icon: 'cui-tags',
+      children: [
+        {
+          name: 'Cadastrar',
+          url: '/base/forms',
+          icon: 'cui-task',
+        },
+        {
+          name: 'Listar',
+          url: '/base/list-groups',
+          icon: 'icon-list',
+        },
+      ],
+    },
+    {
+      name: 'Usuários',
+      url: '/base',
+      icon: 'icon-people',
+      children: [
+        {
+          name: 'Novo usuário',
+          url: '/base/forms',
+          icon: 'icon-user-follow',
+        },
+        {
+          name: 'Listar',
+          url: '/base/list-groups',
+          icon: 'icon-list',
+        },
       ],
     },
     {
@@ -197,14 +286,14 @@ export default {
       icon: 'icon-cloud-download',
       class: 'mt-auto',
       variant: 'success',
-      attributes: { target: '_blank', rel: "noopener" },
+      attributes: { target: '_blank', rel: 'noopener' },
     },
     {
       name: 'Try CoreUI PRO',
       url: 'https://coreui.io/pro/react/',
       icon: 'icon-layers',
       variant: 'danger',
-      attributes: { target: '_blank', rel: "noopener" },
+      attributes: { target: '_blank', rel: 'noopener' },
     },
   ],
 };
