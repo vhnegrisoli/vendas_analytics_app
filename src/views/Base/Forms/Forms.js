@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import {
   Badge,
   Button,
@@ -35,7 +36,18 @@ class Forms extends Component {
       collapse: true,
       fadeIn: true,
       timeout: 300,
+      estados: [],
+      cidades: [],
+      endereco: [],
     };
+  }
+
+  componentDidMount() {
+    axios.get('http://localhost:8080/api/estados/listar').then(res => {
+      this.setState({
+        estados: res.data,
+      });
+    });
   }
 
   toggle() {
@@ -65,56 +77,68 @@ class Forms extends Component {
               >
                 <FormGroup row>
                   <Col md="3">
-                    <Label>Static</Label>
+                    <Label htmlFor="text-input">Nome completo*</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <p className="form-control-static">Username</p>
+                    <Input
+                      type="text"
+                      id="text-input"
+                      required
+                      name="text-input"
+                      placeholder="Nome completo"
+                    />
+                    <FormText color="muted">Digite o nome completo do cliente.</FormText>
                   </Col>
                 </FormGroup>
                 <FormGroup row>
                   <Col md="3">
-                    <Label htmlFor="text-input">Text Input</Label>
-                  </Col>
-                  <Col xs="12" md="9">
-                    <Input type="text" id="text-input" name="text-input" placeholder="Text" />
-                    <FormText color="muted">This is a help text</FormText>
-                  </Col>
-                </FormGroup>
-                <FormGroup row>
-                  <Col md="3">
-                    <Label htmlFor="email-input">Email Input</Label>
+                    <Label htmlFor="email-input">Email*</Label>
                   </Col>
                   <Col xs="12" md="9">
                     <Input
                       type="email"
                       id="email-input"
                       name="email-input"
-                      placeholder="Enter Email"
+                      placeholder="Email"
                       autoComplete="email"
                     />
-                    <FormText className="help-block">Please enter your email</FormText>
+                    <FormText className="help-block">Digite o email.</FormText>
                   </Col>
                 </FormGroup>
                 <FormGroup row>
                   <Col md="3">
-                    <Label htmlFor="password-input">Password</Label>
+                    <Label htmlFor="cpf-input">CPF*</Label>
                   </Col>
                   <Col xs="12" md="9">
                     <Input
-                      type="password"
-                      id="password-input"
-                      name="password-input"
-                      placeholder="Password"
-                      autoComplete="new-password"
+                      type="text"
+                      id="cpf-input"
+                      name="cpf-input"
+                      placeholder="CPF"
+                      autoComplete="cpf"
                     />
-                    <FormText className="help-block">Please enter a complex password</FormText>
+                    <FormText className="help-block">Digite o CPF.</FormText>
                   </Col>
                 </FormGroup>
                 <FormGroup row>
                   <Col md="3">
-                    <Label htmlFor="date-input">
-                      Date Input <Badge>NEW</Badge>
-                    </Label>
+                    <Label htmlFor="rg-input">RG*</Label>
+                  </Col>
+                  <Col xs="12" md="9">
+                    <Input
+                      type="text"
+                      id="rg-input"
+                      name="rg-input"
+                      placeholder="RG"
+                      autoComplete="rg"
+                    />
+                    <FormText className="help-block">Digite o RG.</FormText>
+                  </Col>
+                </FormGroup>
+
+                <FormGroup row>
+                  <Col md="3">
+                    <Label htmlFor="date-input">Data de Nascimento*</Label>
                   </Col>
                   <Col xs="12" md="9">
                     <Input type="date" id="date-input" name="date-input" placeholder="date" />
@@ -122,32 +146,87 @@ class Forms extends Component {
                 </FormGroup>
                 <FormGroup row>
                   <Col md="3">
-                    <Label htmlFor="disabled-input">Disabled Input</Label>
+                    <Label htmlFor="telefone-input">Telefone/Celular*</Label>
                   </Col>
                   <Col xs="12" md="9">
                     <Input
-                      type="text"
-                      id="disabled-input"
-                      name="disabled-input"
-                      placeholder="Disabled"
-                      disabled
+                      type="telefone"
+                      id="telefone-input"
+                      name="telefone-input"
+                      placeholder="Telefone"
+                      autoComplete="telefone"
                     />
+                    <FormText className="help-block">Digite o telefone.</FormText>
+                  </Col>
+                </FormGroup>
+              </Form>
+            </CardBody>
+            <CardHeader>
+              <strong>Endereço </strong>
+            </CardHeader>
+            <CardFooter>
+              <Form
+                action=""
+                method="post"
+                encType="multipart/form-data"
+                className="form-horizontal"
+              >
+                <FormGroup row>
+                  <Col md="3">
+                    <Label htmlFor="text-input">Rua*</Label>
+                  </Col>
+                  <Col xs="12" md="9">
+                    <Input type="text" id="rua-input" required name="rua-input" placeholder="Rua" />
+                    <FormText color="muted">Digite o nome da rua.</FormText>
                   </Col>
                 </FormGroup>
                 <FormGroup row>
                   <Col md="3">
-                    <Label htmlFor="textarea-input">Textarea</Label>
+                    <Label htmlFor="text-input">Número*</Label>
                   </Col>
                   <Col xs="12" md="9">
                     <Input
-                      type="textarea"
-                      name="textarea-input"
-                      id="textarea-input"
-                      rows="9"
-                      placeholder="Content..."
+                      type="number"
+                      id="numero-input"
+                      required
+                      name="rua-input"
+                      placeholder="Número"
                     />
+                    <FormText color="muted">Digite o número da rua.</FormText>
                   </Col>
                 </FormGroup>
+                <FormGroup row>
+                  <Col md="3">
+                    <Label htmlFor="text-input">Cidade*</Label>
+                  </Col>
+                  <Col xs="12" md="9">
+                    <Input
+                      type="text"
+                      id="cidade-input"
+                      required
+                      name="cidade-input"
+                      placeholder="Cidade"
+                    />
+                    <FormText color="muted">Digite a cidade.</FormText>
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Col md="3">
+                    <Label htmlFor="select">Estado*</Label>
+                  </Col>
+                  <Col xs="12" md="9">
+                    <Input type="select" name="select" required id="select">
+                      <option value="0">Por favor, selecione um estado:</option>
+                      {this.state.estados.map(estado => (
+                        <option>{estado.estado}</option>
+                      ))}
+                    </Input>
+                  </Col>
+                </FormGroup>
+                <FormGroup row />
+              </Form>
+            </CardFooter>
+            {/*</div>
                 <FormGroup row>
                   <Col md="3">
                     <Label htmlFor="select">Select</Label>
@@ -440,6 +519,7 @@ class Forms extends Component {
                 </FormGroup>
               </Form>
             </CardBody>
+                */}
             <CardFooter>
               <Button type="submit" size="sm" color="primary">
                 <i className="fa fa-dot-circle-o" /> Submit
