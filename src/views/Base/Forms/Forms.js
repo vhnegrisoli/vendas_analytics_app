@@ -25,8 +25,9 @@ import {
   Label,
   Row,
 } from 'reactstrap';
+import { format } from 'path';
 
-class Forms extends Component {
+class ClienteForm extends Component {
   constructor(props) {
     super(props);
 
@@ -36,8 +37,9 @@ class Forms extends Component {
       collapse: true,
       fadeIn: true,
       timeout: 300,
+      cliente: [],
       estados: [],
-      cidades: [],
+      cidade: [],
       endereco: [],
     };
   }
@@ -60,6 +62,14 @@ class Forms extends Component {
     });
   }
 
+  onSubmit() {
+    var form = document.querySelector('cliente-form');
+    var data = new FormData(form);
+    axios.post('localhost:8080/api/clientes/salvar', {
+      data: data,
+    });
+  }
+
   render() {
     return (
       <div className="animated fadeIn">
@@ -70,6 +80,7 @@ class Forms extends Component {
             </CardHeader>
             <CardBody>
               <Form
+                id="cliente-form"
                 action=""
                 method="post"
                 encType="multipart/form-data"
@@ -218,7 +229,7 @@ class Forms extends Component {
                     <Input type="select" name="select" required id="select">
                       <option value="0">Por favor, selecione um estado:</option>
                       {this.state.estados.map(estado => (
-                        <option>{estado.estado}</option>
+                        <option value={estado.id}>{estado.estado}</option>
                       ))}
                     </Input>
                   </Col>
@@ -226,7 +237,17 @@ class Forms extends Component {
                 <FormGroup row />
               </Form>
             </CardFooter>
-            {/*</div>
+
+            <CardFooter>
+              <Button type="submit" size="sm" color="primary">
+                <i className="fa fa-dot-circle-o" />
+                Cadastrar
+              </Button>
+            </CardFooter>
+          </Card>
+        </Col>
+      </div>
+      /*</div>
                 <FormGroup row>
                   <Col md="3">
                     <Label htmlFor="select">Select</Label>
@@ -519,20 +540,9 @@ class Forms extends Component {
                 </FormGroup>
               </Form>
             </CardBody>
-                */}
-            <CardFooter>
-              <Button type="submit" size="sm" color="primary">
-                <i className="fa fa-dot-circle-o" /> Submit
-              </Button>
-              <Button type="reset" size="sm" color="danger">
-                <i className="fa fa-ban" /> Reset
-              </Button>
-            </CardFooter>
-          </Card>
-        </Col>
-      </div>
+                */
     );
   }
 }
 
-export default Forms;
+export default ClienteForm;
