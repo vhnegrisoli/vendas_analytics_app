@@ -83,8 +83,8 @@ const routes = [
   { path: '/charts', name: 'Charts', component: Charts },
   { path: '/users', name: 'Users', component: Users },
   { path: '/historicovenda', name: 'HistoricoVenda', component: HistoricoVenda },
-  { path: '/cadastrar', name: ' ClienteForm', component: ClienteForm },
-  { path: '/listar', name: 'ClienteList', component: ClienteList },
+  { path: '/cliente/cadastrar', name: ' ClienteForm', component: ClienteForm },
+  { path: '/cliente/listar', name: 'ClienteList', component: ClienteList },
 ];
 
 export default routes;

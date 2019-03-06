@@ -53,12 +53,12 @@ export default {
       children: [
         {
           name: 'Cadastrar',
-          url: '/cliente/clienteform',
+          url: '/cliente/cadastrar',
           icon: 'icon-user-follow',
         },
         {
           name: 'Listar',
-          url: '/users/users',
+          url: '/cliente/listar',
           icon: 'icon-list',
         },
       ],

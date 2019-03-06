@@ -60,7 +60,7 @@ class HistoricoVenda extends Component {
                         </td>
                         <td>{registro.produto.nomeProduto}</td>
                         <td>{registro.produto.descricao}</td>
-                        <td>{registro.produto.preco}</td>
+                        <td>{'R$' + parseFloat(registro.produto.preco).toFixed(2)}</td>
                       </tr>
                     ))}
                   </tbody>
