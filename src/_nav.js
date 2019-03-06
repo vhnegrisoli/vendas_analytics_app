@@ -28,16 +28,15 @@ export default {
       url: '/theme/colors',
       icon: 'icon-list',
     },
-
-    {
-      name: 'Tratar Venda',
-      url: '/theme/colors',
-      icon: 'cui-cart',
-    },
     {
       name: 'Exportar Relatórios',
       url: '/theme/colors',
       icon: 'icon-cloud-download',
+    },
+    {
+      name: 'Analytics',
+      url: '/charts',
+      icon: 'icon-pie-chart',
     },
     {
       title: true,
@@ -59,7 +58,7 @@ export default {
         },
         {
           name: 'Listar',
-          url: '/base/list-groups',
+          url: '/users/users',
           icon: 'icon-list',
         },
       ],
@@ -161,11 +160,7 @@ export default {
       ],
     },
     */
-    {
-      name: 'Analytics',
-      url: '/charts',
-      icon: 'icon-pie-chart',
-    },
+   
     /*{
       name: 'Icons',
       url: '/icons',

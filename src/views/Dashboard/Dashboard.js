@@ -232,218 +232,31 @@ const cardChartOpts4 = {
   },
 };
 
-// Social Box Chart
-const socialBoxData = [
-  { data: [65, 59, 84, 84, 51, 55, 40], label: 'facebook' },
-  { data: [1, 13, 9, 17, 34, 41, 38], label: 'twitter' },
-  { data: [78, 81, 80, 45, 34, 12, 40], label: 'linkedin' },
-  { data: [35, 23, 56, 22, 97, 23, 64], label: 'google' },
-];
-
-const makeSocialBoxData = dataSetNo => {
-  const dataset = socialBoxData[dataSetNo];
-  const data = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-    datasets: [
-      {
-        backgroundColor: 'rgba(255,255,255,.1)',
-        borderColor: 'rgba(255,255,255,.55)',
-        pointHoverBackgroundColor: '#fff',
-        borderWidth: 2,
-        data: dataset.data,
-        label: dataset.label,
-      },
-    ],
-  };
-  return () => data;
-};
-
-const socialChartOpts = {
-  tooltips: {
-    enabled: false,
-    custom: CustomTooltips,
-  },
-  responsive: true,
-  maintainAspectRatio: false,
-  legend: {
-    display: false,
-  },
-  scales: {
-    xAxes: [
-      {
-        display: false,
-      },
-    ],
-    yAxes: [
-      {
-        display: false,
-      },
-    ],
-  },
-  elements: {
-    point: {
-      radius: 0,
-      hitRadius: 10,
-      hoverRadius: 4,
-      hoverBorderWidth: 3,
-    },
-  },
-};
-
-// sparkline charts
-const sparkLineChartData = [
-  {
-    data: [35, 23, 56, 22, 97, 23, 64],
-    label: 'New Clients',
-  },
-  {
-    data: [65, 59, 84, 84, 51, 55, 40],
-    label: 'Recurring Clients',
-  },
-  {
-    data: [35, 23, 56, 22, 97, 23, 64],
-    label: 'Pageviews',
-  },
-  {
-    data: [65, 59, 84, 84, 51, 55, 40],
-    label: 'Organic',
-  },
-  {
-    data: [78, 81, 80, 45, 34, 12, 40],
-    label: 'CTR',
-  },
-  {
-    data: [1, 13, 9, 17, 34, 41, 38],
-    label: 'Bounce Rate',
-  },
-];
-
-const makeSparkLineData = (dataSetNo, variant) => {
-  const dataset = sparkLineChartData[dataSetNo];
-  const data = {
-    labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-    datasets: [
-      {
-        backgroundColor: 'transparent',
-        borderColor: variant ? variant : '#c2cfd6',
-        data: dataset.data,
-        label: dataset.label,
-      },
-    ],
-  };
-  return () => data;
-};
-
-const sparklineChartOpts = {
-  tooltips: {
-    enabled: false,
-    custom: CustomTooltips,
-  },
-  responsive: true,
-  maintainAspectRatio: true,
-  scales: {
-    xAxes: [
-      {
-        display: false,
-      },
-    ],
-    yAxes: [
-      {
-        display: false,
-      },
-    ],
-  },
-  elements: {
-    line: {
-      borderWidth: 2,
-    },
-    point: {
-      radius: 0,
-      hitRadius: 10,
-      hoverRadius: 4,
-      hoverBorderWidth: 3,
-    },
-  },
-  legend: {
-    display: false,
-  },
-};
 
 // Main Chart
 
-//Random Numbers
-function random(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-var elements = 27;
-var data1 = [];
-var data2 = [];
-var data3 = [];
-
-for (var i = 0; i <= elements; i++) {
-  data1.push(random(50, 200));
-  data2.push(random(80, 100));
-  data3.push(65);
-}
+const vendas = [];
 
 const mainChart = {
-  labels: [
-    'Mo',
-    'Tu',
-    'We',
-    'Th',
-    'Fr',
-    'Sa',
-    'Su',
-    'Mo',
-    'Tu',
-    'We',
-    'Th',
-    'Fr',
-    'Sa',
-    'Su',
-    'Mo',
-    'Tu',
-    'We',
-    'Th',
-    'Fr',
-    'Sa',
-    'Su',
-    'Mo',
-    'Tu',
-    'We',
-    'Th',
-    'Fr',
-    'Sa',
-    'Su',
-  ],
+  
+  labels: vendas.meses,
   datasets: [
     {
-      label: 'My First dataset',
+      label: 'Quantidade de vendas',
       backgroundColor: hexToRgba(brandInfo, 10),
       borderColor: brandInfo,
       pointHoverBackgroundColor: '#fff',
       borderWidth: 2,
-      data: data1,
+      data: vendas.quantidade,
     },
     {
-      label: 'My Second dataset',
+      label: 'Preço',
       backgroundColor: 'transparent',
       borderColor: brandSuccess,
       pointHoverBackgroundColor: '#fff',
       borderWidth: 2,
-      data: data2,
-    },
-    {
-      label: 'My Third dataset',
-      backgroundColor: 'transparent',
-      borderColor: brandDanger,
-      pointHoverBackgroundColor: '#fff',
-      borderWidth: 1,
-      borderDash: [8, 5],
-      data: data3,
-    },
+      data: vendas.lucro,
+    }
   ],
 };
 
@@ -503,15 +316,16 @@ class Dashboard extends Component {
     this.state = {
       dropdownOpen: false,
       radioSelected: 2,
-      clientes: [],
+      vendas_periodo: [],
     };
   }
 
   componentDidMount() {
-    axios.get('http://localhost:8080/api/clientes/todos').then(res => {
+    axios.get('http://localhost:8080/api/dashboard/vendas-por-periodo').then(res => {
       this.setState({
-        clientes: res.data,
+        vendas_periodo: res.data,
       });
+      this.state.vendas_periodo = this.vendas;
     });
   }
 
@@ -555,7 +369,7 @@ class Dashboard extends Component {
                     </DropdownMenu>
                   </ButtonDropdown>
                 </ButtonGroup>
-
+                {this.state.vendas_periodo = this.vendas}
                 <div className="text-value">9.823</div>
                 <div>Clientes ativos</div>
               </CardBody>
@@ -583,12 +397,6 @@ class Dashboard extends Component {
                       <DropdownItem>Action</DropdownItem>
                       <DropdownItem>Another action</DropdownItem>
                       <DropdownItem>Something else here</DropdownItem>
-                      {this.state.clientes.map(cliente => (
-                        <DropdownItem>{cliente.nome}</DropdownItem>
-                      ))}
-                      {this.state.clientes.map(cliente => (
-                        <DropdownItem>{cliente.endereco.cidade.estado.regiao.nome}</DropdownItem>
-                      ))}
                     </DropdownMenu>
                   </Dropdown>
                 </ButtonGroup>
@@ -667,38 +475,9 @@ class Dashboard extends Component {
               <CardBody>
                 <Row>
                   <Col sm="5">
-                    <CardTitle className="mb-0">Traffic</CardTitle>
-                    <div className="small text-muted">November 2015</div>
+                    <CardTitle className="mb-0">Vendas totais por período</CardTitle>
                   </Col>
                   <Col sm="7" className="d-none d-sm-inline-block">
-                    <Button color="primary" className="float-right">
-                      <i className="icon-cloud-download" />
-                    </Button>
-                    <ButtonToolbar className="float-right" aria-label="Toolbar with button groups">
-                      <ButtonGroup className="mr-3" aria-label="First group">
-                        <Button
-                          color="outline-secondary"
-                          onClick={() => this.onRadioBtnClick(1)}
-                          active={this.state.radioSelected === 1}
-                        >
-                          Day
-                        </Button>
-                        <Button
-                          color="outline-secondary"
-                          onClick={() => this.onRadioBtnClick(2)}
-                          active={this.state.radioSelected === 2}
-                        >
-                          Month
-                        </Button>
-                        <Button
-                          color="outline-secondary"
-                          onClick={() => this.onRadioBtnClick(3)}
-                          active={this.state.radioSelected === 3}
-                        >
-                          Year
-                        </Button>
-                      </ButtonGroup>
-                    </ButtonToolbar>
                   </Col>
                 </Row>
                 <div className="chart-wrapper" style={{ height: 300 + 'px', marginTop: 40 + 'px' }}>
@@ -708,251 +487,7 @@ class Dashboard extends Component {
             </Card>
           </Col>
         </Row>
-
-        <Row>
-          <Col>
-            <Card>
-              <CardHeader>Traffic {' & '} Sales</CardHeader>
-              <CardBody>
-                <Row>
-                  <Col xs="12" md="6" xl="6">
-                    <Row>
-                      <Col sm="6">
-                        <div className="callout callout-info">
-                          <small className="text-muted">New Clients</small>
-                          <br />
-                          <strong className="h4">9,123</strong>
-                          <div className="chart-wrapper">
-                            <Line
-                              data={makeSparkLineData(0, brandPrimary)}
-                              options={sparklineChartOpts}
-                              width={100}
-                              height={30}
-                            />
-                          </div>
-                        </div>
-                      </Col>
-                      <Col sm="6">
-                        <div className="callout callout-danger">
-                          <small className="text-muted">Recurring Clients</small>
-                          <br />
-                          <strong className="h4">22,643</strong>
-                          <div className="chart-wrapper">
-                            <Line
-                              data={makeSparkLineData(1, brandDanger)}
-                              options={sparklineChartOpts}
-                              width={100}
-                              height={30}
-                            />
-                          </div>
-                        </div>
-                      </Col>
-                    </Row>
-                    <hr className="mt-0" />
-                    <div className="progress-group mb-4">
-                      <div className="progress-group-prepend">
-                        <span className="progress-group-text">Monday</span>
-                      </div>
-                      <div className="progress-group-bars">
-                        <Progress className="progress-xs" color="info" value="34" />
-                        <Progress className="progress-xs" color="danger" value="78" />
-                      </div>
-                    </div>
-                    <div className="progress-group mb-4">
-                      <div className="progress-group-prepend">
-                        <span className="progress-group-text">Tuesday</span>
-                      </div>
-                      <div className="progress-group-bars">
-                        <Progress className="progress-xs" color="info" value="56" />
-                        <Progress className="progress-xs" color="danger" value="94" />
-                      </div>
-                    </div>
-                    <div className="progress-group mb-4">
-                      <div className="progress-group-prepend">
-                        <span className="progress-group-text">Wednesday</span>
-                      </div>
-                      <div className="progress-group-bars">
-                        <Progress className="progress-xs" color="info" value="12" />
-                        <Progress className="progress-xs" color="danger" value="67" />
-                      </div>
-                    </div>
-                    <div className="progress-group mb-4">
-                      <div className="progress-group-prepend">
-                        <span className="progress-group-text">Thursday</span>
-                      </div>
-                      <div className="progress-group-bars">
-                        <Progress className="progress-xs" color="info" value="43" />
-                        <Progress className="progress-xs" color="danger" value="91" />
-                      </div>
-                    </div>
-                    <div className="progress-group mb-4">
-                      <div className="progress-group-prepend">
-                        <span className="progress-group-text">Friday</span>
-                      </div>
-                      <div className="progress-group-bars">
-                        <Progress className="progress-xs" color="info" value="22" />
-                        <Progress className="progress-xs" color="danger" value="73" />
-                      </div>
-                    </div>
-                    <div className="progress-group mb-4">
-                      <div className="progress-group-prepend">
-                        <span className="progress-group-text">Saturday</span>
-                      </div>
-                      <div className="progress-group-bars">
-                        <Progress className="progress-xs" color="info" value="53" />
-                        <Progress className="progress-xs" color="danger" value="82" />
-                      </div>
-                    </div>
-                    <div className="progress-group mb-4">
-                      <div className="progress-group-prepend">
-                        <span className="progress-group-text">Sunday</span>
-                      </div>
-                      <div className="progress-group-bars">
-                        <Progress className="progress-xs" color="info" value="9" />
-                        <Progress className="progress-xs" color="danger" value="69" />
-                      </div>
-                    </div>
-                    <div className="legend text-center">
-                      <small>
-                        <sup className="px-1">
-                          <Badge pill color="info">
-                            &nbsp;
-                          </Badge>
-                        </sup>
-                        New clients &nbsp;
-                        <sup className="px-1">
-                          <Badge pill color="danger">
-                            &nbsp;
-                          </Badge>
-                        </sup>
-                        Recurring clients
-                      </small>
-                    </div>
-                  </Col>
-                  <Col xs="12" md="6" xl="6">
-                    <Row>
-                      <Col sm="6">
-                        <div className="callout callout-warning">
-                          <small className="text-muted">Pageviews</small>
-                          <br />
-                          <strong className="h4">78,623</strong>
-                          <div className="chart-wrapper">
-                            <Line
-                              data={makeSparkLineData(2, brandWarning)}
-                              options={sparklineChartOpts}
-                              width={100}
-                              height={30}
-                            />
-                          </div>
-                        </div>
-                      </Col>
-                      <Col sm="6">
-                        <div className="callout callout-success">
-                          <small className="text-muted">Organic</small>
-                          <br />
-                          <strong className="h4">49,123</strong>
-                          <div className="chart-wrapper">
-                            <Line
-                              data={makeSparkLineData(3, brandSuccess)}
-                              options={sparklineChartOpts}
-                              width={100}
-                              height={30}
-                            />
-                          </div>
-                        </div>
-                      </Col>
-                    </Row>
-                    <hr className="mt-0" />
-                    <ul>
-                      <div className="progress-group">
-                        <div className="progress-group-header">
-                          <i className="icon-user progress-group-icon" />
-                          <span className="title">Male</span>
-                          <span className="ml-auto font-weight-bold">43%</span>
-                        </div>
-                        <div className="progress-group-bars">
-                          <Progress className="progress-xs" color="warning" value="43" />
-                        </div>
-                      </div>
-                      <div className="progress-group mb-5">
-                        <div className="progress-group-header">
-                          <i className="icon-user-female progress-group-icon" />
-                          <span className="title">Female</span>
-                          <span className="ml-auto font-weight-bold">37%</span>
-                        </div>
-                        <div className="progress-group-bars">
-                          <Progress className="progress-xs" color="warning" value="37" />
-                        </div>
-                      </div>
-                      <div className="progress-group">
-                        <div className="progress-group-header">
-                          <i className="icon-globe progress-group-icon" />
-                          <span className="title">Organic Search</span>
-                          <span className="ml-auto font-weight-bold">
-                            191,235 <span className="text-muted small">(56%)</span>
-                          </span>
-                        </div>
-                        <div className="progress-group-bars">
-                          <Progress className="progress-xs" color="success" value="56" />
-                        </div>
-                      </div>
-                      <div className="progress-group">
-                        <div className="progress-group-header">
-                          <i className="icon-social-facebook progress-group-icon" />
-                          <span className="title">Facebook</span>
-                          <span className="ml-auto font-weight-bold">
-                            51,223 <span className="text-muted small">(15%)</span>
-                          </span>
-                        </div>
-                        <div className="progress-group-bars">
-                          <Progress className="progress-xs" color="success" value="15" />
-                        </div>
-                      </div>
-                      <div className="progress-group">
-                        <div className="progress-group-header">
-                          <i className="icon-social-twitter progress-group-icon" />
-                          <span className="title">Twitter</span>
-                          <span className="ml-auto font-weight-bold">
-                            37,564 <span className="text-muted small">(11%)</span>
-                          </span>
-                        </div>
-                        <div className="progress-group-bars">
-                          <Progress className="progress-xs" color="success" value="11" />
-                        </div>
-                      </div>
-                      <div className="progress-group">
-                        <div className="progress-group-header">
-                          <i className="icon-social-linkedin progress-group-icon" />
-                          <span className="title">LinkedIn</span>
-                          <span className="ml-auto font-weight-bold">
-                            27,319 <span className="text-muted small">(8%)</span>
-                          </span>
-                        </div>
-                        <div className="progress-group-bars">
-                          <Progress className="progress-xs" color="success" value="8" />
-                        </div>
-                      </div>
-                      <div className="divider text-center">
-                        <Button
-                          color="link"
-                          size="sm"
-                          className="text-muted"
-                          data-toggle="tooltip"
-                          data-placement="top"
-                          title=""
-                          data-original-title="show more"
-                        >
-                          <i className="icon-options" />
-                        </Button>
-                      </div>
-                    </ul>
-                  </Col>
-                </Row>
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
-      </div>
+     </div>
     );
   }
 }

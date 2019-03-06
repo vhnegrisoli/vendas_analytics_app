@@ -27,7 +27,7 @@ import {
 } from 'reactstrap';
 import { format } from 'path';
 
-class ClienteForm extends Component {
+class Forms extends Component {
   constructor(props) {
     super(props);
 
@@ -545,4 +545,4 @@ class ClienteForm extends Component {
   }
 }
 
-export default ClienteForm;
+export default Forms;

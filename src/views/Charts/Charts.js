@@ -119,11 +119,9 @@ class Charts extends Component {
         <CardColumns className="cols-2">
           <Card>
             <CardHeader>
-              Line Chart
+              Vendas por período
               <div className="card-header-actions">
-                <a href="http://www.chartjs.org" className="card-header-action">
-                  <small className="text-muted">docs</small>
-                </a>
+               
               </div>
             </CardHeader>
             <CardBody>
@@ -134,11 +132,9 @@ class Charts extends Component {
           </Card>
           <Card>
             <CardHeader>
-              Bar Chart
+            Top 10 Clientes por Lucro
               <div className="card-header-actions">
-                <a href="http://www.chartjs.org" className="card-header-action">
-                  <small className="text-muted">docs</small>
-                </a>
+               
               </div>
             </CardHeader>
             <CardBody>
@@ -149,11 +145,9 @@ class Charts extends Component {
           </Card>
           <Card>
             <CardHeader>
-              Doughnut Chart
+              Vendas por Categoria
               <div className="card-header-actions">
-                <a href="http://www.chartjs.org" className="card-header-action">
-                  <small className="text-muted">docs</small>
-                </a>
+               
               </div>
             </CardHeader>
             <CardBody>
@@ -164,11 +158,9 @@ class Charts extends Component {
           </Card>
           <Card>
             <CardHeader>
-              Radar Chart
+              Lucro por tipo de Fornecedor
               <div className="card-header-actions">
-                <a href="http://www.chartjs.org" className="card-header-action">
-                  <small className="text-muted">docs</small>
-                </a>
+                
               </div>
             </CardHeader>
             <CardBody>
@@ -179,11 +171,9 @@ class Charts extends Component {
           </Card>
           <Card>
             <CardHeader>
-              Pie Chart
+            Vendas por Categorias
               <div className="card-header-actions">
-                <a href="http://www.chartjs.org" className="card-header-action">
-                  <small className="text-muted">docs</small>
-                </a>
+                
               </div>
             </CardHeader>
             <CardBody>
@@ -194,11 +184,9 @@ class Charts extends Component {
           </Card>
           <Card>
             <CardHeader>
-              Polar Area Chart
+              Ainda não sei esse
               <div className="card-header-actions">
-                <a href="http://www.chartjs.org" className="card-header-action">
-                  <small className="text-muted">docs</small>
-                </a>
+               
               </div>
             </CardHeader>
             <CardBody>
