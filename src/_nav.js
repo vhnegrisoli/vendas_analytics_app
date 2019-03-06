@@ -30,7 +30,7 @@ export default {
     },
     {
       name: 'Exportar Relatórios',
-      url: '/theme/colors',
+      url: '/exportar',
       icon: 'icon-cloud-download',
     },
     {
@@ -82,42 +82,54 @@ export default {
     },
     {
       name: 'Fornecedores',
-      url: '/base',
+      url: '/fornecedores',
       icon: 'icon-briefcase',
       children: [
         {
           name: 'Cadastrar',
-          url: '/base/forms',
+          url: '/fornecedores/cadastrar',
           icon: 'icon-user',
         },
         {
           name: 'Listar',
-          url: '/base/list-groups',
+          url: '/fornecedores/listar',
           icon: 'icon-list',
         },
       ],
     },
     {
       name: 'Categorias',
-      url: '/base',
+      url: '/categorias',
       icon: 'cui-tags',
       children: [
         {
           name: 'Cadastrar',
-          url: '/base/forms',
+          url: '/categorias/cadastrar',
           icon: 'cui-task',
         },
         {
           name: 'Listar',
-          url: '/base/list-groups',
+          url: '/categorias/listar',
           icon: 'icon-list',
         },
       ],
     },
     {
       name: 'Usuários',
-      url: '/users/users',
+      url: '/users',
       icon: 'icon-people',
+      children: [
+        {
+          name: 'Cadastrar',
+          url: '/usuarios/cadastrar',
+          icon: 'icon-user-follow',
+        },
+        {
+          name: 'Listar',
+          url: '/usuarios/listar',
+          icon: 'icon-list',
+        },
+      ],
     },
     /*
     {

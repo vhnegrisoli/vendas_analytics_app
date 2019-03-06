@@ -1,0 +1,6 @@
+{
+  "name": "FornecedorList",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./FornecedorList.js"
+}

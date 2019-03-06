@@ -3,18 +3,18 @@ import { Link } from 'react-router-dom';
 import { Badge, Card, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
 import axios from 'axios';
 
-class ProdutoList extends Component {
+class CategoriaList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      produtos: [],
+      categorias: [],
     };
   }
 
   componentDidMount = () => {
-    axios.get('http://localhost:8080/api/produtos/todos').then(res => {
+    axios.get('http://localhost:8080/api/categorias/todas').then(res => {
       this.setState({
-        produtos: res.data,
+        categorias: res.data,
       });
     });
   };
@@ -23,29 +23,25 @@ class ProdutoList extends Component {
     return (
       <div className="animated fadeIn">
         <Row>
-          <Col xl={12}>
+          <Col xl={6}>
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify" /> Produtos
+                <i className="fa fa-align-justify" /> Categorias
               </CardHeader>
               <CardBody>
                 <Table responsive hover id="myTable">
                   <thead>
                     <tr>
                       <th scope="col">Código</th>
-                      <th scope="col">Nome do Produto</th>
-                      <th scope="col">Descrição</th>
-                      <th scope="col">Categoria</th>
+                      <th scope="col">Descrição da Categoria</th>
                       <th scope="col">Opções</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {this.state.produtos.map(produto => (
+                    {this.state.categorias.map(categoria => (
                       <tr>
-                        <td>{produto.id}</td>
-                        <td>{produto.nomeProduto}</td>
-                        <td>{produto.descricao}</td>
-                        <td>{produto.categoria.descricao}</td>
+                        <td>{categoria.id}</td>
+                        <td>{categoria.descricao}</td>
                         <td href="http://localhost:3000/#/base/forms/`${cliente.id}`">
                           <i className="icon-options" />
                         </td>
@@ -62,4 +58,4 @@ class ProdutoList extends Component {
   }
 }
 
-export default ProdutoList;
+export default CategoriaList;
