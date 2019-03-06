@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Bar, Doughnut, Line, Pie, Polar, Radar } from 'react-chartjs-2';
 import { Card, CardBody, CardColumns, CardHeader } from 'reactstrap';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
+import axios from 'axios';
 
 const line = {
   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -113,6 +114,21 @@ const options = {
 };
 
 class Charts extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      relatorios: [],
+    };
+  }
+
+  componentDidMount() {
+    axios.get('http://localhost:8080/api/relatorios/vendas_periodo').then(res => {
+      this.setState({
+        relatorios: res.data,
+      });
+    });
+  }
+
   render() {
     return (
       <div className="animated fadeIn">
@@ -120,9 +136,7 @@ class Charts extends Component {
           <Card>
             <CardHeader>
               Vendas por período
-              <div className="card-header-actions">
-               
-              </div>
+              <div className="card-header-actions" />
             </CardHeader>
             <CardBody>
               <div className="chart-wrapper">
@@ -132,10 +146,8 @@ class Charts extends Component {
           </Card>
           <Card>
             <CardHeader>
-            Top 10 Clientes por Lucro
-              <div className="card-header-actions">
-               
-              </div>
+              Top 10 Clientes por Lucro
+              <div className="card-header-actions" />
             </CardHeader>
             <CardBody>
               <div className="chart-wrapper">
@@ -146,9 +158,7 @@ class Charts extends Component {
           <Card>
             <CardHeader>
               Vendas por Categoria
-              <div className="card-header-actions">
-               
-              </div>
+              <div className="card-header-actions" />
             </CardHeader>
             <CardBody>
               <div className="chart-wrapper">
@@ -159,9 +169,7 @@ class Charts extends Component {
           <Card>
             <CardHeader>
               Lucro por tipo de Fornecedor
-              <div className="card-header-actions">
-                
-              </div>
+              <div className="card-header-actions" />
             </CardHeader>
             <CardBody>
               <div className="chart-wrapper">
@@ -171,10 +179,8 @@ class Charts extends Component {
           </Card>
           <Card>
             <CardHeader>
-            Vendas por Categorias
-              <div className="card-header-actions">
-                
-              </div>
+              Vendas por Categorias
+              <div className="card-header-actions" />
             </CardHeader>
             <CardBody>
               <div className="chart-wrapper">
@@ -185,9 +191,7 @@ class Charts extends Component {
           <Card>
             <CardHeader>
               Ainda não sei esse
-              <div className="card-header-actions">
-               
-              </div>
+              <div className="card-header-actions" />
             </CardHeader>
             <CardBody>
               <div className="chart-wrapper">

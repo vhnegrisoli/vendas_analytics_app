@@ -25,7 +25,7 @@ export default {
     },
     {
       name: 'Histórico de Vendas',
-      url: '/theme/colors',
+      url: 'historicovenda/historicovenda',
       icon: 'icon-list',
     },
     {
@@ -53,7 +53,7 @@ export default {
       children: [
         {
           name: 'Cadastrar',
-          url: '/base/forms',
+          url: '/cliente/clienteform',
           icon: 'icon-user-follow',
         },
         {
@@ -160,7 +160,7 @@ export default {
       ],
     },
     */
-   
+
     /*{
       name: 'Icons',
       url: '/icons',

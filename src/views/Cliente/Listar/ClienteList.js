@@ -2,9 +2,8 @@ import React, { Component, lazy } from 'react';
 import { Link } from 'react-router-dom';
 import { Badge, Card, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
 import axios from 'axios';
-import usersData from './UsersData';
 
-class Users extends Component {
+class ClienteList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -67,4 +66,4 @@ class Users extends Component {
   }
 }
 
-export default Users;
+export default ClienteList;

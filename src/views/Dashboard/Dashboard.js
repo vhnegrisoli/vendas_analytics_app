@@ -2,24 +2,17 @@ import React, { Component, lazy, Suspense } from 'react';
 import { Bar, Line } from 'react-chartjs-2';
 import axios from 'axios';
 import {
-  Badge,
-  Button,
   ButtonDropdown,
   ButtonGroup,
-  ButtonToolbar,
   Card,
   CardBody,
-  CardFooter,
-  CardHeader,
   CardTitle,
   Col,
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownToggle,
-  Progress,
   Row,
-  Table,
 } from 'reactstrap';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities';
@@ -232,13 +225,11 @@ const cardChartOpts4 = {
   },
 };
 
-
 // Main Chart
 
-const vendas = [];
+let vendas = [];
 
 const mainChart = {
-  
   labels: vendas.meses,
   datasets: [
     {
@@ -256,7 +247,7 @@ const mainChart = {
       pointHoverBackgroundColor: '#fff',
       borderWidth: 2,
       data: vendas.lucro,
-    }
+    },
   ],
 };
 
@@ -322,10 +313,7 @@ class Dashboard extends Component {
 
   componentDidMount() {
     axios.get('http://localhost:8080/api/dashboard/vendas-por-periodo').then(res => {
-      this.setState({
-        vendas_periodo: res.data,
-      });
-      this.state.vendas_periodo = this.vendas;
+      this.vendas = res.data;
     });
   }
 
@@ -369,7 +357,7 @@ class Dashboard extends Component {
                     </DropdownMenu>
                   </ButtonDropdown>
                 </ButtonGroup>
-                {this.state.vendas_periodo = this.vendas}
+                {(this.state.vendas_periodo = this.vendas)}
                 <div className="text-value">9.823</div>
                 <div>Clientes ativos</div>
               </CardBody>
@@ -477,8 +465,7 @@ class Dashboard extends Component {
                   <Col sm="5">
                     <CardTitle className="mb-0">Vendas totais por período</CardTitle>
                   </Col>
-                  <Col sm="7" className="d-none d-sm-inline-block">
-                  </Col>
+                  <Col sm="7" className="d-none d-sm-inline-block" />
                 </Row>
                 <div className="chart-wrapper" style={{ height: 300 + 'px', marginTop: 40 + 'px' }}>
                   <Line data={mainChart} options={mainChartOpts} height={300} />
@@ -487,7 +474,7 @@ class Dashboard extends Component {
             </Card>
           </Col>
         </Row>
-     </div>
+      </div>
     );
   }
 }

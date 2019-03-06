@@ -36,6 +36,9 @@ const Typography = React.lazy(() => import('./views/Theme/Typography'));
 const Widgets = React.lazy(() => import('./views/Widgets/Widgets'));
 const Users = React.lazy(() => import('./views/Users/Users'));
 const User = React.lazy(() => import('./views/Users/User'));
+const HistoricoVenda = React.lazy(() => import('./views/HistoricoVenda/HistoricoVenda'));
+const ClienteForm = React.lazy(() => import('./views/Cliente/Cadastrar/ClienteForm'));
+const ClienteList = React.lazy(() => import('./views/Cliente/Listar/ClienteList'));
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
@@ -78,7 +81,10 @@ const routes = [
   { path: '/notifications/modals', name: 'Modals', component: Modals },
   { path: '/widgets', name: 'Widgets', component: Widgets },
   { path: '/charts', name: 'Charts', component: Charts },
-  { path: '/users', name: 'Users', component: Users }
+  { path: '/users', name: 'Users', component: Users },
+  { path: '/historicovenda', name: 'HistoricoVenda', component: HistoricoVenda },
+  { path: '/cadastrar', name: ' ClienteForm', component: ClienteForm },
+  { path: '/listar', name: 'ClienteList', component: ClienteList },
 ];
 
 export default routes;
