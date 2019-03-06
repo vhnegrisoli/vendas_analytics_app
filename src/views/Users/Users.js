@@ -2,22 +2,22 @@ import React, { Component, lazy } from 'react';
 import { Link } from 'react-router-dom';
 import { Badge, Card, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
 import axios from 'axios';
-import usersData from './UsersData';
 
 class Users extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      clientes: [],
+      usuarios: [],
     };
   }
 
   componentDidMount = () => {
-    axios.get('http://localhost:8080/api/clientes/todos').then(res => {
+    axios.get('http://localhost:8080/api/usuarios/todos').then(res => {
       this.setState({
-        clientes: res.data,
+        usuarios: res.data,
       });
     });
+    console.log(this.state.usuarios);
   };
 
   render() {
@@ -27,7 +27,7 @@ class Users extends Component {
           <Col xl={12}>
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify" /> Clientes
+                <i className="fa fa-align-justify" /> Usuários dos Clientes
               </CardHeader>
               <CardBody>
                 <Table responsive hover>
@@ -35,25 +35,23 @@ class Users extends Component {
                     <tr>
                       <th scope="col">Código</th>
                       <th scope="col">Nome</th>
-                      <th scope="col">CPF</th>
-                      <th scope="col">RG</th>
+                      <th scope="col">Data de Cadastro</th>
                       <th scope="col">Email</th>
-                      <th scope="col">Endereço</th>
-                      <th scope="col">Opções</th>
+                      <th scope="col">Senha de acesso</th>
+                      <th scope="col">Situação</th>
+                      <th scope="col">Cliente Proprietário</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {this.state.clientes.map(cliente => (
+                    {this.state.usuarios.map(usuario => (
                       <tr>
-                        <td>{cliente.id}</td>
-                        <td>{cliente.nome}</td>
-                        <td>{cliente.cpf}</td>
-                        <td>{cliente.rg}</td>
-                        <td>{cliente.email}</td>
-                        <td>{cliente.endereco.rua + ', nº ' + cliente.endereco.numero}</td>
-                        <td href="http://localhost:3000/#/base/forms/`${cliente.id}`">
-                          <i className="icon-options" />
-                        </td>
+                        <td>{usuario.id}</td>
+                        <td>{usuario.nome}</td>
+                        <td>{usuario.dataCadastro}</td>
+                        <td>{usuario.email}</td>
+                        <td>{usuario.senha}</td>
+                        <td>{usuario.situacao}</td>
+                        <td>{usuario.cliente.nome + ' (Código: ' + usuario.cliente.id + ')'}</td>
                       </tr>
                     ))}
                   </tbody>

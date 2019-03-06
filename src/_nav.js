@@ -48,7 +48,7 @@ export default {
     },
     {
       name: 'Clientes',
-      url: '/base',
+      url: '/clientes',
       icon: 'icon-people',
       children: [
         {
@@ -65,17 +65,17 @@ export default {
     },
     {
       name: 'Produtos',
-      url: '/base',
+      url: '/produtos',
       icon: 'icon-basket-loaded',
       children: [
         {
           name: 'Cadastrar',
-          url: '/base/forms',
+          url: '/produtos/cadastrar',
           icon: 'icon-check',
         },
         {
           name: 'Listar',
-          url: '/base/list-groups',
+          url: '/produtos/listar',
           icon: 'icon-list',
         },
       ],
@@ -116,20 +116,8 @@ export default {
     },
     {
       name: 'Usuários',
-      url: '/base',
+      url: '/users/users',
       icon: 'icon-people',
-      children: [
-        {
-          name: 'Novo usuário',
-          url: '/base/forms',
-          icon: 'icon-user-follow',
-        },
-        {
-          name: 'Listar',
-          url: '/base/list-groups',
-          icon: 'icon-list',
-        },
-      ],
     },
     /*
     {

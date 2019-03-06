@@ -39,6 +39,8 @@ const User = React.lazy(() => import('./views/Users/User'));
 const HistoricoVenda = React.lazy(() => import('./views/HistoricoVenda/HistoricoVenda'));
 const ClienteForm = React.lazy(() => import('./views/Cliente/Cadastrar/ClienteForm'));
 const ClienteList = React.lazy(() => import('./views/Cliente/Listar/ClienteList'));
+const ProdutoForm = React.lazy(() => import('./views/Produto/Cadastrar/ProdutoForm'));
+const ProdutoList = React.lazy(() => import('./views/Produto/Listar/ProdutoList'));
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
@@ -85,6 +87,8 @@ const routes = [
   { path: '/historicovenda', name: 'HistoricoVenda', component: HistoricoVenda },
   { path: '/cliente/cadastrar', name: ' ClienteForm', component: ClienteForm },
   { path: '/cliente/listar', name: 'ClienteList', component: ClienteList },
+  { path: '/produtos/cadastrar', name: 'ProdutoForm', component: ProdutoForm },
+  { path: '/produtos/listar', name: 'ProdutoList', component: ProdutoList },
 ];
 
 export default routes;
