@@ -4,11 +4,14 @@ import { Card, CardBody, CardColumns, CardHeader } from 'reactstrap';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import axios from 'axios';
 
+let mesesGrafico1 = [];
+let lucrosGrafico1 = [];
+
 const line = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  labels: mesesGrafico1,
   datasets: [
     {
-      label: 'My First dataset',
+      label: 'Lucro total por meses',
       fill: false,
       lineTension: 0.1,
       backgroundColor: 'rgba(75,192,192,0.4)',
@@ -26,7 +29,7 @@ const line = {
       pointHoverBorderWidth: 2,
       pointRadius: 1,
       pointHitRadius: 10,
-      data: [65, 59, 80, 81, 56, 55, 40],
+      data: lucrosGrafico1,
     },
   ],
 };
@@ -122,10 +125,15 @@ class Charts extends Component {
   }
 
   componentDidMount() {
-    axios.get('http://localhost:8080/api/relatorios/vendas_periodo').then(res => {
+    axios.get('http://localhost:8080/api/dashboard/vendas-por-periodo').then(res => {
       this.setState({
         relatorios: res.data,
       });
+
+      for (var i = 0; i < res.data.length; i++) {
+        mesesGrafico1[i] = res.data[i].meses;
+        lucrosGrafico1[i] = res.data[i].lucro;
+      }
     });
   }
 

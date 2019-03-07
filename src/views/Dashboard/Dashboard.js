@@ -227,10 +227,12 @@ const cardChartOpts4 = {
 
 // Main Chart
 
-let vendas = [];
+let mesesGrafico1 = [];
+let lucrosGrafico1 = [];
+let quantidadesGrafico1 = [];
 
 const mainChart = {
-  labels: vendas.meses,
+  labels: mesesGrafico1,
   datasets: [
     {
       label: 'Quantidade de vendas',
@@ -238,15 +240,15 @@ const mainChart = {
       borderColor: brandInfo,
       pointHoverBackgroundColor: '#fff',
       borderWidth: 2,
-      data: vendas.quantidade,
+      data: quantidadesGrafico1,
     },
     {
-      label: 'Preço',
+      label: 'Margem de Lucro',
       backgroundColor: 'transparent',
       borderColor: brandSuccess,
       pointHoverBackgroundColor: '#fff',
       borderWidth: 2,
-      data: vendas.lucro,
+      data: lucrosGrafico1,
     },
   ],
 };
@@ -313,8 +315,18 @@ class Dashboard extends Component {
 
   componentDidMount() {
     axios.get('http://localhost:8080/api/dashboard/vendas-por-periodo').then(res => {
-      this.vendas = res.data;
+      this.setState = {
+        vendas_periodo: res.data,
+      };
+      for (var i = 0; i < res.data.length; i++) {
+        mesesGrafico1[i] = res.data[i].meses;
+        lucrosGrafico1[i] = res.data[i].lucro;
+        quantidadesGrafico1[i] = res.data[i].quantidade;
+      }
     });
+    console.log(quantidadesGrafico1);
+    console.log(mesesGrafico1);
+    console.log(lucrosGrafico1);
   }
 
   toggle() {
