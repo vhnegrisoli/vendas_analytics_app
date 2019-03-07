@@ -12,6 +12,7 @@ import {
   Input,
   Label,
 } from 'reactstrap';
+import { Redirect } from 'react-router-dom';
 import { format } from 'path';
 
 class CategoriaForm extends Component {
@@ -24,7 +25,8 @@ class CategoriaForm extends Component {
       collapse: true,
       fadeIn: true,
       timeout: 300,
-      categoria: null,
+      error: false,
+      success: false,
     };
   }
 
@@ -40,21 +42,26 @@ class CategoriaForm extends Component {
 
   onSubmit(e) {
     let data = new FormData(e.target);
-    let categoria = {
-      id: parseInt(data.get('id')),
-      descricao: data.get('descricao'),
-    };
     axios
       .post('http://localhost:8080/api/categorias/salvar', {
         id: parseInt(data.get('id')),
         descricao: data.get('descricao'),
       })
       .then(res => {
-        console.log(res);
+        if (res.status === 200) {
+          this.setState = {
+            success: true,
+          };
+        }
+        console.log(res.status);
       })
       .catch(error => {
+        this.setState = {
+          error: true,
+        };
         console.log(error);
       });
+    return <Redirect to="/categoria/listar" />;
   }
 
   render() {
@@ -85,6 +92,7 @@ class CategoriaForm extends Component {
                 <Button type="submit" size="sm" color="success">
                   <i className="fa fa-dot-circle-o" /> Cadastrar
                 </Button>
+                <br />
               </Form>
             </CardBody>
           </Card>

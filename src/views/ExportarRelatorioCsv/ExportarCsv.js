@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
 import {
   Button,
@@ -25,22 +26,34 @@ class ExportarCsv extends Component {
       collapse: true,
       fadeIn: true,
       timeout: 300,
-      dataInicial: '',
-      dataFinal: '',
+      downloadUrl: '',
     };
   }
 
-  handleSubmit = e => {
+  onSubmit(e) {
     const data = new FormData(e.target);
-    axios
-      .get(
+    this.setState = {
+      downloadUrl:
         'http://localhost:8080/api/vendas/relatorio-csv?dataInicial=' +
-          data.get('dataInicial') +
-          '&dataFinal=' +
-          data.get('dataFinal'),
-      )
-      .then(res => {});
-  };
+        data.get('dataInicial') +
+        '&dataFinal=' +
+        data.get('dataFinal'),
+    };
+
+    //<p href={urlDownload.toString} />;
+    // axios
+    //   .get(
+    //     'http://localhost:8080/api/vendas/relatorio-csv?dataInicial=' +
+    //       data.get('dataInicial') +
+    //       '&dataFinal=' +
+    //       data.get('dataFinal'),
+    //   )
+    //   .then(res => {
+    //     this.setState = {
+    //       csvFile: res.data,
+    //     };
+    //   });
+  }
 
   toggle() {
     this.setState({ collapse: !this.state.collapse });
@@ -61,14 +74,7 @@ class ExportarCsv extends Component {
               <strong>Exportar CSV </strong> - Filtros
             </CardHeader>
             <CardBody>
-              <Form
-                id="cliente-form"
-                action=""
-                method="post"
-                encType="multipart/form-data"
-                className="form-horizontal"
-                onSubmit={this.handleSubmit}
-              >
+              <Form id="cliente-form" className="form-horizontal" onSubmit={this.onSubmit}>
                 <FormGroup row>
                   <Col md="3">
                     <Label htmlFor="date-input">Data de Inicial*</Label>
@@ -85,7 +91,12 @@ class ExportarCsv extends Component {
                     <Input type="date" id="dataFinal" name="dataFinal" placeholder="date" />
                   </Col>
                 </FormGroup>
-                <Button type="submit" size="sm" color="success">
+                <Button
+                  type="submit"
+                  size="sm"
+                  color="success"
+                  onClick={() => window.open(this.state.downloadUrl, '_blank')}
+                >
                   <i className="fa fa-dot-circle-o" /> Gerar relatório
                 </Button>
               </Form>
