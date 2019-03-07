@@ -1,29 +1,17 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import {
-  Badge,
   Button,
-  ButtonDropdown,
   Card,
   CardBody,
   CardFooter,
   CardHeader,
   Col,
-  Collapse,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Fade,
   Form,
   FormGroup,
-  FormText,
-  FormFeedback,
   Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
   Label,
-  Row,
 } from 'reactstrap';
 import { format } from 'path';
 
@@ -37,18 +25,22 @@ class ExportarCsv extends Component {
       collapse: true,
       fadeIn: true,
       timeout: 300,
-      categorias: [],
-      produtos: [],
+      dataInicial: '',
+      dataFinal: '',
     };
   }
 
-  componentDidMount() {
-    axios.get('http://localhost:8080/api/categorias/todas').then(res => {
-      this.setState({
-        categorias: res.data,
-      });
-    });
-  }
+  handleSubmit = e => {
+    const data = new FormData(e.target);
+    axios
+      .get(
+        'http://localhost:8080/api/vendas/relatorio-csv?dataInicial=' +
+          data.get('dataInicial') +
+          '&dataFinal=' +
+          data.get('dataFinal'),
+      )
+      .then(res => {});
+  };
 
   toggle() {
     this.setState({ collapse: !this.state.collapse });
@@ -57,14 +49,6 @@ class ExportarCsv extends Component {
   toggleFade() {
     this.setState(prevState => {
       return { fadeIn: !prevState };
-    });
-  }
-
-  onSubmit() {
-    var form = document.querySelector('cliente-form');
-    var data = new FormData(form);
-    axios.post('localhost:8080/api/produtos/salvar', {
-      data: data,
     });
   }
 
@@ -83,13 +67,14 @@ class ExportarCsv extends Component {
                 method="post"
                 encType="multipart/form-data"
                 className="form-horizontal"
+                onSubmit={this.handleSubmit}
               >
                 <FormGroup row>
                   <Col md="3">
                     <Label htmlFor="date-input">Data de Inicial*</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <Input type="date" id="date-input" name="date-input" placeholder="date" />
+                    <Input type="date" id="dataInicial" name="dataInicial" placeholder="date" />
                   </Col>
                 </FormGroup>
                 <FormGroup row>
@@ -97,17 +82,14 @@ class ExportarCsv extends Component {
                     <Label htmlFor="date-input">Data de Final*</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <Input type="date" id="date-input" name="date-input" placeholder="date" />
+                    <Input type="date" id="dataFinal" name="dataFinal" placeholder="date" />
                   </Col>
                 </FormGroup>
+                <Button type="submit" size="sm" color="success">
+                  <i className="fa fa-dot-circle-o" /> Gerar relatório
+                </Button>
               </Form>
             </CardBody>
-            <CardFooter>
-              <Button type="submit" size="sm" color="primary">
-                <i className="fa fa-dot-circle-o" />
-                Gerar relatório
-              </Button>
-            </CardFooter>
           </Card>
         </Col>
       </div>

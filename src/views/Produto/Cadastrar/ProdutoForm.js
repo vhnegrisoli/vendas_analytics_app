@@ -132,7 +132,7 @@ class ProdutoForm extends Component {
               </Form>
             </CardBody>
             <CardFooter>
-              <Button type="submit" size="sm" color="primary">
+              <Button type="submit" size="sm" color="success">
                 <i className="fa fa-dot-circle-o" />
                 Cadastrar
               </Button>

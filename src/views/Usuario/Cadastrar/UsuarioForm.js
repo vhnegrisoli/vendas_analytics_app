@@ -73,7 +73,7 @@ class UsuarioForm extends Component {
         <Col xs="12" md="12">
           <Card>
             <CardHeader>
-              <strong>Clientes </strong> - Cadastrar
+              <strong>Usuários de Clientes </strong> - Cadastrar
             </CardHeader>
             <CardBody>
               <Form
@@ -145,7 +145,7 @@ class UsuarioForm extends Component {
               </Form>
             </CardBody>
             <CardFooter>
-              <Button type="submit" size="sm" color="primary">
+              <Button type="submit" size="sm" color="success">
                 <i className="fa fa-dot-circle-o" />
                 Cadastrar
               </Button>

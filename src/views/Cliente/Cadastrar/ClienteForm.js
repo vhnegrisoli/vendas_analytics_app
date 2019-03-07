@@ -239,7 +239,7 @@ class ClienteForm extends Component {
             </CardFooter>
 
             <CardFooter>
-              <Button type="submit" size="sm" color="primary">
+              <Button type="submit" size="sm" color="success">
                 <i className="fa fa-dot-circle-o" />
                 Cadastrar
               </Button>

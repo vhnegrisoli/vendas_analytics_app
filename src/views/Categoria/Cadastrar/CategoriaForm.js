@@ -1,29 +1,16 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import {
-  Badge,
   Button,
-  ButtonDropdown,
   Card,
   CardBody,
-  CardFooter,
   CardHeader,
   Col,
-  Collapse,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Fade,
   Form,
   FormGroup,
   FormText,
-  FormFeedback,
   Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
   Label,
-  Row,
 } from 'reactstrap';
 import { format } from 'path';
 
@@ -37,17 +24,8 @@ class CategoriaForm extends Component {
       collapse: true,
       fadeIn: true,
       timeout: 300,
-      categorias: [],
-      produtos: [],
+      categoria: null,
     };
-  }
-
-  componentDidMount() {
-    axios.get('http://localhost:8080/api/categorias/todas').then(res => {
-      this.setState({
-        categorias: res.data,
-      });
-    });
   }
 
   toggle() {
@@ -60,12 +38,23 @@ class CategoriaForm extends Component {
     });
   }
 
-  onSubmit() {
-    var form = document.querySelector('cliente-form');
-    var data = new FormData(form);
-    axios.post('localhost:8080/api/produtos/salvar', {
-      data: data,
-    });
+  onSubmit(e) {
+    let data = new FormData(e.target);
+    let categoria = {
+      id: parseInt(data.get('id')),
+      descricao: data.get('descricao'),
+    };
+    axios
+      .post('http://localhost:8080/api/categorias/salvar', {
+        id: parseInt(data.get('id')),
+        descricao: data.get('descricao'),
+      })
+      .then(res => {
+        console.log(res);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
   render() {
@@ -77,13 +66,7 @@ class CategoriaForm extends Component {
               <strong>Categorias </strong> - Cadastrar
             </CardHeader>
             <CardBody>
-              <Form
-                id="cliente-form"
-                action=""
-                method="post"
-                encType="multipart/form-data"
-                className="form-horizontal"
-              >
+              <Form id="cliente-form" className="form-horizontal" onSubmit={this.onSubmit}>
                 <FormGroup row>
                   <Col md="3">
                     <Label htmlFor="text-input">Descrição da Categoria*</Label>
@@ -91,22 +74,19 @@ class CategoriaForm extends Component {
                   <Col xs="12" md="9">
                     <Input
                       type="text"
-                      id="text-input"
+                      id="descricao"
                       required
-                      name="text-input"
+                      name="descricao"
                       placeholder="Descrição."
                     />
                     <FormText color="muted">Descrição da categoria.</FormText>
                   </Col>
                 </FormGroup>
+                <Button type="submit" size="sm" color="success">
+                  <i className="fa fa-dot-circle-o" /> Cadastrar
+                </Button>
               </Form>
             </CardBody>
-            <CardFooter>
-              <Button type="submit" size="sm" color="primary">
-                <i className="fa fa-dot-circle-o" />
-                Cadastrar
-              </Button>
-            </CardFooter>
           </Card>
         </Col>
       </div>
