@@ -25,15 +25,20 @@ const brandInfo = getStyle('--info');
 const brandWarning = getStyle('--warning');
 const brandDanger = getStyle('--danger');
 
+let qtdClientes = '';
+let qtdProdutos = 0;
+let qtdVendasConcretizadas = 0;
+let qtdVendasCanceladas = 0;
+
 // Card Chart 1
 const cardChartData1 = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  labels: clientesMeses,
   datasets: [
     {
-      label: 'My First dataset',
+      label: 'Quantidade de Clientes',
       backgroundColor: brandPrimary,
       borderColor: 'rgba(255,255,255,.55)',
-      data: [65, 59, 84, 84, 51, 55, 40],
+      data: clientes,
     },
   ],
 };
@@ -84,14 +89,17 @@ const cardChartOpts1 = {
 };
 
 // Card Chart 2
-const cardChartData2 = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+
+let clientes = [];
+let clientesMeses = [];
+let cardChartData2 = {
+  labels: clientesMeses,
   datasets: [
     {
-      label: 'My First dataset',
+      label: 'Quantidade de Clientes',
       backgroundColor: brandInfo,
       borderColor: 'rgba(255,255,255,.55)',
-      data: [1, 18, 9, 17, 34, 22, 11],
+      data: clientes,
     },
   ],
 };
@@ -230,12 +238,13 @@ const cardChartOpts4 = {
 let mesesGrafico1 = [];
 let lucrosGrafico1 = [];
 let quantidadesGrafico1 = [];
+let mediasGrafico1 = [];
 
 const mainChart = {
   labels: mesesGrafico1,
   datasets: [
     {
-      label: 'Quantidade de vendas',
+      label: 'Quantidade de Vendas',
       backgroundColor: hexToRgba(brandInfo, 10),
       borderColor: brandInfo,
       pointHoverBackgroundColor: '#fff',
@@ -250,6 +259,14 @@ const mainChart = {
       borderWidth: 2,
       data: lucrosGrafico1,
     },
+    {
+      label: 'Média Mensal',
+      backgroundColor: 'transparent',
+      borderColor: brandSuccess,
+      pointHoverBackgroundColor: '#fff',
+      borderWidth: 2,
+      data: mediasGrafico1,
+    },
   ],
 };
 
@@ -261,7 +278,7 @@ const mainChartOpts = {
     mode: 'index',
     position: 'nearest',
     callbacks: {
-      labelColor: function(tooltipItem, chart) {
+      labelColor: function (tooltipItem, chart) {
         return { backgroundColor: chart.data.datasets[tooltipItem.datasetIndex].borderColor };
       },
     },
@@ -309,24 +326,36 @@ class Dashboard extends Component {
     this.state = {
       dropdownOpen: false,
       radioSelected: 2,
-      vendas_periodo: [],
     };
   }
 
   componentDidMount() {
     axios.get('http://localhost:8080/api/dashboard/vendas-por-periodo').then(res => {
-      this.setState = {
-        vendas_periodo: res.data,
-      };
       for (var i = 0; i < res.data.length; i++) {
         mesesGrafico1[i] = res.data[i].meses;
         lucrosGrafico1[i] = res.data[i].lucro;
+        mediasGrafico1[i] = res.data[i].media;
         quantidadesGrafico1[i] = res.data[i].quantidade;
       }
     });
-    console.log(quantidadesGrafico1);
-    console.log(mesesGrafico1);
-    console.log(lucrosGrafico1);
+
+    axios.get('http://localhost:8080/api/clientes/todos').then(res => {
+      qtdClientes = res.data.length.toString
+      console.log(res.data)
+    });
+    console.log('Quantidade: ' + qtdClientes)
+
+    axios.get('http://localhost:8080/api/dashboard/card1/vendas-por-cliente').then(res => {
+      for (var f = 0; f < res.data.length; f++) {
+        clientes[f] = res.data[f].clientes;
+        clientesMeses[f] = res.data[f].meses;
+      }
+    });
+    this.toggle()
+    console.log(clientes)
+    console.log(clientesMeses)
+
+
   }
 
   toggle() {
@@ -358,19 +387,9 @@ class Dashboard extends Component {
                       this.setState({ card1: !this.state.card1 });
                     }}
                   >
-                    <DropdownToggle caret className="p-0" color="transparent">
-                      <i className="icon-settings" />
-                    </DropdownToggle>
-                    <DropdownMenu right>
-                      <DropdownItem>Action</DropdownItem>
-                      <DropdownItem>Another action</DropdownItem>
-                      <DropdownItem disabled>Disabled action</DropdownItem>
-                      <DropdownItem>Something else here</DropdownItem>
-                    </DropdownMenu>
                   </ButtonDropdown>
                 </ButtonGroup>
-                {(this.state.vendas_periodo = this.vendas)}
-                <div className="text-value">9.823</div>
+                <div className="text-value">{qtdClientes}</div>
                 <div>Clientes ativos</div>
               </CardBody>
               <div className="chart-wrapper mx-3" style={{ height: '70px' }}>
@@ -390,14 +409,7 @@ class Dashboard extends Component {
                       this.setState({ card2: !this.state.card2 });
                     }}
                   >
-                    <DropdownToggle className="p-0" color="transparent">
-                      <i className="icon-location-pin" />
-                    </DropdownToggle>
-                    <DropdownMenu right>
-                      <DropdownItem>Action</DropdownItem>
-                      <DropdownItem>Another action</DropdownItem>
-                      <DropdownItem>Something else here</DropdownItem>
-                    </DropdownMenu>
+
                   </Dropdown>
                 </ButtonGroup>
                 <div className="text-value">9.823</div>
@@ -420,14 +432,6 @@ class Dashboard extends Component {
                       this.setState({ card3: !this.state.card3 });
                     }}
                   >
-                    <DropdownToggle caret className="p-0" color="transparent">
-                      <i className="icon-settings" />
-                    </DropdownToggle>
-                    <DropdownMenu right>
-                      <DropdownItem>Action</DropdownItem>
-                      <DropdownItem>Another action</DropdownItem>
-                      <DropdownItem>Something else here</DropdownItem>
-                    </DropdownMenu>
                   </Dropdown>
                 </ButtonGroup>
                 <div className="text-value">9.823</div>
@@ -450,14 +454,7 @@ class Dashboard extends Component {
                       this.setState({ card4: !this.state.card4 });
                     }}
                   >
-                    <DropdownToggle caret className="p-0" color="transparent">
-                      <i className="icon-settings" />
-                    </DropdownToggle>
-                    <DropdownMenu right>
-                      <DropdownItem>Action</DropdownItem>
-                      <DropdownItem>Another action</DropdownItem>
-                      <DropdownItem>Something else here</DropdownItem>
-                    </DropdownMenu>
+
                   </ButtonDropdown>
                 </ButtonGroup>
                 <div className="text-value">9.823</div>
