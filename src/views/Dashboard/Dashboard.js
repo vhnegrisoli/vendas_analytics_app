@@ -9,9 +9,6 @@ import {
   CardTitle,
   Col,
   Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
   Row,
 } from 'reactstrap';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
@@ -25,10 +22,14 @@ const brandInfo = getStyle('--info');
 const brandWarning = getStyle('--warning');
 const brandDanger = getStyle('--danger');
 
-let qtdClientes = '';
+let qtdClientesArr = [];
+let qtdClientes = 0;
+let qtdProdutosArr = [];
 let qtdProdutos = 0;
+let qtdVendasConcretizadasArr = [];
 let qtdVendasConcretizadas = 0;
-let qtdVendasCanceladas = 0;
+let qtdVendasNaoRealizadasArr = [];
+let qtdVendasNaoRealizadas = 0;
 
 // Card Chart 1
 const cardChartData1 = {
@@ -93,13 +94,13 @@ const cardChartOpts1 = {
 let clientes = [];
 let clientesMeses = [];
 let cardChartData2 = {
-  labels: clientesMeses,
+  labels: [clientesMeses],
   datasets: [
     {
       label: 'Quantidade de Clientes',
       backgroundColor: brandInfo,
       borderColor: 'rgba(255,255,255,.55)',
-      data: clientes,
+      data: [JSON.stringify(clientes, '"', '')],
     },
   ],
 };
@@ -278,7 +279,7 @@ const mainChartOpts = {
     mode: 'index',
     position: 'nearest',
     callbacks: {
-      labelColor: function (tooltipItem, chart) {
+      labelColor: function(tooltipItem, chart) {
         return { backgroundColor: chart.data.datasets[tooltipItem.datasetIndex].borderColor };
       },
     },
@@ -315,11 +316,15 @@ const mainChartOpts = {
     },
   },
 };
+var data = [];
 
 class Dashboard extends Component {
   constructor(props) {
     super(props);
-
+    this.fetchAllApis();
+    data = [1, 2, 1, 3];
+    debugger;
+    console.log('Replace: ' + clientes.toString().replace('"', ''));
     this.toggle = this.toggle.bind(this);
     this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
 
@@ -329,7 +334,8 @@ class Dashboard extends Component {
     };
   }
 
-  componentDidMount() {
+  fetchAllApis() {
+    //VIEWS DO BANCO DE DADOS
     axios.get('http://localhost:8080/api/dashboard/vendas-por-periodo').then(res => {
       for (var i = 0; i < res.data.length; i++) {
         mesesGrafico1[i] = res.data[i].meses;
@@ -339,24 +345,45 @@ class Dashboard extends Component {
       }
     });
 
-    axios.get('http://localhost:8080/api/clientes/todos').then(res => {
-      qtdClientes = res.data.length.toString
-      console.log(res.data)
-    });
-    console.log('Quantidade: ' + qtdClientes)
-
     axios.get('http://localhost:8080/api/dashboard/card1/vendas-por-cliente').then(res => {
-      for (var f = 0; f < res.data.length; f++) {
-        clientes[f] = res.data[f].clientes;
-        clientesMeses[f] = res.data[f].meses;
+      for (var i = 0; i < res.data.length; i++) {
+        clientes[i] = Number(res.data[i].clientes);
+        clientesMeses[i] = res.data[i].meses;
       }
     });
-    this.toggle()
-    console.log(clientes)
-    console.log(clientesMeses)
+    console.log(clientes);
 
+    //VALORES SOMATÓRIOS NOS CARDS
+    axios.get('http://localhost:8080/api/clientes/todos').then(res => {
+      for (var i = 0; i < res.data.length; i++) {
+        qtdClientesArr[i] = res.data[i].id;
+      }
+    });
+    qtdClientes = qtdClientesArr.length;
 
+    axios.get('http://localhost:8080/api/produtos/todos').then(res => {
+      for (var i = 0; i < res.data.length; i++) {
+        qtdProdutosArr[i] = res.data[i].id;
+      }
+    });
+    qtdProdutos = qtdProdutosArr.length;
+
+    axios.get('http://localhost:8080/api/vendas/vendas-realizadas').then(res => {
+      for (var i = 0; i < res.data.length; i++) {
+        qtdVendasConcretizadasArr[i] = res.data[i].id;
+      }
+    });
+    qtdVendasConcretizadas = qtdVendasConcretizadasArr.length;
+
+    axios.get('http://localhost:8080/api/vendas/vendas-nao-realizadas').then(res => {
+      for (var i = 0; i < res.data.length; i++) {
+        qtdVendasNaoRealizadasArr[i] = res.data[i].id;
+      }
+    });
+    qtdVendasNaoRealizadas = qtdVendasNaoRealizadasArr.length;
   }
+
+  componentWillMount() {}
 
   toggle() {
     this.setState({
@@ -386,8 +413,7 @@ class Dashboard extends Component {
                     toggle={() => {
                       this.setState({ card1: !this.state.card1 });
                     }}
-                  >
-                  </ButtonDropdown>
+                  />
                 </ButtonGroup>
                 <div className="text-value">{qtdClientes}</div>
                 <div>Clientes ativos</div>
@@ -408,11 +434,9 @@ class Dashboard extends Component {
                     toggle={() => {
                       this.setState({ card2: !this.state.card2 });
                     }}
-                  >
-
-                  </Dropdown>
+                  />
                 </ButtonGroup>
-                <div className="text-value">9.823</div>
+                <div className="text-value">{qtdProdutos}</div>
                 <div>Produtos cadastrados</div>
               </CardBody>
               <div className="chart-wrapper mx-3" style={{ height: '70px' }}>
@@ -422,7 +446,7 @@ class Dashboard extends Component {
           </Col>
 
           <Col xs="12" sm="6" lg="3">
-            <Card className="text-white bg-warning">
+            <Card className="text-white bg-success">
               <CardBody className="pb-0">
                 <ButtonGroup className="float-right">
                   <Dropdown
@@ -431,10 +455,9 @@ class Dashboard extends Component {
                     toggle={() => {
                       this.setState({ card3: !this.state.card3 });
                     }}
-                  >
-                  </Dropdown>
+                  />
                 </ButtonGroup>
-                <div className="text-value">9.823</div>
+                <div className="text-value">{qtdVendasConcretizadas}</div>
                 <div>Vendas concretizadas</div>
               </CardBody>
               <div className="chart-wrapper" style={{ height: '70px' }}>
@@ -453,11 +476,9 @@ class Dashboard extends Component {
                     toggle={() => {
                       this.setState({ card4: !this.state.card4 });
                     }}
-                  >
-
-                  </ButtonDropdown>
+                  />
                 </ButtonGroup>
-                <div className="text-value">9.823</div>
+                <div className="text-value">{qtdVendasNaoRealizadas}</div>
                 <div>Vendas rejeitadas</div>
               </CardBody>
               <div className="chart-wrapper mx-3" style={{ height: '70px' }}>

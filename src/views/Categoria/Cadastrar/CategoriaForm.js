@@ -61,7 +61,6 @@ class CategoriaForm extends Component {
         };
         console.log(error);
       });
-    return <Redirect to="/categoria/listar" />;
   }
 
   render() {
