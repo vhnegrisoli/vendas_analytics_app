@@ -49,7 +49,7 @@ class ClienteList extends Component {
                         <td>{cliente.cpf}</td>
                         <td>{cliente.rg}</td>
                         <td>{cliente.email}</td>
-                        <td>{cliente.endereco.rua + ', nº ' + cliente.endereco.numero}</td>
+                        <td>{cliente.rua + ', nº ' + cliente.numero}</td>
                         <td href="http://localhost:3000/#/base/forms/`${cliente.id}`">
                           <i className="icon-options" />
                         </td>

@@ -30,30 +30,15 @@ class ExportarCsv extends Component {
     };
   }
 
-  onSubmit(e) {
+  handleChange(e) {
     const data = new FormData(e.target);
-    this.setState = {
-      downloadUrl:
-        'http://localhost:8080/api/vendas/relatorio-csv?dataInicial=' +
-        data.get('dataInicial') +
-        '&dataFinal=' +
-        data.get('dataFinal'),
-    };
+    var urlDownload = 'http://localhost:8080/api/vendas/relatorio-csv?dataInicial=' +
+      data.get('dataInicial') + '&dataFinal=' + data.get('dataFinal')
+    axios.get(urlDownload).then(res => {
 
-    //<p href={urlDownload.toString} />;
-    // axios
-    //   .get(
-    //     'http://localhost:8080/api/vendas/relatorio-csv?dataInicial=' +
-    //       data.get('dataInicial') +
-    //       '&dataFinal=' +
-    //       data.get('dataFinal'),
-    //   )
-    //   .then(res => {
-    //     this.setState = {
-    //       csvFile: res.data,
-    //     };
-    //   });
+    });
   }
+
 
   toggle() {
     this.setState({ collapse: !this.state.collapse });
@@ -80,7 +65,7 @@ class ExportarCsv extends Component {
                     <Label htmlFor="date-input">Data de Inicial*</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <Input type="date" id="dataInicial" name="dataInicial" placeholder="date" />
+                    <Input type="date" id="dataInicial" required name="dataInicial" placeholder="date" />
                   </Col>
                 </FormGroup>
                 <FormGroup row>
@@ -88,14 +73,14 @@ class ExportarCsv extends Component {
                     <Label htmlFor="date-input">Data de Final*</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <Input type="date" id="dataFinal" name="dataFinal" placeholder="date" />
+                    <Input type="date" id="dataFinal" required name="dataFinal" placeholder="date" />
                   </Col>
                 </FormGroup>
                 <Button
                   type="submit"
                   size="sm"
                   color="success"
-                  onClick={() => window.open(this.state.downloadUrl, '_blank')}
+                  onClick={this.handleChange.bind(this)}
                 >
                   <i className="fa fa-dot-circle-o" /> Gerar relatório
                 </Button>

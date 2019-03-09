@@ -54,9 +54,9 @@ class HistoricoVenda extends Component {
                         <td>{registro.cliente.nome}</td>
                         <td>{registro.cliente.email}</td>
                         <td>
-                          {registro.cliente.endereco.rua +
+                          {registro.cliente.rua +
                             ', nº ' +
-                            registro.cliente.endereco.numero}
+                            registro.cliente.numero}
                         </td>
                         <td>{registro.produto.nomeProduto}</td>
                         <td>{registro.produto.descricao}</td>

@@ -38,13 +38,11 @@ class ClienteForm extends Component {
       fadeIn: true,
       timeout: 300,
       cliente: [],
-      estados: [],
-      cidade: [],
-      endereco: [],
+      estados: []
     };
   }
 
-  componentWillMount() {}
+  componentWillMount() { }
 
   toggle() {
     this.setState({ collapse: !this.state.collapse });
@@ -74,15 +72,13 @@ class ClienteForm extends Component {
       rg: data.get('rg'),
       telefone: data.get('telefone'),
       dataNascimento: data.get('dataNascimento'),
-      endereco: {
-        rua: data.get('rua'),
-        cep: data.get('cep'),
-        complemento: data.get('complemento'),
-        cidade: data.get('cidade'),
-        numero: data.get('numero'),
-        estado: {
-          id: data.get('estado'),
-        },
+      rua: data.get('rua'),
+      cep: data.get('cep'),
+      complemento: data.get('complemento'),
+      cidade: data.get('cidade'),
+      numero: data.get('numero'),
+      estado: {
+        id: data.get('estado'),
       },
     });
   }
