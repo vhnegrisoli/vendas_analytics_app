@@ -39,6 +39,7 @@ class HistoricoVenda extends Component {
                       <th scope="col">Cliente</th>
                       <th scope="col">Email do Cliente</th>
                       <th scope="col">Endereço do Cliente</th>
+                      <th scope="col">Cidade e Estado</th>
                       <th scope="col">Produto</th>
                       <th scope="col">Descrição do Produto</th>
                       <th scope="col">Preço</th>
@@ -47,20 +48,17 @@ class HistoricoVenda extends Component {
                   <tbody>
                     {this.state.historico.map(registro => (
                       <tr>
-                        <td>{registro.venda.id}</td>
-                        <td>{registro.venda.situacao}</td>
-                        <td>{registro.venda.aprovacao}</td>
-                        <td>{registro.venda.quantidadeItens}</td>
-                        <td>{registro.cliente.nome}</td>
-                        <td>{registro.cliente.email}</td>
-                        <td>
-                          {registro.cliente.rua +
-                            ', nº ' +
-                            registro.cliente.numero}
-                        </td>
-                        <td>{registro.produto.nomeProduto}</td>
-                        <td>{registro.produto.descricao}</td>
-                        <td>{'R$' + parseFloat(registro.produto.preco).toFixed(2)}</td>
+                        <td>{registro.codigoVenda}</td>
+                        <td>{registro.situacaoVenda}</td>
+                        <td>{registro.aprovacaoVenda}</td>
+                        <td>{registro.quantidade}</td>
+                        <td>{registro.nomeCliente}</td>
+                        <td>{registro.emailCliente}</td>
+                        <td>{registro.enderecoCliente}</td>
+                        <td>{registro.localCliente}</td>
+                        <td>{registro.nomeProduto}</td>
+                        <td>{registro.descricaoProduto}</td>
+                        <td>{'R$' + parseFloat(registro.preco).toFixed(2)}</td>
                       </tr>
                     ))}
                   </tbody>

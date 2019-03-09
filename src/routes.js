@@ -48,6 +48,8 @@ const FornecedorList = React.lazy(() => import('./views/Fornecedor/Listar/Fornec
 const UsuarioForm = React.lazy(() => import('./views/Usuario/Cadastrar/UsuarioForm'));
 const UsuarioList = React.lazy(() => import('./views/Usuario/Listar/UsuarioList'));
 const ExportarCsv = React.lazy(() => import('./views/ExportarRelatorioCsv/ExportarCsv'));
+const TratarVendaFormAdmin = React.lazy(() => import('./views/TratarVenda/Tratar/TratarVendaAdminForm'));
+
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
@@ -103,6 +105,7 @@ const routes = [
   { path: '/usuarios/cadastrar', name: 'UsuarioForm', component: UsuarioForm },
   { path: '/usuarios/listar', name: 'UsuarioList', component: UsuarioList },
   { path: '/exportar', name: 'ExportarCsv', component: ExportarCsv },
+  { path: '/tratar-venda', name: 'TratarVendaFormAdmin', component: TratarVendaFormAdmin },
 ];
 
 export default routes;

@@ -6,6 +6,8 @@ import axios from 'axios';
 
 let mesesGrafico1 = [];
 let lucrosGrafico1 = [];
+let quantidadesGrafico2 = [];
+let mediaGrafico2 = []
 
 const line = {
   labels: mesesGrafico1,
@@ -30,32 +32,35 @@ const line = {
       pointRadius: 1,
       pointHitRadius: 10,
       data: lucrosGrafico1,
-    },
+    }
+    ,
   ],
 };
 
 const bar = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  labels: mesesGrafico1,
   datasets: [
     {
-      label: 'My First dataset',
+      label: 'Média de Vendas',
       backgroundColor: 'rgba(255,99,132,0.2)',
       borderColor: 'rgba(255,99,132,1)',
       borderWidth: 1,
       hoverBackgroundColor: 'rgba(255,99,132,0.4)',
       hoverBorderColor: 'rgba(255,99,132,1)',
-      data: [65, 59, 80, 81, 56, 55, 40],
+      data: mediaGrafico2,
     },
   ],
 };
 
 const doughnut = {
-  labels: ['Red', 'Green', 'Yellow'],
+  labels: mesesGrafico1,
   datasets: [
     {
-      data: [300, 50, 100],
-      backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-      hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+      data: quantidadesGrafico2,
+      backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#E6f9FF', '#ffd1b3', '#ffff99',
+        '#1aff1a', , '#004080', , '#ffb3b3', , '#b3ffb3', , '#ccffdd', '#990000'],
+      hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#E6f9FF', '#ffd1b3', '#ffff99',
+        '#1aff1a', , '#004080', , '#ffb3b3', , '#b3ffb3', , '#ccffdd', '#990000'],
     },
   ],
 };
@@ -91,8 +96,10 @@ const pie = {
   datasets: [
     {
       data: [300, 50, 100],
-      backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-      hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+      backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#E6f9FF', '#ffd1b3', '#ffff99',
+        '#1aff1a', , '#004080', , '#ffb3b3', , '#b3ffb3', , '#ccffdd', '#990000'],
+      hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#E6f9FF', '#ffd1b3', '#ffff99',
+        '#1aff1a', , '#004080', , '#ffb3b3', , '#b3ffb3', , '#ccffdd', '#990000'],
     },
   ],
 };
@@ -101,7 +108,8 @@ const polar = {
   datasets: [
     {
       data: [11, 16, 7, 3, 14],
-      backgroundColor: ['#FF6384', '#4BC0C0', '#FFCE56', '#E7E9ED', '#36A2EB'],
+      backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#E6f9FF', '#ffd1b3', '#ffff99',
+        '#1aff1a', , '#004080', , '#ffb3b3', , '#b3ffb3', , '#ccffdd', '#990000'],
       label: 'My dataset', // for legend
     },
   ],
@@ -133,6 +141,8 @@ class Charts extends Component {
       for (var i = 0; i < res.data.length; i++) {
         mesesGrafico1[i] = res.data[i].meses;
         lucrosGrafico1[i] = res.data[i].lucro;
+        quantidadesGrafico2[i] = res.data[i].quantidade;
+        mediaGrafico2[i] = res.data[i].media;
       }
     });
   }

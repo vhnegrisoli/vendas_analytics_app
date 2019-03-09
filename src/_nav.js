@@ -20,7 +20,7 @@ export default {
     },
     {
       name: 'Tratar Venda',
-      url: '/theme/colors',
+      url: '/tratar-venda',
       icon: 'cui-cart',
     },
     {
