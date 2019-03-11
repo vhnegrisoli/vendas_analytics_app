@@ -54,6 +54,7 @@ class CategoriaForm extends Component {
           };
         }
         console.log(res.status);
+
       })
       .catch(error => {
         this.setState = {
