@@ -37,7 +37,7 @@ class UsuarioList extends Component {
                       <th scope="col">Nome</th>
                       <th scope="col">Data de Cadastro</th>
                       <th scope="col">Email</th>
-                      <th scope="col">Senha de acesso</th>
+                      <th scope="col">Permissão</th>
                       <th scope="col">Situação</th>
                       <th scope="col">Cliente Proprietário</th>
                     </tr>
@@ -49,7 +49,12 @@ class UsuarioList extends Component {
                         <td>{usuario.nome}</td>
                         <td>{usuario.dataCadastro}</td>
                         <td>{usuario.email}</td>
-                        <td>{usuario.senha}</td>
+                        <td>
+                          {usuario.permissoesUsuario.permissao === 'USER'
+                            ? 'Usuário'
+                            : 'Administrador'}
+                        </td>
+                        <td>{usuario.permissoesUsuario.descricao}</td>
                         <td>{usuario.situacao}</td>
                         <td>{usuario.cliente.nome + ' (Código: ' + usuario.cliente.id + ')'}</td>
                       </tr>

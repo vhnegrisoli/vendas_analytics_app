@@ -35,6 +35,8 @@ class ProdutoList extends Component {
                       <th scope="col">Código</th>
                       <th scope="col">Nome do Produto</th>
                       <th scope="col">Descrição</th>
+                      <th scope="col">Preço</th>
+                      <th scope="col">Fornecedor</th>
                       <th scope="col">Categoria</th>
                       <th scope="col">Opções</th>
                     </tr>
@@ -45,7 +47,9 @@ class ProdutoList extends Component {
                         <td>{produto.id}</td>
                         <td>{produto.nomeProduto}</td>
                         <td>{produto.descricao}</td>
+                        <td>{'R$' + produto.preco.toFixed(2)}</td>
                         <td>{produto.categoria.descricao}</td>
+                        <td>{produto.fornecedor.nomeFantasia}</td>
                         <td href="http://localhost:3000/#/base/forms/`${cliente.id}`">
                           <i className="icon-options" />
                         </td>

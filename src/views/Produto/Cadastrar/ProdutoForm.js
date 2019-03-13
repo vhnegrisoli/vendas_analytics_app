@@ -77,21 +77,8 @@ class ProdutoForm extends Component {
     });
   };
 
-  getProdutoCadastro() {
-    var produtoCadastro = {
-      nomeProduto: this.state.nomeProduto,
-      descricao: this.state.descricao,
-      preco: this.state.preco,
-      categoria: { id: this.state.categoria },
-      fornecedor: { id: this.state.fornecedor },
-    };
-    return produtoCadastro;
-  }
-
   onSubmit(e) {
     e.preventDefault();
-    var produto = this.getProdutoCadastro();
-    // console.log(produto);
     axios
       .post('http://localhost:8080/api/produtos/salvar', {
         nomeProduto: this.state.nomeProduto,
