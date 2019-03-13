@@ -323,7 +323,6 @@ class Dashboard extends Component {
     super(props);
     this.fetchAllApis();
     data = [1, 2, 1, 3];
-    debugger;
     console.log('Replace: ' + clientes.toString().replace('"', ''));
     this.toggle = this.toggle.bind(this);
     this.onRadioBtnClick = this.onRadioBtnClick.bind(this);

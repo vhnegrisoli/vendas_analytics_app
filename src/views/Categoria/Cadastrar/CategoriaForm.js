@@ -27,6 +27,7 @@ class CategoriaForm extends Component {
       timeout: 300,
       error: false,
       success: false,
+      descricao: '',
     };
   }
 
@@ -40,12 +41,19 @@ class CategoriaForm extends Component {
     });
   }
 
+  onChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  };
+
   onSubmit(e) {
-    let data = new FormData(e.target);
+    e.preventDefault();
+    console.log(this.state);
     axios
       .post('http://localhost:8080/api/categorias/salvar', {
-        id: parseInt(data.get('id')),
-        descricao: data.get('descricao'),
+        id: null,
+        descricao: this.state.descricao,
       })
       .then(res => {
         if (res.status === 200) {
@@ -53,14 +61,11 @@ class CategoriaForm extends Component {
             success: true,
           };
         }
-        console.log(res.status);
-
       })
       .catch(error => {
         this.setState = {
           error: true,
         };
-        console.log(error);
       });
   }
 
@@ -73,7 +78,7 @@ class CategoriaForm extends Component {
               <strong>Categorias </strong> - Cadastrar
             </CardHeader>
             <CardBody>
-              <Form id="cliente-form" className="form-horizontal" onSubmit={this.onSubmit}>
+              <Form id="cliente-form" className="form-horizontal" onSubmit={e => this.onSubmit(e)}>
                 <FormGroup row>
                   <Col md="3">
                     <Label htmlFor="text-input">Descrição da Categoria*</Label>
@@ -85,11 +90,13 @@ class CategoriaForm extends Component {
                       required
                       name="descricao"
                       placeholder="Descrição."
+                      value={this.state.descricao}
+                      onChange={e => this.onChange(e)}
                     />
                     <FormText color="muted">Descrição da categoria.</FormText>
                   </Col>
                 </FormGroup>
-                <Button type="submit" size="sm" color="success">
+                <Button size="sm" color="success">
                   <i className="fa fa-dot-circle-o" /> Cadastrar
                 </Button>
                 <br />
