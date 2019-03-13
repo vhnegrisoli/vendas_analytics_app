@@ -1,12 +1,28 @@
 import React, { Component, lazy } from 'react';
 import { Link } from 'react-router-dom';
-import { Badge, Card, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
+import {
+  Badge,
+  Card,
+  CardBody,
+  DropdownMenu,
+  DropdownItem,
+  DropdownToggle,
+  ButtonDropdown,
+  CardHeader,
+  Col,
+  Row,
+  Table,
+} from 'reactstrap';
 import axios from 'axios';
 
+const url = 'http://localhost:3000/#/categorias/cadastrar/';
+const urlCsv = 'http://localhost:8080/api/vendas/relatorio-csv';
 class CategoriaList extends Component {
   constructor(props) {
     super(props);
+    this.toggle = this.toggle.bind(this);
     this.state = {
+      dropdownOpen: false,
       categorias: [],
     };
   }
@@ -18,6 +34,12 @@ class CategoriaList extends Component {
       });
     });
   };
+
+  toggle() {
+    this.setState(prevState => ({
+      dropdownOpen: !prevState.dropdownOpen,
+    }));
+  }
 
   render() {
     return (
@@ -42,8 +64,16 @@ class CategoriaList extends Component {
                       <tr>
                         <td>{categoria.id}</td>
                         <td>{categoria.descricao}</td>
-                        <td href="http://localhost:3000/#/base/forms/`${cliente.id}`">
-                          <i className="icon-options" />
+                        <td>
+                          <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                            <DropdownToggle caret>
+                              <i class="icon-options" />
+                            </DropdownToggle>
+                            <DropdownMenu>
+                              <DropdownItem href={url + categoria.id}>Editar</DropdownItem>
+                              <DropdownItem href={urlCsv}>Remover</DropdownItem>
+                            </DropdownMenu>
+                          </ButtonDropdown>
                         </td>
                       </tr>
                     ))}
