@@ -28,6 +28,7 @@ import {
   Row,
 } from 'reactstrap';
 import { format } from 'path';
+import { hidden } from 'ansi-colors';
 
 class TratarVendaFormAdmin extends Component {
   constructor(props) {
@@ -41,8 +42,14 @@ class TratarVendaFormAdmin extends Component {
       timeout: 300,
       clientes: [],
       produtos: [],
-      precoTotal: 0.0,
-      qtdTotal: 0.0
+      idProduto: '',
+      cliente: '',
+      produtoVenda: {
+        idProduto: '',
+        quantidade: '',
+      },
+      preco: 0.0,
+      aprovacao: '',
     };
 
     axios.get('http://localhost:8080/api/produtos/todos').then(res => {
@@ -50,9 +57,15 @@ class TratarVendaFormAdmin extends Component {
         produtos: res.data,
       });
     });
+
+    axios.get('http://localhost:8080/api/clientes/todos').then(res => {
+      this.setState({
+        clientes: res.data,
+      });
+    });
   }
 
-  componentWillMount() { }
+  componentWillMount() {}
 
   toggle() {
     this.setState({ collapse: !this.state.collapse });
@@ -64,42 +77,16 @@ class TratarVendaFormAdmin extends Component {
     });
   }
 
-  handleChangeCliente(e) {
-    axios.get('http://localhost:8080/api/clientes/todos').then(res => {
-      this.setState({
-        clientes: res.data,
-      });
+  onChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value,
     });
+    console.log(this.state);
+  };
 
-  }
+  onSubmit(e) {}
 
-  onSubmit(e) {
-    let data = new FormData(e.target);
-    axios.post('http://localhost:8080/api/clientes/salvar', {
-      id: data.get('id'),
-      nome: data.get('nome'),
-      email: data.get('email'),
-      cpf: data.get('cpf'),
-      rg: data.get('rg'),
-      telefone: data.get('telefone'),
-      dataNascimento: data.get('dataNascimento'),
-      rua: data.get('rua'),
-      cep: data.get('cep'),
-      complemento: data.get('complemento'),
-      cidade: data.get('cidade'),
-      numero: data.get('numero'),
-      estado: {
-        id: data.get('estado'),
-      },
-    });
-  }
-
-  precoOnClick(e) {
-    let data = new FormData(e.target);
-    this.setState = {
-      precoTotal: data.get('produtos')
-    }
-  }
+  precoOnClick(e) {}
 
   render() {
     return (
@@ -110,11 +97,7 @@ class TratarVendaFormAdmin extends Component {
               <strong>Tratar Venda </strong> - Administrador
             </CardHeader>
             <CardBody>
-              <Form
-                id="cliente-form"
-                className="form-horizontal"
-                onSubmit={this.onSubmit.bind(this)}
-              >
+              <Form id="cliente-form" className="form-horizontal" onSubmit={e => this.onSubmit(e)}>
                 <FormGroup row>
                   <Col md="3">
                     <Label htmlFor="select">Cliente*</Label>
@@ -122,10 +105,11 @@ class TratarVendaFormAdmin extends Component {
                   <Col xs="12" md="9">
                     <Input
                       type="select"
-                      name="estado"
-                      onClick={this.handleChangeCliente.bind(this)}
+                      name="cliente"
                       required
-                      id="estado"
+                      id="cliente"
+                      value={this.state.cliente}
+                      onChange={e => this.onChange(e)}
                     >
                       <option type="option" value="0">
                         Por favor, selecione um cliente:
@@ -157,33 +141,56 @@ class TratarVendaFormAdmin extends Component {
                           <td>{produto.descricao}</td>
                           <td>{'R$' + parseFloat(produto.preco).toFixed(2)}</td>
                           <td>{produto.fornecedor.nomeFantasia}</td>
-                          <td><CustomInput onClick={this.precoOnClick.bind(this)} type="checkbox" name="produto" id={produto.id} value={produto.preco}></CustomInput></td>
-                          <td><Input type="number" name="quantidade" id={produto.id} ></Input></td>
+                          <td>
+                            <CustomInput
+                              type="checkbox"
+                              name="idProduto"
+                              value={this.state.produtoVenda.idProduto}
+                              onChange={e => this.onChange(e)}
+                            />
+                          </td>
+                          <td>
+                            <Input
+                              type="number"
+                              name="quantidade"
+                              id="quantidade"
+                              value={this.state.produtoVenda.quantidade}
+                              onChange={e => this.onChange(e)}
+                            />
+                          </td>
                         </tr>
-
                       ))}
-
                     </tbody>
                   </Table>
                   <Table>
                     <tr>
-                      <td><strong>Total de itens: {this.state.qtdTotal}</strong></td>
-                      <td><strong>Total a pagar: R${this.state.precoTotal.toFixed(2)}</strong></td>
+                      <td>
+                        <strong>Total de itens: {this.state.produtoVenda.quantidade}</strong>
+                      </td>
+                      <td>
+                        <strong>Total a pagar: R${this.state.preco.toFixed(2)}</strong>
+                      </td>
                     </tr>
                   </Table>
                 </FormGroup>
 
                 <FormGroup>
                   <Col xs="12" md="4">
-                    <Label check> Aprovação*:<br></br><br></br>
-                      <Input type="radio" name="aprovacao" id="aprovada" /> APROVADA <br></br>
-                      <Input type="radio" name="aprovacao" id="aguardando" /> AGUARDANDO APROVAÇÃO<br></br>
-                      <Input type="radio" name="aprovacao" id="rejeitada" /> REJEITADA<br></br>
+                    <Label check>
+                      {' '}
+                      Aprovação*:
+                      <br />
+                      <br />
+                      <Input type="radio" name="aprovacao" id="aprovada" /> APROVADA <br />
+                      <Input type="radio" name="aprovacao" id="aguardando" /> AGUARDANDO APROVAÇÃO
+                      <br />
+                      <Input type="radio" name="aprovacao" id="rejeitada" /> REJEITADA
+                      <br />
                     </Label>
                   </Col>
                 </FormGroup>
 
-                <br></br>
+                <br />
                 <Button type="submit" size="sm" color="success">
                   <i className="fa fa-dot-circle-o" />
                   Realizar venda
