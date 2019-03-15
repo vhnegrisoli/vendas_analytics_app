@@ -41,6 +41,10 @@ class CategoriaList extends Component {
     }));
   }
 
+  remover(id) {
+    axios.get('http://localhost:8080/api/categorias/remover/' + id).then(res => {});
+  }
+
   render() {
     return (
       <div className="animated fadeIn">

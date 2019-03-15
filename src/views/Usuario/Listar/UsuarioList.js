@@ -1,8 +1,7 @@
 import React, { Component, lazy } from 'react';
 import { Link } from 'react-router-dom';
-import { Badge, Card, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
+import { Badge, Card, Button, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
 import axios from 'axios';
-
 class UsuarioList extends Component {
   constructor(props) {
     super(props);
@@ -38,8 +37,11 @@ class UsuarioList extends Component {
                       <th scope="col">Data de Cadastro</th>
                       <th scope="col">Email</th>
                       <th scope="col">Permissão</th>
+                      <th scope="col">Autorizado a</th>
                       <th scope="col">Situação</th>
                       <th scope="col">Cliente Proprietário</th>
+                      <th scope="col">Editar</th>
+                      <th scope="col">Remover</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -55,8 +57,25 @@ class UsuarioList extends Component {
                             : 'Administrador'}
                         </td>
                         <td>{usuario.permissoesUsuario.descricao}</td>
-                        <td>{usuario.situacao}</td>
+                        <td>
+                          <Button
+                            size="sm"
+                            color={usuario.situacao === 'ATIVO' ? 'success' : 'danger'}
+                          >
+                            {usuario.situacao}
+                          </Button>
+                        </td>
                         <td>{usuario.cliente.nome + ' (Código: ' + usuario.cliente.id + ')'}</td>
+                        <td>
+                          <Button size="sm" color="primary" href={''}>
+                            <i className="cui-comment-bubble-edit" aria-hidden="true" />
+                          </Button>
+                        </td>
+                        <td>
+                          <Button size="m" color="danger" href={''}>
+                            <i className="cui-delete" />
+                          </Button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
