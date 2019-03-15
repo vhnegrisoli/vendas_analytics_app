@@ -37,8 +37,9 @@ class ClienteForm extends Component {
       collapse: true,
       fadeIn: true,
       timeout: 300,
-      cliente: [],
-      estados: []
+      cliente: [
+        
+      ],
     };
   }
 

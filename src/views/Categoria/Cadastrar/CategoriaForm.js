@@ -15,6 +15,7 @@ import {
 import { Redirect } from 'react-router-dom';
 import { format } from 'path';
 
+let id = '';
 class CategoriaForm extends Component {
   constructor(props) {
     super(props);
@@ -29,6 +30,14 @@ class CategoriaForm extends Component {
       success: false,
       descricao: '',
     };
+    this.getUrlParam();
+  }
+
+  getUrlParam() {
+    var url_string = window.location.href;
+    var url = new URL(url_string);
+    var idParam = url.searchParams.get('id');
+    console.log(this.props.match.params);
   }
 
   toggle() {

@@ -7,7 +7,7 @@ import {
   DropdownMenu,
   DropdownItem,
   DropdownToggle,
-  ButtonDropdown,
+  Button,
   CardHeader,
   Col,
   Row,
@@ -15,8 +15,8 @@ import {
 } from 'reactstrap';
 import axios from 'axios';
 
-const url = 'http://localhost:3000/#/categorias/cadastrar/';
-const urlCsv = 'http://localhost:8080/api/vendas/relatorio-csv';
+const urlEditar = 'http://localhost:3000/#/categorias/cadastrar/';
+const urlRemover = 'http://localhost:8080/api/categorias/remover/';
 class CategoriaList extends Component {
   constructor(props) {
     super(props);
@@ -56,7 +56,8 @@ class CategoriaList extends Component {
                     <tr>
                       <th scope="col">Código</th>
                       <th scope="col">Descrição da Categoria</th>
-                      <th scope="col">Opções</th>
+                      <th scope="col">Editar itens</th>
+                      <th scope="col">Remover itens</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -65,15 +66,14 @@ class CategoriaList extends Component {
                         <td>{categoria.id}</td>
                         <td>{categoria.descricao}</td>
                         <td>
-                          <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                            <DropdownToggle caret>
-                              <i class="icon-options" />
-                            </DropdownToggle>
-                            <DropdownMenu>
-                              <DropdownItem href={url + categoria.id}>Editar</DropdownItem>
-                              <DropdownItem href={urlCsv}>Remover</DropdownItem>
-                            </DropdownMenu>
-                          </ButtonDropdown>
+                          <Button size="sm" color="primary" href={urlEditar + categoria.id}>
+                            Editar
+                          </Button>
+                        </td>
+                        <td>
+                          <Button size="sm" color="danger" href={urlRemover + categoria.id}>
+                            Remover
+                          </Button>
                         </td>
                       </tr>
                     ))}
