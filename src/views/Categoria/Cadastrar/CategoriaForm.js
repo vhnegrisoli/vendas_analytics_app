@@ -15,7 +15,6 @@ import {
 import { Redirect } from 'react-router-dom';
 import { format } from 'path';
 
-let id = '';
 class CategoriaForm extends Component {
   constructor(props) {
     super(props);
@@ -30,14 +29,17 @@ class CategoriaForm extends Component {
       success: false,
       descricao: '',
     };
-    this.getUrlParam();
+    this.getUrlParameter();
   }
 
-  getUrlParam() {
-    var url_string = window.location.href;
-    var url = new URL(url_string);
-    var idParam = url.searchParams.get('id');
-    console.log(this.props.match.params);
+  getUrlParameter() {
+    var url = window.location.toString().split('/');
+    var id = url[url.length - 1];
+    if (!isNaN(id)) {
+      return parseInt(url[url.length - 1]);
+    } else {
+      return '';
+    }
   }
 
   toggle() {
@@ -56,12 +58,10 @@ class CategoriaForm extends Component {
     });
   };
 
-  onSubmit(e) {
-    e.preventDefault();
-    console.log(this.state);
+  editar() {
     axios
       .post('http://localhost:8080/api/categorias/salvar', {
-        id: null,
+        id: this.getUrlParameter(),
         descricao: this.state.descricao,
       })
       .then(res => {
@@ -76,6 +76,34 @@ class CategoriaForm extends Component {
           error: true,
         };
       });
+  }
+
+  salvar() {
+    axios
+      .post('http://localhost:8080/api/categorias/salvar', {
+        descricao: this.state.descricao,
+      })
+      .then(res => {
+        if (res.status === 200) {
+          this.setState = {
+            success: true,
+          };
+        }
+      })
+      .catch(error => {
+        this.setState = {
+          error: true,
+        };
+      });
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+    if (this.getUrlParameter()) {
+      this.editar();
+    } else {
+      this.salvar();
+    }
   }
 
   render() {
