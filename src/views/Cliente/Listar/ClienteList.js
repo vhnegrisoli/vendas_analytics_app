@@ -1,6 +1,6 @@
 import React, { Component, lazy } from 'react';
 import { Link } from 'react-router-dom';
-import { Badge, Card, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
+import { Badge, Card, CardBody, Button, CardHeader, Col, Row, Table } from 'reactstrap';
 import axios from 'axios';
 
 class ClienteList extends Component {
@@ -38,7 +38,8 @@ class ClienteList extends Component {
                       <th scope="col">RG</th>
                       <th scope="col">Email</th>
                       <th scope="col">Endereço</th>
-                      <th scope="col">Opções</th>
+                      <th scope="col">Editar</th>
+                      <th scope="col">Remover</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -50,8 +51,15 @@ class ClienteList extends Component {
                         <td>{cliente.rg}</td>
                         <td>{cliente.email}</td>
                         <td>{cliente.rua + ', nº ' + cliente.numero}</td>
-                        <td href="http://localhost:3000/#/base/forms/`${cliente.id}`">
-                          <i className="icon-options" />
+                        <td>
+                          <Button size="sm" color="primary" href={''}>
+                            Editar
+                          </Button>
+                        </td>
+                        <td>
+                          <Button size="sm" color="danger" href={''}>
+                            Remover
+                          </Button>
                         </td>
                       </tr>
                     ))}

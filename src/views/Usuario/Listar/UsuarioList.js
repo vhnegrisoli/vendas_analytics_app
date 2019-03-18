@@ -68,12 +68,12 @@ class UsuarioList extends Component {
                         <td>{usuario.cliente.nome + ' (Código: ' + usuario.cliente.id + ')'}</td>
                         <td>
                           <Button size="sm" color="primary" href={''}>
-                            <i className="cui-comment-bubble-edit" aria-hidden="true" />
+                            Editar
                           </Button>
                         </td>
                         <td>
-                          <Button size="m" color="danger" href={''}>
-                            <i className="cui-delete" />
+                          <Button size="sm" color="danger" href={''}>
+                            Remover
                           </Button>
                         </td>
                       </tr>

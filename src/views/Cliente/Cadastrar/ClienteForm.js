@@ -37,13 +37,14 @@ class ClienteForm extends Component {
       collapse: true,
       fadeIn: true,
       timeout: 300,
-      cliente: [
-        
-      ],
+      estados: []
     };
+    axios.get('http://localhost:8080/api/estados/listar').then(res => {
+      this.setState({
+        estados: res.data,
+      });
+    });
   }
-
-  componentWillMount() { }
 
   toggle() {
     this.setState({ collapse: !this.state.collapse });
@@ -56,32 +57,11 @@ class ClienteForm extends Component {
   }
 
   handleChange(e) {
-    axios.get('http://localhost:8080/api/estados/listar').then(res => {
-      this.setState({
-        estados: res.data,
-      });
-    });
+
   }
 
   onSubmit(e) {
-    let data = new FormData(e.target);
-    axios.post('http://localhost:8080/api/clientes/salvar', {
-      id: data.get('id'),
-      nome: data.get('nome'),
-      email: data.get('email'),
-      cpf: data.get('cpf'),
-      rg: data.get('rg'),
-      telefone: data.get('telefone'),
-      dataNascimento: data.get('dataNascimento'),
-      rua: data.get('rua'),
-      cep: data.get('cep'),
-      complemento: data.get('complemento'),
-      cidade: data.get('cidade'),
-      numero: data.get('numero'),
-      estado: {
-        id: data.get('estado'),
-      },
-    });
+
   }
 
   render() {
@@ -247,7 +227,7 @@ class ClienteForm extends Component {
                     </Input>
                   </Col>
                 </FormGroup>
-                <Button type="submit" size="sm" color="success">
+                <Button size="sm" color="success">
                   <i className="fa fa-dot-circle-o" />
                   Cadastrar
                 </Button>

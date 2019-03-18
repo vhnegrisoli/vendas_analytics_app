@@ -1,6 +1,6 @@
 import React, { Component, lazy } from 'react';
 import { Link } from 'react-router-dom';
-import { Badge, Card, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
+import { Badge, Card, Button, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
 import axios from 'axios';
 
 class HistoricoVenda extends Component {
@@ -50,7 +50,8 @@ class HistoricoVenda extends Component {
                       <tr>
                         <td>{registro.codigoVenda}</td>
                         <td>{registro.situacaoVenda}</td>
-                        <td>{registro.aprovacaoVenda}</td>
+                        <td><Button size="sm" color={registro.aprovacaoVenda === 'APROVADA' ? 'success' :
+                          registro.aprovacaoVenda === 'AGUARDANDO APROVACAO' ? 'primary' : 'danger'}>{registro.aprovacaoVenda}</Button></td>
                         <td>{registro.quantidade}</td>
                         <td>{registro.nomeCliente}</td>
                         <td>{registro.emailCliente}</td>
