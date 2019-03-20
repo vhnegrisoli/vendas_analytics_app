@@ -1,6 +1,6 @@
 {
-  "name": "TratarVendaFormAdmin",
+  "name": "AprovarVendaForm",
   "version": "0.0.0",
   "private": true,
-  "main": "./TratarVendaFormAdmin.js"
+  "main": "./AprovarVendaForm.js"
 }

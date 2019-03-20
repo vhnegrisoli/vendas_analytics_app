@@ -42,6 +42,7 @@ class DetalharVendaForm extends Component {
       timeout: 300,
       vendas: {},
       produtosId: [],
+      produtos: [],
     };
 
     axios.get('http://localhost:8080/api/vendas/' + this.getUrlParameter()).then(res => {
@@ -55,7 +56,6 @@ class DetalharVendaForm extends Component {
         console.log(res.data.produtos[i].id.produtoId);
       }
     });
-    console.log(this.state.vendas.dataCompra);
   }
   getUrlParameter() {
     var url = window.location.toString().split('/');
