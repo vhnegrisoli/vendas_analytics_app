@@ -1,6 +1,7 @@
 import React, { Component, lazy, Suspense } from 'react';
 import { Bar, Line } from 'react-chartjs-2';
 import axios from 'axios';
+import ReactLoading from 'react-loading';
 import {
   ButtonDropdown,
   ButtonGroup,
@@ -94,13 +95,13 @@ const cardChartOpts1 = {
 let clientes = [];
 let clientesMeses = [];
 let cardChartData2 = {
-  labels: [clientesMeses],
+  labels: clientesMeses,
   datasets: [
     {
       label: 'Quantidade de Clientes',
       backgroundColor: brandInfo,
       borderColor: 'rgba(255,255,255,.55)',
-      data: [JSON.stringify(clientes, '"', '')],
+      data: clientes,
     },
   ],
 };
@@ -321,21 +322,20 @@ var data = [];
 class Dashboard extends Component {
   constructor(props) {
     super(props);
-    this.fetchAllApis();
-    data = [1, 2, 1, 3];
-    console.log('Replace: ' + clientes.toString().replace('"', ''));
+    this.initialize();
     this.toggle = this.toggle.bind(this);
     this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
 
     this.state = {
       dropdownOpen: false,
       radioSelected: 2,
+      isLoading: true,
     };
   }
 
-  fetchAllApis() {
+  async initialize() {
     //VIEWS DO BANCO DE DADOS
-    axios.get('http://localhost:8080/api/dashboard/vendas-por-periodo').then(res => {
+    await axios.get('http://localhost:8080/api/dashboard/vendas-por-periodo').then(res => {
       for (var i = 0; i < res.data.length; i++) {
         mesesGrafico1[i] = res.data[i].meses;
         lucrosGrafico1[i] = res.data[i].lucro;
@@ -344,7 +344,7 @@ class Dashboard extends Component {
       }
     });
 
-    axios.get('http://localhost:8080/api/dashboard/card1/vendas-por-cliente').then(res => {
+    await axios.get('http://localhost:8080/api/dashboard/card1/vendas-por-cliente').then(res => {
       for (var i = 0; i < res.data.length; i++) {
         clientes[i] = Number(res.data[i].clientes);
         clientesMeses[i] = res.data[i].meses;
@@ -353,33 +353,36 @@ class Dashboard extends Component {
     console.log(clientes);
 
     //VALORES SOMATÓRIOS NOS CARDS
-    axios.get('http://localhost:8080/api/clientes/todos').then(res => {
+    await axios.get('http://localhost:8080/api/clientes/todos').then(res => {
       for (var i = 0; i < res.data.length; i++) {
         qtdClientesArr[i] = res.data[i].id;
       }
     });
     qtdClientes = qtdClientesArr.length;
 
-    axios.get('http://localhost:8080/api/produtos/todos').then(res => {
+    await axios.get('http://localhost:8080/api/produtos/todos').then(res => {
       for (var i = 0; i < res.data.length; i++) {
         qtdProdutosArr[i] = res.data[i].id;
       }
     });
     qtdProdutos = qtdProdutosArr.length;
 
-    axios.get('http://localhost:8080/api/vendas/vendas-realizadas').then(res => {
+    await axios.get('http://localhost:8080/api/vendas/vendas-realizadas').then(res => {
       for (var i = 0; i < res.data.length; i++) {
         qtdVendasConcretizadasArr[i] = res.data[i].id;
       }
     });
     qtdVendasConcretizadas = qtdVendasConcretizadasArr.length;
 
-    axios.get('http://localhost:8080/api/vendas/vendas-nao-realizadas').then(res => {
+    await axios.get('http://localhost:8080/api/vendas/vendas-nao-realizadas').then(res => {
       for (var i = 0; i < res.data.length; i++) {
         qtdVendasNaoRealizadasArr[i] = res.data[i].id;
       }
     });
     qtdVendasNaoRealizadas = qtdVendasNaoRealizadasArr.length;
+    this.setState = {
+      isLoading: false,
+    };
   }
 
   componentWillMount() {}

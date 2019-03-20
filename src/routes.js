@@ -48,8 +48,13 @@ const FornecedorList = React.lazy(() => import('./views/Fornecedor/Listar/Fornec
 const UsuarioForm = React.lazy(() => import('./views/Usuario/Cadastrar/UsuarioForm'));
 const UsuarioList = React.lazy(() => import('./views/Usuario/Listar/UsuarioList'));
 const ExportarCsv = React.lazy(() => import('./views/ExportarRelatorioCsv/ExportarCsv'));
-const TratarVendaFormAdmin = React.lazy(() => import('./views/TratarVenda/Tratar/TratarVendaAdminForm'));
-
+const TratarVendaFormAdmin = React.lazy(() =>
+  import('./views/TratarVenda/Tratar/TratarVendaAdminForm'),
+);
+const AprovarVendaForm = React.lazy(() => import('./views/TratarVenda/Aprovar/AprovarVendaForm'));
+const DetalharVendaForm = React.lazy(() =>
+  import('./views/TratarVenda/Detalhar/DetalharVendaForm'),
+);
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
@@ -106,6 +111,8 @@ const routes = [
   { path: '/usuarios/listar', name: 'UsuarioList', component: UsuarioList },
   { path: '/exportar', name: 'ExportarCsv', component: ExportarCsv },
   { path: '/tratar-venda', name: 'TratarVendaFormAdmin', component: TratarVendaFormAdmin },
+  { path: '/aprovar-venda', name: 'AprovarVendaForm', component: AprovarVendaForm },
+  { path: '/detalhar-venda', name: 'DetalharVendaForm', component: DetalharVendaForm },
 ];
 
 export default routes;

@@ -65,7 +65,9 @@ class CategoriaForm extends Component {
         descricao: this.state.descricao,
       })
       .then(res => {
-        window.location.replace = 'http://localhost:3000/#/categorias/listar';
+        if (res.status === 200) {
+          window.location.replace = 'http://localhost:3000/#/categorias/listar';
+        }
       })
       .catch(error => {
         this.setState = {
@@ -80,7 +82,9 @@ class CategoriaForm extends Component {
         descricao: this.state.descricao,
       })
       .then(res => {
-        window.location.replace = 'http://localhost:3000/#/categorias/listar';
+        if (res.status === 200) {
+          window.location.replace = 'http://localhost:3000/#/categorias/listar';
+        }
       })
       .catch(error => {
         this.setState = {
