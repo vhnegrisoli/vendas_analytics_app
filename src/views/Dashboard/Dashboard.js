@@ -279,7 +279,7 @@ const mainChartOpts = {
     mode: 'index',
     position: 'nearest',
     callbacks: {
-      labelColor: function (tooltipItem, chart) {
+      labelColor: function(tooltipItem, chart) {
         return { backgroundColor: chart.data.datasets[tooltipItem.datasetIndex].borderColor };
       },
     },
@@ -342,7 +342,7 @@ class Dashboard extends Component {
       }
     });
 
-    await axios.get('http://localhost:8080/api/dashboard/card1/vendas-por-cliente').then(res => {
+    axios.get('http://localhost:8080/api/dashboard/card1/vendas-por-cliente').then(res => {
       for (var i = 0; i < res.data.length; i++) {
         clientes[i] = Number(res.data[i].clientes);
         clientesMeses[i] = res.data[i].meses;
@@ -351,38 +351,37 @@ class Dashboard extends Component {
     console.log(clientes);
 
     //VALORES SOMATÓRIOS NOS CARDS
-    await axios.get('http://localhost:8080/api/clientes/todos').then(res => {
+    axios.get('http://localhost:8080/api/clientes/todos').then(res => {
       for (var i = 0; i < res.data.length; i++) {
         qtdClientesArr[i] = res.data[i].id;
       }
     });
     qtdClientes = qtdClientesArr.length;
 
-    await axios.get('http://localhost:8080/api/produtos/todos').then(res => {
+    axios.get('http://localhost:8080/api/produtos/todos').then(res => {
       for (var i = 0; i < res.data.length; i++) {
         qtdProdutosArr[i] = res.data[i].id;
       }
     });
     qtdProdutos = qtdProdutosArr.length;
 
-    await axios.get('http://localhost:8080/api/vendas/vendas-realizadas').then(res => {
+    axios.get('http://localhost:8080/api/vendas/vendas-realizadas').then(res => {
       for (var i = 0; i < res.data.length; i++) {
         qtdVendasConcretizadasArr[i] = res.data[i].id;
       }
     });
     qtdVendasConcretizadas = qtdVendasConcretizadasArr.length;
 
-    await axios.get('http://localhost:8080/api/vendas/vendas-nao-realizadas').then(res => {
+    axios.get('http://localhost:8080/api/vendas/vendas-nao-realizadas').then(res => {
       for (var i = 0; i < res.data.length; i++) {
         qtdVendasNaoRealizadasArr[i] = res.data[i].id;
       }
     });
     qtdVendasNaoRealizadas = qtdVendasNaoRealizadasArr.length;
-    this.setState = {
-    };
+    this.setState = {};
   }
 
-  componentWillMount() { }
+  componentWillMount() {}
 
   toggle() {
     this.setState({
@@ -395,7 +394,6 @@ class Dashboard extends Component {
       radioSelected: radioSelected,
     });
   }
-
 
   render() {
     return (

@@ -12,8 +12,6 @@ import {
   Input,
   Label,
 } from 'reactstrap';
-import { Redirect } from 'react-router-dom';
-import { format } from 'path';
 
 class CategoriaForm extends Component {
   constructor(props) {

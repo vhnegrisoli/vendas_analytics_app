@@ -30,6 +30,8 @@ import {
 import { format } from 'path';
 import { hidden } from 'ansi-colors';
 
+let quantidadesArr = [];
+
 class TratarVendaFormAdmin extends Component {
   constructor(props) {
     super(props);
@@ -47,6 +49,8 @@ class TratarVendaFormAdmin extends Component {
       produtoVenda: [],
       preco: 0.0,
       aprovacao: '',
+      quantidade: 0,
+      quantidades: [],
     };
 
     axios.get('http://localhost:8080/api/produtos/todos').then(res => {
@@ -74,25 +78,20 @@ class TratarVendaFormAdmin extends Component {
     });
   }
 
-  onChange = e => {
-    this.setState({
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  adicionaProduto(e) {
+  getIdProduto(id) {
     this.setState = {
-      produtoVenda: [
-        {
-          [e.target.idProduto]: e.target.value,
-          [e.target.quantidade]: e.target.value,
-        },
-      ],
+      idProduto: id,
     };
-    console.log(this.state);
   }
 
-  onSubmit(e) {}
+  adicionaProduto(e) {
+    quantidadesArr.push(e.target.value);
+    this.setState = {
+      quantidades: quantidadesArr,
+    };
+    console.log(quantidadesArr);
+    console.log(this.state.idProduto);
+  }
 
   render() {
     return (
@@ -153,7 +152,6 @@ class TratarVendaFormAdmin extends Component {
                               name="quantidade"
                               id="quantidade"
                               value={this.state.produtoVenda.quantidade}
-                              onChange={e => this.onChange(e)}
                             />
                           </td>
                           <td>
