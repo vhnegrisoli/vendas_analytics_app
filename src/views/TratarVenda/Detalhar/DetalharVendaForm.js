@@ -119,7 +119,7 @@ class DetalharVendaForm extends Component {
         <Row>
           <Col xl={12}>
             <Card>
-              <CardHeader>Detalhes da Venda: {this.state.vendas.id}</CardHeader>
+              <CardHeader>Detalhes da Venda <strong>{this.state.vendas.id}</strong></CardHeader>
               <CardBody>
                 <CardHeader>
                   <Table responsive hover>
