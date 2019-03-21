@@ -1,7 +1,6 @@
 import React, { Component, lazy, Suspense } from 'react';
 import { Bar, Line } from 'react-chartjs-2';
 import axios from 'axios';
-import ReactLoading from 'react-loading';
 import {
   ButtonDropdown,
   ButtonGroup,
@@ -280,7 +279,7 @@ const mainChartOpts = {
     mode: 'index',
     position: 'nearest',
     callbacks: {
-      labelColor: function(tooltipItem, chart) {
+      labelColor: function (tooltipItem, chart) {
         return { backgroundColor: chart.data.datasets[tooltipItem.datasetIndex].borderColor };
       },
     },
@@ -329,7 +328,6 @@ class Dashboard extends Component {
     this.state = {
       dropdownOpen: false,
       radioSelected: 2,
-      isLoading: true,
     };
   }
 
@@ -381,11 +379,10 @@ class Dashboard extends Component {
     });
     qtdVendasNaoRealizadas = qtdVendasNaoRealizadasArr.length;
     this.setState = {
-      isLoading: false,
     };
   }
 
-  componentWillMount() {}
+  componentWillMount() { }
 
   toggle() {
     this.setState({
@@ -399,7 +396,6 @@ class Dashboard extends Component {
     });
   }
 
-  loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>;
 
   render() {
     return (

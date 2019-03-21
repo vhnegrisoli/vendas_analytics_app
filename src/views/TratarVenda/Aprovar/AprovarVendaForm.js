@@ -47,7 +47,9 @@ class AprovarVendaForm extends Component {
       this.setState({
         vendas: res.data,
       });
+      console.log(res.data)
     });
+
   }
 
   toggle() {
@@ -64,12 +66,11 @@ class AprovarVendaForm extends Component {
     this.setState({
       [e.target.name]: e.target.value,
     });
-    console.log(this.state);
   };
 
-  onSubmit(e) {}
+  onSubmit(e) { }
 
-  precoOnClick(e) {}
+  precoOnClick(e) { }
 
   render() {
     return (
@@ -104,10 +105,10 @@ class AprovarVendaForm extends Component {
                               venda.aprovacao === 'AGUARDANDO_APROVACAO'
                                 ? 'warning'
                                 : venda.aprovacao === 'APROVADA'
-                                ? 'success'
-                                : venda.aprovacao === 'REJEITADA'
-                                ? 'danger'
-                                : ''
+                                  ? 'success'
+                                  : venda.aprovacao === 'REJEITADA'
+                                    ? 'danger'
+                                    : ''
                             }
                           >
                             {venda.aprovacao === 'AGUARDANDO_APROVACAO'
@@ -117,11 +118,11 @@ class AprovarVendaForm extends Component {
                         </td>
                         <td>{venda.clientes.nome}</td>
                         <td>
-                          {venda.dataCompra.substring(0, 2) +
+                          {venda.dataCompra.substring(8, 10) +
                             '/' +
-                            venda.dataCompra.substring(2, 4) +
+                            venda.dataCompra.substring(5, 7) +
                             '/' +
-                            venda.dataCompra.substring(7, 10)}
+                            venda.dataCompra.substring(0, 4)}
                         </td>
                         <td>
                           <Button href={'#/detalhar-venda/' + venda.id}>Detalhar </Button>
