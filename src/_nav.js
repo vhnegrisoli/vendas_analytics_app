@@ -135,7 +135,7 @@ export default {
           icon: 'icon-list',
         },
       ],
-    },
+    },/*
     {
       name: 'Pages',
       url: '/pages',
@@ -162,7 +162,7 @@ export default {
           icon: 'icon-star',
         },
       ],
-    },
+    },*/
     {
       name: 'Sair',
       url: '/pages',

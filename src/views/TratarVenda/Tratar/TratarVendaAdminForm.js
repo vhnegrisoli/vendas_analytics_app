@@ -44,10 +44,7 @@ class TratarVendaFormAdmin extends Component {
       produtos: [],
       idProduto: '',
       cliente: '',
-      produtoVenda: {
-        idProduto: '',
-        quantidade: '',
-      },
+      produtoVenda: [],
       preco: 0.0,
       aprovacao: '',
     };
@@ -81,12 +78,21 @@ class TratarVendaFormAdmin extends Component {
     this.setState({
       [e.target.name]: e.target.value,
     });
-    console.log(this.state);
   };
 
-  onSubmit(e) {}
+  adicionaProduto(e) {
+    this.setState = {
+      produtoVenda: [
+        {
+          [e.target.idProduto]: e.target.value,
+          [e.target.quantidade]: e.target.value,
+        },
+      ],
+    };
+    console.log(this.state);
+  }
 
-  precoOnClick(e) {}
+  onSubmit(e) {}
 
   render() {
     return (
@@ -142,14 +148,6 @@ class TratarVendaFormAdmin extends Component {
                           <td>{'R$' + parseFloat(produto.preco).toFixed(2)}</td>
                           <td>{produto.fornecedor.nomeFantasia}</td>
                           <td>
-                            <CustomInput
-                              type="checkbox"
-                              name="idProduto"
-                              value={this.state.produtoVenda.idProduto}
-                              onChange={e => this.onChange(e)}
-                            />
-                          </td>
-                          <td>
                             <Input
                               type="number"
                               name="quantidade"
@@ -158,10 +156,40 @@ class TratarVendaFormAdmin extends Component {
                               onChange={e => this.onChange(e)}
                             />
                           </td>
+                          <td>
+                            <Button color="primary" onClick={e => this.adicionaProduto(e)}>
+                              Adicionar produto
+                            </Button>
+                          </td>
                         </tr>
                       ))}
                     </tbody>
                   </Table>
+                  <Card>
+                    <CardHeader>
+                      Itens adicionados:
+                      <Table>
+                        <thead>
+                          {this.state.produtoVenda.idProduto ? (
+                            <tr>
+                              <th scope="col">Código do Produto</th>
+                              <th scope="col">Quantidade</th>
+                            </tr>
+                          ) : (
+                            'Você ainda não adicionou produtos'
+                          )}
+                        </thead>
+                        <tbody>
+                          {this.state.produtoVenda.map(item => (
+                            <tr>
+                              <td>{item.idProduto}</td>
+                              <td>{item.quantidade}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                    </CardHeader>
+                  </Card>
                   <Table>
                     <tr>
                       <td>
@@ -192,8 +220,7 @@ class TratarVendaFormAdmin extends Component {
 
                 <br />
                 <Button type="submit" size="sm" color="success">
-                  <i className="fa fa-dot-circle-o" />
-                  Realizar venda
+                  <i className="fa fa-dot-circle-o" /> Tratar venda
                 </Button>
               </Form>
             </CardBody>
