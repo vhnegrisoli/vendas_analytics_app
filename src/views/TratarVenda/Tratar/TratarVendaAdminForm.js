@@ -30,7 +30,8 @@ import {
 import { format } from 'path';
 import { hidden } from 'ansi-colors';
 
-let quantidadesArr = [];
+let precoTotal = 0;
+let produtosCarrinho = [];
 
 class TratarVendaFormAdmin extends Component {
   constructor(props) {
@@ -44,6 +45,7 @@ class TratarVendaFormAdmin extends Component {
       timeout: 300,
       clientes: [],
       produtos: [],
+      produtosAdicionados: [],
       idProduto: '',
       cliente: '',
       produtoVenda: [],
@@ -66,8 +68,6 @@ class TratarVendaFormAdmin extends Component {
     });
   }
 
-  componentWillMount() {}
-
   toggle() {
     this.setState({ collapse: !this.state.collapse });
   }
@@ -78,19 +78,34 @@ class TratarVendaFormAdmin extends Component {
     });
   }
 
-  getIdProduto(id) {
-    this.setState = {
-      idProduto: id,
-    };
+  onSubmit(e) {
+    axios.post('http://localhost:8080/api/vendas/salvar', {
+      aprovacao: this.state.aprovacao,
+      produtos: {
+        idProduto: this.state.produtos.id,
+        quantidade: this.state.produtos.quantidade,
+      },
+    });
   }
 
-  adicionaProduto(e) {
-    quantidadesArr.push(e.target.value);
-    this.setState = {
-      quantidades: quantidadesArr,
-    };
-    console.log(quantidadesArr);
-    console.log(this.state.idProduto);
+  onChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  getPreco(preco) {
+    precoTotal = precoTotal + preco;
+  }
+
+  adicionaProduto(produto) {
+    produto.quantidade = this.state.quantidade;
+    produtosCarrinho.push(produto);
+    this.setState({
+      quantidade: 0,
+    });
+    this.forceUpdate();
+    console.log(produtosCarrinho);
   }
 
   render() {
@@ -102,7 +117,7 @@ class TratarVendaFormAdmin extends Component {
               <strong>Tratar Venda </strong> - Administrador
             </CardHeader>
             <CardBody>
-              <Form id="cliente-form" className="form-horizontal" onSubmit={e => this.onSubmit(e)}>
+              <Form id="venda" className="form-horizontal" onSubmit={e => this.onSubmit(e)}>
                 <FormGroup row>
                   <Col md="3">
                     <Label htmlFor="select">Cliente*</Label>
@@ -152,10 +167,25 @@ class TratarVendaFormAdmin extends Component {
                               name="quantidade"
                               id="quantidade"
                               value={this.state.produtoVenda.quantidade}
+                              onChange={e => this.onChange(e)}
                             />
                           </td>
                           <td>
-                            <Button color="primary" onClick={e => this.adicionaProduto(e)}>
+                            <Button
+                              color="primary"
+                              onClick={e =>
+                                this.adicionaProduto(
+                                  {
+                                    id: produto.id,
+                                    nome: produto.nome,
+                                    descricao: produto.descricao,
+                                    preco: produto.preco,
+                                    quantidade: null,
+                                  },
+                                  e,
+                                )
+                              }
+                            >
                               Adicionar produto
                             </Button>
                           </td>
@@ -168,7 +198,7 @@ class TratarVendaFormAdmin extends Component {
                       Itens adicionados:
                       <Table>
                         <thead>
-                          {this.state.produtoVenda.idProduto ? (
+                          {this.state.produtosAdicionados.idProduto ? (
                             <tr>
                               <th scope="col">Código do Produto</th>
                               <th scope="col">Quantidade</th>
@@ -178,10 +208,10 @@ class TratarVendaFormAdmin extends Component {
                           )}
                         </thead>
                         <tbody>
-                          {this.state.produtoVenda.map(item => (
+                          {this.state.produtosAdicionados.map(item => (
                             <tr>
-                              <td>{item.idProduto}</td>
-                              <td>{item.quantidade}</td>
+                              <td>{item.nomeProduto}</td>
+                              <td>{item.descricao}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -191,10 +221,10 @@ class TratarVendaFormAdmin extends Component {
                   <Table>
                     <tr>
                       <td>
-                        <strong>Total de itens: {this.state.produtoVenda.quantidade}</strong>
+                        <strong>Total de itens: {precoTotal}</strong>
                       </td>
                       <td>
-                        <strong>Total a pagar: R${this.state.preco.toFixed(2)}</strong>
+                        <strong>Total a pagar: R${precoTotal.toFixed(2)}</strong>
                       </td>
                     </tr>
                   </Table>

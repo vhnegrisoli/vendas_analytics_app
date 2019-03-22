@@ -316,12 +316,12 @@ const mainChartOpts = {
     },
   },
 };
-var data = [];
 
 class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.initialize();
+    this.forceUpdate();
     this.toggle = this.toggle.bind(this);
     this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
 
@@ -378,10 +378,8 @@ class Dashboard extends Component {
       }
     });
     qtdVendasNaoRealizadas = qtdVendasNaoRealizadasArr.length;
-    this.setState = {};
+    this.forceUpdate();
   }
-
-  componentWillMount() {}
 
   toggle() {
     this.setState({
