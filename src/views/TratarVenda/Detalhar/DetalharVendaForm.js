@@ -1,34 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import {
-  Badge,
-  Button,
-  ButtonDropdown,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Col,
-  Collapse,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Table,
-  Fade,
-  Form,
-  FormGroup,
-  FormText,
-  FormFeedback,
-  Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  Label,
-  CustomInput,
-  Row,
-} from 'reactstrap';
-import { format } from 'path';
-import { hidden } from 'ansi-colors';
+import { Card, CardBody, CardHeader, Col, Table, Label, Row } from 'reactstrap';
 
 class DetalharVendaForm extends Component {
   constructor(props) {

@@ -1,6 +1,7 @@
 import React, { Component, lazy, Suspense } from 'react';
 import { Bar, Line } from 'react-chartjs-2';
 import axios from 'axios';
+import ReactLoading from 'react-loading';
 import {
   ButtonDropdown,
   ButtonGroup,
@@ -286,7 +287,7 @@ const mainChartOpts = {
   },
   maintainAspectRatio: false,
   legend: {
-    display: false,
+    display: true,
   },
   scales: {
     xAxes: [
@@ -300,9 +301,9 @@ const mainChartOpts = {
       {
         ticks: {
           beginAtZero: true,
-          maxTicksLimit: 5,
-          stepSize: Math.ceil(250 / 5),
-          max: 250,
+          maxTicksLimit: 10,
+          stepSize: Math.ceil(10000 / 5),
+          max: 10000,
         },
       },
     ],
@@ -321,13 +322,16 @@ class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.initialize();
-    this.forceUpdate();
     this.toggle = this.toggle.bind(this);
     this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
-
     this.state = {
+      isLoading: true,
       dropdownOpen: false,
       radioSelected: 2,
+      qtdClientes: 0,
+      qtdProdutos: 0,
+      qtdVendasNaoRealizadas: 0,
+      qtdVendasConcretizadas: 0,
     };
   }
 
@@ -351,33 +355,40 @@ class Dashboard extends Component {
     console.log(clientes);
 
     //VALORES SOMATÓRIOS NOS CARDS
-    axios.get('http://localhost:8080/api/clientes/todos').then(res => {
+    await axios.get('http://localhost:8080/api/clientes/todos').then(res => {
       for (var i = 0; i < res.data.length; i++) {
         qtdClientesArr[i] = res.data[i].id;
       }
     });
     qtdClientes = qtdClientesArr.length;
 
-    axios.get('http://localhost:8080/api/produtos/todos').then(res => {
+    await axios.get('http://localhost:8080/api/produtos/todos').then(res => {
       for (var i = 0; i < res.data.length; i++) {
         qtdProdutosArr[i] = res.data[i].id;
       }
     });
     qtdProdutos = qtdProdutosArr.length;
 
-    axios.get('http://localhost:8080/api/vendas/vendas-realizadas').then(res => {
+    await axios.get('http://localhost:8080/api/vendas/vendas-realizadas').then(res => {
       for (var i = 0; i < res.data.length; i++) {
         qtdVendasConcretizadasArr[i] = res.data[i].id;
       }
     });
     qtdVendasConcretizadas = qtdVendasConcretizadasArr.length;
 
-    axios.get('http://localhost:8080/api/vendas/vendas-nao-realizadas').then(res => {
+    await axios.get('http://localhost:8080/api/vendas/vendas-nao-realizadas').then(res => {
       for (var i = 0; i < res.data.length; i++) {
         qtdVendasNaoRealizadasArr[i] = res.data[i].id;
       }
     });
     qtdVendasNaoRealizadas = qtdVendasNaoRealizadasArr.length;
+    this.setState({
+      qtdClientes: qtdClientesArr.length,
+      qtdProdutos: qtdProdutosArr.length,
+      qtdVendasConcretizadas: qtdVendasConcretizadasArr.length,
+      qtdVendasNaoRealizadas: qtdVendasNaoRealizadasArr.length,
+      isLoading: false,
+    });
     this.forceUpdate();
   }
 
@@ -394,7 +405,9 @@ class Dashboard extends Component {
   }
 
   render() {
-    return (
+    return this.state.isLoading ? (
+      <ReactLoading type={'cylon'} height={'100%'} width={'100%'} />
+    ) : (
       <div className="animated fadeIn">
         <Row>
           <Col xs="12" sm="6" lg="3">
@@ -409,7 +422,7 @@ class Dashboard extends Component {
                     }}
                   />
                 </ButtonGroup>
-                <div className="text-value">{qtdClientes}</div>
+                <div className="text-value">{this.state.qtdClientes}</div>
                 <div>Clientes ativos</div>
               </CardBody>
               <div className="chart-wrapper mx-3" style={{ height: '70px' }}>
@@ -430,7 +443,7 @@ class Dashboard extends Component {
                     }}
                   />
                 </ButtonGroup>
-                <div className="text-value">{qtdProdutos}</div>
+                <div className="text-value">{this.state.qtdProdutos}</div>
                 <div>Produtos cadastrados</div>
               </CardBody>
               <div className="chart-wrapper mx-3" style={{ height: '70px' }}>
@@ -451,7 +464,7 @@ class Dashboard extends Component {
                     }}
                   />
                 </ButtonGroup>
-                <div className="text-value">{qtdVendasConcretizadas}</div>
+                <div className="text-value">{this.state.qtdVendasConcretizadas}</div>
                 <div>Vendas concretizadas</div>
               </CardBody>
               <div className="chart-wrapper" style={{ height: '70px' }}>
@@ -472,7 +485,7 @@ class Dashboard extends Component {
                     }}
                   />
                 </ButtonGroup>
-                <div className="text-value">{qtdVendasNaoRealizadas}</div>
+                <div className="text-value">{this.state.qtdVendasNaoRealizadas}</div>
                 <div>Vendas rejeitadas</div>
               </CardBody>
               <div className="chart-wrapper mx-3" style={{ height: '70px' }}>
