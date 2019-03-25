@@ -405,15 +405,14 @@ class Dashboard extends Component {
   }
 
   render() {
-    return this.state.isLoading ? (
-      <ReactLoading type={'cylon'} height={'100%'} width={'100%'} />
-    ) : (
+    return (
       <div className="animated fadeIn">
         <Row>
           <Col xs="12" sm="6" lg="3">
             <Card className="text-white bg-info">
               <CardBody className="pb-0">
                 <ButtonGroup className="float-right">
+                  {this.state.isLoading && <ReactLoading type={'spin'} />}
                   <ButtonDropdown
                     id="card1"
                     isOpen={this.state.card1}
@@ -435,6 +434,7 @@ class Dashboard extends Component {
             <Card className="text-white bg-primary">
               <CardBody className="pb-0">
                 <ButtonGroup className="float-right">
+                  {this.state.isLoading && <ReactLoading type={'spin'} />}
                   <Dropdown
                     id="card2"
                     isOpen={this.state.card2}
@@ -456,6 +456,7 @@ class Dashboard extends Component {
             <Card className="text-white bg-success">
               <CardBody className="pb-0">
                 <ButtonGroup className="float-right">
+                  {this.state.isLoading && <ReactLoading type={'spin'} />}
                   <Dropdown
                     id="card3"
                     isOpen={this.state.card3}
@@ -477,6 +478,7 @@ class Dashboard extends Component {
             <Card className="text-white bg-danger">
               <CardBody className="pb-0">
                 <ButtonGroup className="float-right">
+                  {this.state.isLoading && <ReactLoading type={'spin'} />}
                   <ButtonDropdown
                     id="card4"
                     isOpen={this.state.card4}
@@ -494,23 +496,30 @@ class Dashboard extends Component {
             </Card>
           </Col>
         </Row>
-        <Row>
-          <Col>
-            <Card>
-              <CardBody>
-                <Row>
-                  <Col sm="5">
-                    <CardTitle className="mb-0">Vendas totais por período</CardTitle>
-                  </Col>
-                  <Col sm="7" className="d-none d-sm-inline-block" />
-                </Row>
-                <div className="chart-wrapper" style={{ height: 300 + 'px', marginTop: 40 + 'px' }}>
-                  <Line data={mainChart} options={mainChartOpts} height={300} />
-                </div>
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
+        {this.state.isLoading ? (
+          <ReactLoading type={'bars'} />
+        ) : (
+          <Row>
+            <Col>
+              <Card>
+                <CardBody>
+                  <Row>
+                    <Col sm="5">
+                      <CardTitle className="mb-0">Vendas totais por período</CardTitle>
+                    </Col>
+                    <Col sm="7" className="d-none d-sm-inline-block" />
+                  </Row>
+                  <div
+                    className="chart-wrapper"
+                    style={{ height: 300 + 'px', marginTop: 40 + 'px' }}
+                  >
+                    <Line data={mainChart} options={mainChartOpts} height={300} />
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+        )}
       </div>
     );
   }
