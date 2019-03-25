@@ -31,7 +31,6 @@ import { format } from 'path';
 import { hidden } from 'ansi-colors';
 
 let precoTotal = 0;
-let produtosCarrinho = [];
 
 class TratarVendaFormAdmin extends Component {
   constructor(props) {
@@ -53,6 +52,7 @@ class TratarVendaFormAdmin extends Component {
       aprovacao: '',
       quantidade: 0,
       quantidades: [],
+      produtoVenda: [],
     };
 
     axios.get('http://localhost:8080/api/produtos/todos').then(res => {
@@ -79,12 +79,16 @@ class TratarVendaFormAdmin extends Component {
   }
 
   onSubmit(e) {
+    e.preventDefault();
+    // var objeto = {};
+    // objeto = {
+    //   clientes: { id: this.state.cliente },
+    //   produtos: this.state.produtoVenda,
+    // };
+    // console.log(objeto);
     axios.post('http://localhost:8080/api/vendas/salvar', {
-      aprovacao: this.state.aprovacao,
-      produtos: {
-        idProduto: this.state.produtos.id,
-        quantidade: this.state.produtos.quantidade,
-      },
+      clientes: { id: this.state.cliente },
+      produtos: this.state.produtoVenda,
     });
   }
 
@@ -94,18 +98,33 @@ class TratarVendaFormAdmin extends Component {
     });
   };
 
-  getPreco(preco) {
-    precoTotal = precoTotal + preco;
+  getPreco() {
+    var precoTotal = 0;
+    this.state.produtosAdicionados.map(
+      preco => (precoTotal = precoTotal + preco.preco * preco.quantidade),
+    );
+    return precoTotal;
+  }
+
+  getQtd() {
+    var qtdTotal = 0;
+    this.state.produtosAdicionados.map(qtd => (qtdTotal = qtdTotal + parseInt(qtd.quantidade)));
+    return qtdTotal;
   }
 
   adicionaProduto(produto) {
     produto.quantidade = this.state.quantidade;
-    produtosCarrinho.push(produto);
+    var produtoVendaAdd = {
+      id: { produtoId: produto.id },
+      quantidade: produto.quantidade,
+    };
+    this.state.produtoVenda.push(produtoVendaAdd);
+    this.state.produtosAdicionados.push(produto);
     this.setState({
       quantidade: 0,
     });
     this.forceUpdate();
-    console.log(produtosCarrinho);
+    console.log(this.state.produtosAdicionados);
   }
 
   render() {
@@ -177,7 +196,7 @@ class TratarVendaFormAdmin extends Component {
                                 this.adicionaProduto(
                                   {
                                     id: produto.id,
-                                    nome: produto.nome,
+                                    nome: produto.nomeProduto,
                                     descricao: produto.descricao,
                                     preco: produto.preco,
                                     quantidade: null,
@@ -196,56 +215,46 @@ class TratarVendaFormAdmin extends Component {
                   <Card>
                     <CardHeader>
                       Itens adicionados:
-                      <Table>
-                        <thead>
-                          {this.state.produtosAdicionados.idProduto ? (
+                      <br />
+                      {this.state.produtosAdicionados.length === 0 ? (
+                        <label>
+                          <strong> Você não possui produtos adicionados</strong>
+                        </label>
+                      ) : (
+                        <Table>
+                          <thead>
                             <tr>
                               <th scope="col">Código do Produto</th>
+                              <th scope="col">Nome do Produto</th>
+                              <th scope="col">Preço do Produto</th>
                               <th scope="col">Quantidade</th>
                             </tr>
-                          ) : (
-                            'Você ainda não adicionou produtos'
-                          )}
-                        </thead>
-                        <tbody>
-                          {this.state.produtosAdicionados.map(item => (
-                            <tr>
-                              <td>{item.nomeProduto}</td>
-                              <td>{item.descricao}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </Table>
+                          </thead>
+                          <tbody>
+                            {this.state.produtosAdicionados.map(item => (
+                              <tr>
+                                <td>{item.id}</td>
+                                <td>{item.nome}</td>
+                                <td>{'R$' + item.preco.toFixed(2)}</td>
+                                <td>{item.quantidade}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </Table>
+                      )}
                     </CardHeader>
                   </Card>
                   <Table>
                     <tr>
                       <td>
-                        <strong>Total de itens: {precoTotal}</strong>
+                        <strong>Total de itens: {this.getQtd()}</strong>
                       </td>
                       <td>
-                        <strong>Total a pagar: R${precoTotal.toFixed(2)}</strong>
+                        <strong>Total a pagar: R${this.getPreco().toFixed(2)}</strong>
                       </td>
                     </tr>
                   </Table>
                 </FormGroup>
-
-                <FormGroup>
-                  <Col xs="12" md="4">
-                    <Label check>
-                      {' '}
-                      Aprovação*:
-                      <br />
-                      <br />
-                      <Input type="radio" name="aprovacao" id="aprovada" /> APROVADA <br />
-                      <Input type="radio" name="aprovacao" id="aguardando" /> AGUARDANDO APROVAÇÃO
-                      <br />
-                      <Input type="radio" name="aprovacao" id="rejeitada" /> REJEITADA
-                      <br />
-                    </Label>
-                  </Col>
-                </FormGroup>
-
                 <br />
                 <Button type="submit" size="sm" color="success">
                   <i className="fa fa-dot-circle-o" /> Tratar venda
