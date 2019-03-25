@@ -72,7 +72,9 @@ class DetalharVendaForm extends Component {
 
   getValorTotalDaCompra() {
     var valorTotal = 0.0;
-    this.state.produtos.map(produto => (valorTotal = produto.preco + valorTotal));
+    this.state.produtos.map(
+      produto => (valorTotal = produto.preco * produto.quantidade + valorTotal),
+    );
     return valorTotal;
   }
 

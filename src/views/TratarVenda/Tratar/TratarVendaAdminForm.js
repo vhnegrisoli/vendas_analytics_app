@@ -80,12 +80,6 @@ class TratarVendaFormAdmin extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    // var objeto = {};
-    // objeto = {
-    //   clientes: { id: this.state.cliente },
-    //   produtos: this.state.produtoVenda,
-    // };
-    // console.log(objeto);
     axios.post('http://localhost:8080/api/vendas/salvar', {
       clientes: { id: this.state.cliente },
       produtos: this.state.produtoVenda,
