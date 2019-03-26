@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import { Bar, Doughnut, Line, Pie, Polar, Radar } from 'react-chartjs-2';
 import { Card, CardBody, CardColumns, CardHeader } from 'reactstrap';
+import ReactLoading from 'react-loading';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import axios from 'axios';
 
 let mesesGrafico1 = [];
 let lucrosGrafico1 = [];
 let quantidadesGrafico2 = [];
-let mediaGrafico2 = []
+let mediaGrafico2 = [];
+let categorias = [];
+let lucrosCategorias = [];
+let quantidadesCategorias = [];
 
 const line = {
   labels: mesesGrafico1,
@@ -92,10 +96,10 @@ const radar = {
 };
 
 const pie = {
-  labels: ['Red', 'Green', 'Yellow'],
+  labels: categorias,
   datasets: [
     {
-      data: [300, 50, 100],
+      data: lucrosCategorias,
       backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#E6f9FF', '#ffd1b3', '#ffff99',
         '#1aff1a', , '#004080', , '#ffb3b3', , '#b3ffb3', , '#ccffdd', '#990000'],
       hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#E6f9FF', '#ffd1b3', '#ffff99',
@@ -129,11 +133,16 @@ class Charts extends Component {
     super(props);
     this.state = {
       relatorios: [],
+      categorias: [],
+      isLoading: true
     };
+    this.initialize()
+    this.forceUpdate()
   }
 
-  componentDidMount() {
-    axios.get('http://localhost:8080/api/dashboard/vendas-por-periodo').then(res => {
+
+  async initialize() {
+    await axios.get('http://localhost:8080/api/dashboard/vendas-por-periodo').then(res => {
       this.setState({
         relatorios: res.data,
       });
@@ -145,81 +154,95 @@ class Charts extends Component {
         mediaGrafico2[i] = res.data[i].media;
       }
     });
+
+    await axios.get('http://localhost:8080/api/analytics/vendas-por-categoria').then(res => {
+      this.setState({
+        categorias: res.data,
+        isLoading: false
+      });
+      for (var i = 0; i < res.data.length; i++) {
+        categorias[i] = res.data[i].categoria;
+        lucrosCategorias[i] = res.data[i].lucro;
+        quantidadesCategorias[i] = res.data[i].quantidade;
+      }
+    });
+    this.forceUpdate();
   }
 
   render() {
-    return (
-      <div className="animated fadeIn">
-        <CardColumns className="cols-2">
-          <Card>
-            <CardHeader>
-              Vendas por período
+    return this.state.isLoading ? (<ReactLoading type={'spin'} />
+    ) : (
+        <div className="animated fadeIn" >
+          <CardColumns className="cols-2">
+            <Card>
+              <CardHeader>
+                Lucro mensal de vendas
               <div className="card-header-actions" />
-            </CardHeader>
-            <CardBody>
-              <div className="chart-wrapper">
-                <Line data={line} options={options} />
-              </div>
-            </CardBody>
-          </Card>
-          <Card>
-            <CardHeader>
-              Top 10 Clientes por Lucro
+              </CardHeader>
+              <CardBody>
+                <div className="chart-wrapper">
+                  <Line data={line} options={options} />
+                </div>
+              </CardBody>
+            </Card>
+            <Card>
+              <CardHeader>
+                Média mensal de vendas
               <div className="card-header-actions" />
-            </CardHeader>
-            <CardBody>
-              <div className="chart-wrapper">
-                <Bar data={bar} options={options} />
-              </div>
-            </CardBody>
-          </Card>
-          <Card>
-            <CardHeader>
-              Vendas por Categoria
+              </CardHeader>
+              <CardBody>
+                <div className="chart-wrapper">
+                  <Bar data={bar} options={options} />
+                </div>
+              </CardBody>
+            </Card>
+            <Card>
+              <CardHeader>
+                Vendas por Categoria
               <div className="card-header-actions" />
-            </CardHeader>
-            <CardBody>
-              <div className="chart-wrapper">
-                <Doughnut data={doughnut} />
-              </div>
-            </CardBody>
-          </Card>
-          <Card>
-            <CardHeader>
-              Lucro por tipo de Fornecedor
+              </CardHeader>
+              <CardBody>
+                <div className="chart-wrapper">
+                  <Doughnut data={doughnut} />
+                </div>
+              </CardBody>
+            </Card>
+            <Card>
+              <CardHeader>
+                Lucro por tipo de Fornecedor
               <div className="card-header-actions" />
-            </CardHeader>
-            <CardBody>
-              <div className="chart-wrapper">
-                <Radar data={radar} />
-              </div>
-            </CardBody>
-          </Card>
-          <Card>
-            <CardHeader>
-              Vendas por Categorias
+              </CardHeader>
+              <CardBody>
+                <div className="chart-wrapper">
+                  <Radar data={radar} />
+                </div>
+              </CardBody>
+            </Card>
+            <Card>
+              <CardHeader>
+                Vendas por Categoria
               <div className="card-header-actions" />
-            </CardHeader>
-            <CardBody>
-              <div className="chart-wrapper">
-                <Pie data={pie} />
-              </div>
-            </CardBody>
-          </Card>
-          <Card>
-            <CardHeader>
-              Ainda não sei esse
+              </CardHeader>
+              <CardBody>
+                <div className="chart-wrapper">
+                  <Pie data={pie} />
+                </div>
+              </CardBody>
+            </Card>
+            <Card>
+              <CardHeader>
+                Ainda não sei esse
               <div className="card-header-actions" />
-            </CardHeader>
-            <CardBody>
-              <div className="chart-wrapper">
-                <Polar data={polar} options={options} />
-              </div>
-            </CardBody>
-          </Card>
-        </CardColumns>
-      </div>
-    );
+              </CardHeader>
+              <CardBody>
+                <div className="chart-wrapper">
+                  <Polar data={polar} options={options} />
+                </div>
+              </CardBody>
+            </Card>
+          </CardColumns>
+        </div>
+      );
   }
 }
 
