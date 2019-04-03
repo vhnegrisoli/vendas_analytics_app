@@ -31,18 +31,24 @@ let qtdVendasConcretizadasArr = [];
 let qtdVendasConcretizadas = 0;
 let qtdVendasNaoRealizadasArr = [];
 let qtdVendasNaoRealizadas = 0;
-let clientes = [];
+let clientes = [0];
 let clientesMeses = [];
+let produtos = [0];
+let produtosMeses = [];
+let vendasFeitas = [0];
+let vendasFeitasMeses = [];
+let vendasRejeitadas = [0];
+let vendasRejeitadasMeses = [];
 
 // Card Chart 1
 const cardChartData1 = {
-  labels: clientesMeses,
+  labels: produtosMeses,
   datasets: [
     {
-      label: 'Quantidade de Clientes',
+      label: 'Quantidade de Produtos',
       backgroundColor: brandPrimary,
       borderColor: 'rgba(255,255,255,.55)',
-      data: clientes,
+      data: produtos,
     },
   ],
 };
@@ -75,7 +81,7 @@ const cardChartOpts1 = {
         ticks: {
           display: false,
           min: Math.min.apply(Math, cardChartData1.datasets[0].data) - 5,
-          max: Math.max.apply(Math, cardChartData1.datasets[0].data) + 5,
+          max: Math.max.apply(Math, cardChartData1.datasets[0].data) + 50,
         },
       },
     ],
@@ -98,7 +104,7 @@ let cardChartData2 = {
   labels: clientesMeses,
   datasets: [
     {
-      label: 'Quantidade de Clientes',
+      label: 'Quantidade de Compras por Clientes',
       backgroundColor: brandInfo,
       borderColor: 'rgba(255,255,255,.55)',
       data: clientes,
@@ -134,7 +140,7 @@ const cardChartOpts2 = {
         ticks: {
           display: false,
           min: Math.min.apply(Math, cardChartData2.datasets[0].data) - 5,
-          max: Math.max.apply(Math, cardChartData2.datasets[0].data) + 5,
+          max: Math.max.apply(Math, cardChartData2.datasets[0].data) + 25,
         },
       },
     ],
@@ -154,13 +160,13 @@ const cardChartOpts2 = {
 
 // Card Chart 3
 const cardChartData3 = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  labels: vendasFeitasMeses,
   datasets: [
     {
-      label: 'My First dataset',
+      label: 'Quantidade de vendas realizadas',
       backgroundColor: 'rgba(255,255,255,.2)',
       borderColor: 'rgba(255,255,255,.55)',
-      data: [78, 81, 80, 45, 34, 12, 40],
+      data: vendasFeitas,
     },
   ],
 };
@@ -200,13 +206,13 @@ const cardChartOpts3 = {
 
 // Card Chart 4
 const cardChartData4 = {
-  labels: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+  labels: vendasRejeitadasMeses,
   datasets: [
     {
-      label: 'My First dataset',
+      label: 'Quantidade de vendas rejeitadas',
       backgroundColor: 'rgba(255,255,255,.3)',
       borderColor: 'transparent',
-      data: [78, 81, 80, 45, 34, 12, 40, 75, 34, 89, 32, 68, 54, 72, 18, 98],
+      data: vendasRejeitadas,
     },
   ],
 };
@@ -292,7 +298,7 @@ const mainChart3 = {
       borderColor: brandSuccess,
       pointHoverBackgroundColor: '#fff',
       borderWidth: 2,
-      data: quantidadesGrafico1,
+      data: lucrosGrafico1,
     },
   ],
 };
@@ -415,14 +421,30 @@ class Dashboard extends Component {
         quantidadesGrafico1[i] = res.data[i].quantidade;
       }
     });
-    clientes = [0];
     await axios.get('http://localhost:8080/api/dashboard/card1/vendas-por-cliente').then(res => {
       for (var i = 0; i < res.data.length; i++) {
         clientes[i] = res.data[i].clientes;
         clientesMeses[i] = res.data[i].meses;
       }
     });
-
+    await axios.get('http://localhost:8080/api/dashboard/card2/vendas-por-produto').then(res => {
+      for (var i = 0; i < res.data.length; i++) {
+        produtos[i] = res.data[i].produtos;
+        produtosMeses[i] = res.data[i].meses;
+      }
+    });
+    await axios.get('http://localhost:8080/api/dashboard/card3/vendas-feitas').then(res => {
+      for (var i = 0; i < res.data.length; i++) {
+        vendasFeitas[i] = res.data[i].vendasConcluidas;
+        vendasFeitasMeses[i] = res.data[i].meses;
+      }
+    });
+    await axios.get('http://localhost:8080/api/dashboard/card4/vendas-rejeitadas').then(res => {
+      for (var i = 0; i < res.data.length; i++) {
+        vendasRejeitadas[i] = res.data[i].vendasNaoConcluidas;
+        vendasRejeitadasMeses[i] = res.data[i].meses;
+      }
+    });
     //VALORES SOMATÓRIOS NOS CARDS
     await axios.get('http://localhost:8080/api/clientes/todos').then(res => {
       for (var i = 0; i < res.data.length; i++) {
@@ -441,6 +463,7 @@ class Dashboard extends Component {
     await axios.get('http://localhost:8080/api/vendas/vendas-realizadas').then(res => {
       for (var i = 0; i < res.data.length; i++) {
         qtdVendasConcretizadasArr[i] = res.data[i].id;
+        vendasFeitas = res.data[i].vendas_concl;
       }
     });
     qtdVendasConcretizadas = qtdVendasConcretizadasArr.length;
