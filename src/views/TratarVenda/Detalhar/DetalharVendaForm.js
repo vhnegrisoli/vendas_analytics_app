@@ -85,9 +85,6 @@ class DetalharVendaForm extends Component {
               <CardBody>
                 <Card>
                   <CardHeader>
-                    <Label>Código da Venda: {this.state.vendas.id}</Label>
-                    <Label>Código da Venda: {this.state.vendas.id}</Label>
-                    <Label>Código da Venda: {this.state.vendas.id}</Label>
                     <Table responsive hover>
                       <thead>
                         <tr>

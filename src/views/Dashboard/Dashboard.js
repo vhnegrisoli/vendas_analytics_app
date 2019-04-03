@@ -1,5 +1,5 @@
 import React, { Component, lazy, Suspense } from 'react';
-import { Bar, Line } from 'react-chartjs-2';
+import { Bar, Line, Pie } from 'react-chartjs-2';
 import axios from 'axios';
 import ReactLoading from 'react-loading';
 import {
@@ -250,7 +250,7 @@ const mainChart = {
       backgroundColor: hexToRgba(brandInfo, 10),
       borderColor: brandInfo,
       pointHoverBackgroundColor: '#fff',
-      borderWidth: 2,
+      borderWidth: 4,
       data: quantidadesGrafico1,
     },
     {
@@ -258,7 +258,7 @@ const mainChart = {
       backgroundColor: 'transparent',
       borderColor: brandSuccess,
       pointHoverBackgroundColor: '#fff',
-      borderWidth: 2,
+      borderWidth: 4,
       data: lucrosGrafico1,
     },
     {
@@ -266,8 +266,36 @@ const mainChart = {
       backgroundColor: 'transparent',
       borderColor: brandSuccess,
       pointHoverBackgroundColor: '#fff',
+      borderWidth: 4,
+      data: mediasGrafico1,
+    },
+  ],
+};
+
+const mainChart2 = {
+  labels: mesesGrafico1,
+  datasets: [
+    {
+      label: 'Média Mensal',
+      backgroundColor: brandSuccess,
+      borderColor: brandSuccess,
+      pointHoverBackgroundColor: '#fff',
       borderWidth: 2,
       data: mediasGrafico1,
+    },
+  ],
+};
+
+const mainChart3 = {
+  labels: mesesGrafico1,
+  datasets: [
+    {
+      label: 'Média Mensal',
+      backgroundColor: 'transparent',
+      borderColor: brandSuccess,
+      pointHoverBackgroundColor: '#fff',
+      borderWidth: 2,
+      data: quantidadesGrafico1,
     },
   ],
 };
@@ -317,7 +345,6 @@ const mainChartOpts = {
     },
   },
 };
-
 class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -514,6 +541,48 @@ class Dashboard extends Component {
                     style={{ height: 300 + 'px', marginTop: 40 + 'px' }}
                   >
                     <Line data={mainChart} options={mainChartOpts} height={300} />
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+        )}
+        {this.state.isLoading ? (
+          <ReactLoading type={'bars'} />
+        ) : (
+          <Row>
+            <Col>
+              <Card>
+                <CardBody>
+                  <Row>
+                    <Col sm="5">
+                      <CardTitle className="mb-0">Vendas totais por período</CardTitle>
+                    </Col>
+                    <Col sm="7" className="d-none d-sm-inline-block" />
+                  </Row>
+                  <div
+                    className="chart-wrapper"
+                    style={{ height: 300 + 'px', marginTop: 40 + 'px' }}
+                  >
+                    <Bar data={mainChart2} options={mainChartOpts} height={300} />
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
+            <Col>
+              <Card>
+                <CardBody>
+                  <Row>
+                    <Col sm="5">
+                      <CardTitle className="mb-0">Vendas totais por período</CardTitle>
+                    </Col>
+                    <Col sm="7" className="d-none d-sm-inline-block" />
+                  </Row>
+                  <div
+                    className="chart-wrapper"
+                    style={{ height: 300 + 'px', marginTop: 40 + 'px' }}
+                  >
+                    <Pie data={mainChart3} options={mainChartOpts} height={300} />
                   </div>
                 </CardBody>
               </Card>
