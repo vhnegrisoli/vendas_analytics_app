@@ -253,22 +253,6 @@ const mainChart = {
       borderWidth: 4,
       data: quantidadesGrafico1,
     },
-    {
-      label: 'Margem de Lucro',
-      backgroundColor: 'transparent',
-      borderColor: brandSuccess,
-      pointHoverBackgroundColor: '#fff',
-      borderWidth: 4,
-      data: lucrosGrafico1,
-    },
-    {
-      label: 'Média Mensal',
-      backgroundColor: 'transparent',
-      borderColor: brandSuccess,
-      pointHoverBackgroundColor: '#fff',
-      borderWidth: 4,
-      data: mediasGrafico1,
-    },
   ],
 };
 
@@ -276,7 +260,7 @@ const mainChart2 = {
   labels: mesesGrafico1,
   datasets: [
     {
-      label: 'Média Mensal',
+      label: 'Média de vendas mensal',
       backgroundColor: brandSuccess,
       borderColor: brandSuccess,
       pointHoverBackgroundColor: '#fff',
@@ -290,8 +274,21 @@ const mainChart3 = {
   labels: mesesGrafico1,
   datasets: [
     {
-      label: 'Média Mensal',
-      backgroundColor: 'transparent',
+      label: 'Lucro total por meses',
+      backgroundColor: [
+        '#FF6384',
+        '#36A2EB',
+        '#FFCE56',
+        '#E6f9FF',
+        '#ffd1b3',
+        '#ffff99',
+        '#1aff1a',
+        '#004080',
+        '#ffb3b3',
+        '#b3ffb3',
+        '#ccffdd',
+        '#990000',
+      ],
       borderColor: brandSuccess,
       pointHoverBackgroundColor: '#fff',
       borderWidth: 2,
@@ -301,6 +298,52 @@ const mainChart3 = {
 };
 
 const mainChartOpts = {
+  tooltips: {
+    enabled: false,
+    custom: CustomTooltips,
+    intersect: true,
+    mode: 'index',
+    position: 'nearest',
+    callbacks: {
+      labelColor: function(tooltipItem, chart) {
+        return { backgroundColor: chart.data.datasets[tooltipItem.datasetIndex].borderColor };
+      },
+    },
+  },
+  maintainAspectRatio: false,
+  legend: {
+    display: true,
+  },
+  scales: {
+    xAxes: [
+      {
+        gridLines: {
+          drawOnChartArea: false,
+        },
+      },
+    ],
+    yAxes: [
+      {
+        ticks: {
+          beginAtZero: true,
+          maxTicksLimit: 10,
+          stepSize: Math.ceil(100 / 5),
+          max: 50,
+        },
+      },
+    ],
+  },
+  elements: {
+    point: {
+      radius: 0,
+      hitRadius: 10,
+      hoverRadius: 4,
+      hoverBorderWidth: 3,
+    },
+  },
+};
+
+const mainChartOpts2 = {
   tooltips: {
     enabled: false,
     custom: CustomTooltips,
@@ -556,7 +599,7 @@ class Dashboard extends Component {
                 <CardBody>
                   <Row>
                     <Col sm="5">
-                      <CardTitle className="mb-0">Vendas totais por período</CardTitle>
+                      <CardTitle className="mb-0">Média de vendas por meses</CardTitle>
                     </Col>
                     <Col sm="7" className="d-none d-sm-inline-block" />
                   </Row>
@@ -564,7 +607,7 @@ class Dashboard extends Component {
                     className="chart-wrapper"
                     style={{ height: 300 + 'px', marginTop: 40 + 'px' }}
                   >
-                    <Bar data={mainChart2} options={mainChartOpts} height={300} />
+                    <Bar data={mainChart2} options={mainChartOpts2} height={300} />
                   </div>
                 </CardBody>
               </Card>
@@ -574,7 +617,7 @@ class Dashboard extends Component {
                 <CardBody>
                   <Row>
                     <Col sm="5">
-                      <CardTitle className="mb-0">Vendas totais por período</CardTitle>
+                      <CardTitle className="mb-0">Lucro total por meses</CardTitle>
                     </Col>
                     <Col sm="7" className="d-none d-sm-inline-block" />
                   </Row>
@@ -582,7 +625,7 @@ class Dashboard extends Component {
                     className="chart-wrapper"
                     style={{ height: 300 + 'px', marginTop: 40 + 'px' }}
                   >
-                    <Pie data={mainChart3} options={mainChartOpts} height={300} />
+                    <Pie data={mainChart3} options={mainChartOpts2} height={300} />
                   </div>
                 </CardBody>
               </Card>
