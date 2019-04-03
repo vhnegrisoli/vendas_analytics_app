@@ -31,6 +31,8 @@ let qtdVendasConcretizadasArr = [];
 let qtdVendasConcretizadas = 0;
 let qtdVendasNaoRealizadasArr = [];
 let qtdVendasNaoRealizadas = 0;
+let clientes = [];
+let clientesMeses = [];
 
 // Card Chart 1
 const cardChartData1 = {
@@ -92,8 +94,6 @@ const cardChartOpts1 = {
 
 // Card Chart 2
 
-let clientes = [];
-let clientesMeses = [];
 let cardChartData2 = {
   labels: clientesMeses,
   datasets: [
@@ -415,14 +415,13 @@ class Dashboard extends Component {
         quantidadesGrafico1[i] = res.data[i].quantidade;
       }
     });
-
-    axios.get('http://localhost:8080/api/dashboard/card1/vendas-por-cliente').then(res => {
+    clientes = [0];
+    await axios.get('http://localhost:8080/api/dashboard/card1/vendas-por-cliente').then(res => {
       for (var i = 0; i < res.data.length; i++) {
-        clientes[i] = Number(res.data[i].clientes);
+        clientes[i] = res.data[i].clientes;
         clientesMeses[i] = res.data[i].meses;
       }
     });
-    console.log(clientes);
 
     //VALORES SOMATÓRIOS NOS CARDS
     await axios.get('http://localhost:8080/api/clientes/todos').then(res => {
