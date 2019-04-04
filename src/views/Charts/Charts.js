@@ -268,7 +268,7 @@ class Charts extends Component {
         <CardColumns className="cols-2">
           <Card>
             <CardHeader>
-              Lucro mensal de vendas
+              Lucro total e Média de Lucro por Região
               <div className="card-header-actions" />
             </CardHeader>
             <CardBody>
@@ -279,7 +279,7 @@ class Charts extends Component {
           </Card>
           <Card>
             <CardHeader>
-              Média mensal de vendas
+              Quantidade de Vendas por Estado
               <div className="card-header-actions" />
             </CardHeader>
             <CardBody>
@@ -290,7 +290,7 @@ class Charts extends Component {
           </Card>
           <Card>
             <CardHeader>
-              Vendas por Categoria
+              Quantidade de Vendas por Região
               <div className="card-header-actions" />
             </CardHeader>
             <CardBody>
@@ -301,7 +301,7 @@ class Charts extends Component {
           </Card>
           <Card>
             <CardHeader>
-              Lucro por tipo de Fornecedor
+              Faturamento e Média de Lucro por Produtos
               <div className="card-header-actions" />
             </CardHeader>
             <CardBody>
@@ -312,7 +312,7 @@ class Charts extends Component {
           </Card>
           <Card>
             <CardHeader>
-              Vendas por Categoria
+              Lucro Total por Categoria
               <div className="card-header-actions" />
             </CardHeader>
             <CardBody>
@@ -323,7 +323,7 @@ class Charts extends Component {
           </Card>
           <Card>
             <CardHeader>
-              Ainda não sei esse
+              Quantidade de Clientes por Região
               <div className="card-header-actions" />
             </CardHeader>
             <CardBody>
