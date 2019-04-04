@@ -23,26 +23,20 @@ const brandInfo = getStyle('--info');
 const brandWarning = getStyle('--warning');
 const brandDanger = getStyle('--danger');
 
-let qtdClientesArr = [];
-let qtdClientes = 0;
-let qtdProdutosArr = [];
-let qtdProdutos = 0;
-let qtdVendasConcretizadasArr = [];
-let qtdVendasConcretizadas = 0;
-let qtdVendasNaoRealizadasArr = [];
-let qtdVendasNaoRealizadas = 0;
 let clientes = [0];
-let clientesMeses = [];
 let produtos = [0];
-let produtosMeses = [];
 let vendasFeitas = [0];
-let vendasFeitasMeses = [];
 let vendasRejeitadas = [0];
+let vendasFeitasMeses = [];
 let vendasRejeitadasMeses = [];
+let mesesGrafico = [];
+let lucrosGrafico = [];
+let quantidadesGrafico = [];
+let mediasGrafico = [];
 
 // Card Chart 1
 const cardChartData1 = {
-  labels: produtosMeses,
+  labels: mesesGrafico,
   datasets: [
     {
       label: 'Quantidade de Produtos',
@@ -101,7 +95,7 @@ const cardChartOpts1 = {
 // Card Chart 2
 
 let cardChartData2 = {
-  labels: clientesMeses,
+  labels: mesesGrafico,
   datasets: [
     {
       label: 'Quantidade de Compras por Clientes',
@@ -242,14 +236,8 @@ const cardChartOpts4 = {
 };
 
 // Main Chart
-
-let mesesGrafico1 = [];
-let lucrosGrafico1 = [];
-let quantidadesGrafico1 = [];
-let mediasGrafico1 = [];
-
 const mainChart = {
-  labels: mesesGrafico1,
+  labels: mesesGrafico,
   datasets: [
     {
       label: 'Quantidade de Vendas',
@@ -257,13 +245,13 @@ const mainChart = {
       borderColor: brandInfo,
       pointHoverBackgroundColor: '#fff',
       borderWidth: 4,
-      data: quantidadesGrafico1,
+      data: quantidadesGrafico,
     },
   ],
 };
 
 const mainChart2 = {
-  labels: mesesGrafico1,
+  labels: mesesGrafico,
   datasets: [
     {
       label: 'Média de vendas mensal',
@@ -271,13 +259,13 @@ const mainChart2 = {
       borderColor: brandSuccess,
       pointHoverBackgroundColor: '#fff',
       borderWidth: 2,
-      data: mediasGrafico1,
+      data: mediasGrafico,
     },
   ],
 };
 
 const mainChart3 = {
-  labels: mesesGrafico1,
+  labels: mesesGrafico,
   datasets: [
     {
       label: 'Lucro total por meses',
@@ -298,7 +286,7 @@ const mainChart3 = {
       borderColor: brandSuccess,
       pointHoverBackgroundColor: '#fff',
       borderWidth: 2,
-      data: lucrosGrafico1,
+      data: lucrosGrafico,
     },
   ],
 };
@@ -413,73 +401,46 @@ class Dashboard extends Component {
 
   async initialize() {
     //VIEWS DO BANCO DE DADOS
-    await axios.get('http://localhost:8080/api/dashboard/vendas-por-periodo').then(res => {
+    await axios.get('http://localhost:8080/api/dashboard/vendas-analise-dashboard').then(res => {
       for (var i = 0; i < res.data.length; i++) {
-        mesesGrafico1[i] = res.data[i].meses;
-        lucrosGrafico1[i] = res.data[i].lucro;
-        mediasGrafico1[i] = res.data[i].media;
-        quantidadesGrafico1[i] = res.data[i].quantidade;
-      }
-    });
-    await axios.get('http://localhost:8080/api/dashboard/card1/vendas-por-cliente').then(res => {
-      for (var i = 0; i < res.data.length; i++) {
+        mesesGrafico[i] = res.data[i].meses;
+        lucrosGrafico[i] = res.data[i].lucro;
+        mediasGrafico[i] = res.data[i].media;
+        quantidadesGrafico[i] = res.data[i].quantidade;
         clientes[i] = res.data[i].clientes;
-        clientesMeses[i] = res.data[i].meses;
-      }
-    });
-    await axios.get('http://localhost:8080/api/dashboard/card2/vendas-por-produto').then(res => {
-      for (var i = 0; i < res.data.length; i++) {
         produtos[i] = res.data[i].produtos;
-        produtosMeses[i] = res.data[i].meses;
       }
     });
+
     await axios.get('http://localhost:8080/api/dashboard/card3/vendas-feitas').then(res => {
       for (var i = 0; i < res.data.length; i++) {
         vendasFeitas[i] = res.data[i].vendasConcluidas;
         vendasFeitasMeses[i] = res.data[i].meses;
       }
     });
+
     await axios.get('http://localhost:8080/api/dashboard/card4/vendas-rejeitadas').then(res => {
       for (var i = 0; i < res.data.length; i++) {
         vendasRejeitadas[i] = res.data[i].vendasNaoConcluidas;
         vendasRejeitadasMeses[i] = res.data[i].meses;
       }
     });
+
     //VALORES SOMATÓRIOS NOS CARDS
-    await axios.get('http://localhost:8080/api/clientes/todos').then(res => {
-      for (var i = 0; i < res.data.length; i++) {
-        qtdClientesArr[i] = res.data[i].id;
-      }
-    });
-    qtdClientes = qtdClientesArr.length;
-
-    await axios.get('http://localhost:8080/api/produtos/todos').then(res => {
-      for (var i = 0; i < res.data.length; i++) {
-        qtdProdutosArr[i] = res.data[i].id;
-      }
-    });
-    qtdProdutos = qtdProdutosArr.length;
-
-    await axios.get('http://localhost:8080/api/vendas/vendas-realizadas').then(res => {
-      for (var i = 0; i < res.data.length; i++) {
-        qtdVendasConcretizadasArr[i] = res.data[i].id;
-        vendasFeitas = res.data[i].vendas_concl;
-      }
-    });
-    qtdVendasConcretizadas = qtdVendasConcretizadasArr.length;
-
-    await axios.get('http://localhost:8080/api/vendas/vendas-nao-realizadas').then(res => {
-      for (var i = 0; i < res.data.length; i++) {
-        qtdVendasNaoRealizadasArr[i] = res.data[i].id;
-      }
-    });
-    qtdVendasNaoRealizadas = qtdVendasNaoRealizadasArr.length;
-    this.setState({
-      qtdClientes: qtdClientesArr.length,
-      qtdProdutos: qtdProdutosArr.length,
-      qtdVendasConcretizadas: qtdVendasConcretizadasArr.length,
-      qtdVendasNaoRealizadas: qtdVendasNaoRealizadasArr.length,
-      isLoading: false,
+    await axios.get('http://localhost:8080/api/dashboard/cards-totais').then(res => {
+      console.log(res.data);
+      this.setState = {
+        qtdClientes: res.data.qtdClientes,
+        qtdProdutos: res.data.qtdProdutos,
+        qtdVendasConcretizadas: res.data.qtdVendasRealizadas,
+        qtdVendasNaoRealizadas: res.data.qtdVendasNaoRealizadas,
+        isLoading: false,
+      };
+      this.state.qtdClientes = res.data.qtdClientes;
+      this.state.qtdProdutos = res.data.qtdProdutos;
+      this.state.qtdVendasConcretizadas = res.data.qtdVendasRealizadas;
+      this.state.qtdVendasNaoRealizadas = res.data.qtdVendasNaoRealizadas;
+      this.state.isLoading = false;
     });
     this.forceUpdate();
   }
@@ -613,7 +574,7 @@ class Dashboard extends Component {
           </Row>
         )}
         {this.state.isLoading ? (
-          <ReactLoading type={'bars'} />
+          <label>Aguarde, estamos processando sua análise</label>
         ) : (
           <Row>
             <Col>
