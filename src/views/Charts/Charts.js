@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Bar, Doughnut, Line, Pie, Polar, Radar } from 'react-chartjs-2';
+import { Bar, Doughnut, Line, Pie, Polar, Radar, HorizontalBar } from 'react-chartjs-2';
 import { Card, CardBody, CardColumns, CardHeader } from 'reactstrap';
 import ReactLoading from 'react-loading';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
@@ -12,6 +12,9 @@ let mediaGrafico2 = [];
 let categorias = [];
 let lucrosCategorias = [];
 let quantidadesCategorias = [];
+let produtos = [];
+let lucrosProdutos = [];
+let mediaProdutos = [];
 
 const line = {
   labels: mesesGrafico1,
@@ -101,27 +104,27 @@ const doughnut = {
 };
 
 const radar = {
-  labels: ['Eating', 'Drinking', 'Sleeping', 'Designing', 'Coding', 'Cycling', 'Running'],
+  labels: produtos,
   datasets: [
     {
-      label: 'My First dataset',
-      backgroundColor: 'rgba(179,181,198,0.2)',
-      borderColor: 'rgba(179,181,198,1)',
-      pointBackgroundColor: 'rgba(179,181,198,1)',
+      label: 'Faturamento total',
+      backgroundColor: '#36A2EB',
+      borderColor: '#004080',
+      pointBackgroundColor: '#004080',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
       pointHoverBorderColor: 'rgba(179,181,198,1)',
-      data: [65, 59, 90, 81, 56, 55, 40],
+      data: lucrosProdutos,
     },
     {
-      label: 'My Second dataset',
-      backgroundColor: 'rgba(255,99,132,0.2)',
-      borderColor: 'rgba(255,99,132,1)',
+      label: 'Média de lucro por produto',
+      backgroundColor: '#FF6384',
+      borderColor: '#990000',
       pointBackgroundColor: 'rgba(255,99,132,1)',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
       pointHoverBorderColor: 'rgba(255,99,132,1)',
-      data: [28, 48, 40, 19, 96, 27, 100],
+      data: mediaProdutos,
     },
   ],
 };
@@ -234,14 +237,21 @@ class Charts extends Component {
     });
 
     await axios.get('http://localhost:8080/api/analytics/vendas-por-categoria').then(res => {
-      this.setState({
-        categorias: res.data,
-        isLoading: false,
-      });
       for (var i = 0; i < res.data.length; i++) {
         categorias[i] = res.data[i].categoria;
         lucrosCategorias[i] = res.data[i].lucro;
         quantidadesCategorias[i] = res.data[i].quantidade;
+      }
+    });
+
+    await axios.get('http://localhost:8080/api/analytics/geral-produtos').then(res => {
+      this.setState({
+        isLoading: false,
+      });
+      for (var i = 0; i < res.data.length; i++) {
+        produtos[i] = res.data[i].produto;
+        lucrosProdutos[i] = res.data[i].quantidade;
+        mediaProdutos[i] = res.data[i].media;
       }
     });
     this.forceUpdate();
@@ -296,7 +306,7 @@ class Charts extends Component {
             </CardHeader>
             <CardBody>
               <div className="chart-wrapper">
-                <Radar data={radar} />
+                <HorizontalBar data={radar} />
               </div>
             </CardBody>
           </Card>
