@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Bar, Doughnut, Line, Pie, Polar, Radar, HorizontalBar } from 'react-chartjs-2';
+import { Bar, Doughnut, Line, Pie, Polar, Radar, HorizontalBar, Scatter } from 'react-chartjs-2';
 import { Card, CardBody, CardColumns, CardHeader } from 'reactstrap';
 import ReactLoading from 'react-loading';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
@@ -16,11 +16,24 @@ let produtos = [];
 let lucrosProdutos = [];
 let mediaProdutos = [];
 
+let qtdClientesRegiao = [];
+let qtdProdutosRegiao = [];
+let qtdVendasRegiao = [];
+let lucroRegiao = [];
+let mediaRegiao = [];
+let regiao = [];
+let estado = [];
+
+let mediaFornecedor = [];
+let lucroFornecedor = [];
+let vendaFornecedor = [];
+let fornecedores = [];
+
 const line = {
-  labels: mesesGrafico1,
+  labels: regiao,
   datasets: [
     {
-      label: 'Lucro total por meses',
+      label: 'Lucro total por região',
       fill: false,
       lineTension: 0.1,
       backgroundColor: 'rgba(75,192,192,0.4)',
@@ -38,31 +51,118 @@ const line = {
       pointHoverBorderWidth: 2,
       pointRadius: 1,
       pointHitRadius: 10,
-      data: lucrosGrafico1,
+      data: lucroRegiao,
+    },
+    {
+      label: 'Média por região',
+      fill: false,
+      lineTension: 0.1,
+      backgroundColor: 'rgba(255,99,132,0.2)',
+      borderColor: 'rgba(255,99,132,1)',
+      borderCapStyle: 'butt',
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: 'miter',
+      pointBorderColor: 'rgba(255,99,132,0.2)',
+      pointBackgroundColor: '#fff',
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: 'rgba(255,99,132,0.4)',
+      pointHoverBorderColor: 'rgba(220,220,220,1)',
+      pointHoverBorderWidth: 2,
+      pointRadius: 1,
+      pointHitRadius: 10,
+      data: mediaRegiao,
     },
   ],
 };
 
 const bar = {
-  labels: mesesGrafico1,
+  labels: estado,
   datasets: [
     {
-      label: 'Média de Vendas',
+      label: 'Quantidade de vendas por estado',
       backgroundColor: 'rgba(255,99,132,0.2)',
       borderColor: 'rgba(255,99,132,1)',
       borderWidth: 1,
       hoverBackgroundColor: 'rgba(255,99,132,0.4)',
       hoverBorderColor: 'rgba(255,99,132,1)',
-      data: mediaGrafico2,
+      data: qtdVendasRegiao,
+    },
+    {
+      label: 'Quantidade de produtos por estado',
+      backgroundColor: 'rgba(75,192,192,0.4)',
+      borderColor: 'rgba(75,192,192,1)',
+      borderWidth: 1,
+      hoverBackgroundColor: 'rgba(75,192,192,1)',
+      hoverBorderColor: 'rgba(75,192,192,1)',
+      data: qtdProdutosRegiao,
+    },
+    {
+      label: 'Quantidade de clientes por estado',
+      backgroundColor: '#FFCE56',
+      borderColor: '#ffff99',
+      borderWidth: 1,
+      hoverBackgroundColor: '#ffff99',
+      hoverBorderColor: '#ffff99',
+      data: qtdClientesRegiao,
+    },
+  ],
+};
+
+const bar2 = {
+  labels: estado,
+  datasets: [
+    {
+      label: 'Faturamento por estado',
+      backgroundColor: 'rgba(255,99,132,0.2)',
+      borderColor: 'rgba(255,99,132,1)',
+      borderWidth: 1,
+      hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+      hoverBorderColor: 'rgba(255,99,132,1)',
+      data: lucroRegiao,
+    },
+    {
+      label: 'Média de lucro por estado',
+      backgroundColor: 'rgba(75,192,192,0.4)',
+      borderColor: 'rgba(75,192,192,1)',
+      borderWidth: 1,
+      hoverBackgroundColor: 'rgba(75,192,192,1)',
+      hoverBorderColor: 'rgba(75,192,192,1)',
+      data: mediaRegiao,
+    },
+  ],
+};
+
+const scatter = {
+  labels: estado,
+  datasets: [
+    {
+      label: 'Faturamento por estado',
+      backgroundColor: 'rgba(255,99,132,0.2)',
+      borderColor: 'rgba(255,99,132,1)',
+      borderWidth: 1,
+      hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+      hoverBorderColor: 'rgba(255,99,132,1)',
+      data: lucroRegiao,
+    },
+    {
+      label: 'Média de lucro por estado',
+      backgroundColor: 'rgba(75,192,192,0.4)',
+      borderColor: 'rgba(75,192,192,1)',
+      borderWidth: 1,
+      hoverBackgroundColor: 'rgba(75,192,192,1)',
+      hoverBorderColor: 'rgba(75,192,192,1)',
+      data: mediaRegiao,
     },
   ],
 };
 
 const doughnut = {
-  labels: mesesGrafico1,
+  labels: regiao,
   datasets: [
     {
-      data: quantidadesGrafico2,
+      data: qtdVendasRegiao,
       backgroundColor: [
         '#FF6384',
         '#36A2EB',
@@ -129,6 +229,32 @@ const radar = {
   ],
 };
 
+const radar2 = {
+  labels: fornecedores,
+  datasets: [
+    {
+      label: 'Lucro por fornecedor',
+      backgroundColor: '#36A2EB',
+      borderColor: '#004080',
+      pointBackgroundColor: '#004080',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(179,181,198,1)',
+      data: lucroFornecedor,
+    },
+    {
+      label: 'Média por fornecedor',
+      backgroundColor: '#FF6384',
+      borderColor: '#990000',
+      pointBackgroundColor: 'rgba(255,99,132,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(255,99,132,1)',
+      data: mediaFornecedor,
+    },
+  ],
+};
+
 const pie = {
   labels: categorias,
   datasets: [
@@ -177,7 +303,7 @@ const pie = {
 const polar = {
   datasets: [
     {
-      data: [11, 16, 7, 3, 14],
+      data: qtdClientesRegiao,
       backgroundColor: [
         '#FF6384',
         '#36A2EB',
@@ -196,10 +322,10 @@ const polar = {
         '#ccffdd',
         '#990000',
       ],
-      label: 'My dataset', // for legend
+      label: 'Quantidade de clientes por região', // for legend
     },
   ],
-  labels: ['Red', 'Green', 'Yellow', 'Grey', 'Blue'],
+  labels: regiao,
 };
 
 const options = {
@@ -245,15 +371,37 @@ class Charts extends Component {
     });
 
     await axios.get('http://localhost:8080/api/analytics/geral-produtos').then(res => {
-      this.setState({
-        isLoading: false,
-      });
       for (var i = 0; i < res.data.length; i++) {
         produtos[i] = res.data[i].produto;
         lucrosProdutos[i] = res.data[i].quantidade;
         mediaProdutos[i] = res.data[i].media;
       }
     });
+
+    await axios.get('http://localhost:8080/api/analytics/geral-regioes').then(res => {
+      for (var i = 0; i < res.data.length; i++) {
+        qtdClientesRegiao[i] = res.data[i].qtdClientes;
+        qtdVendasRegiao[i] = res.data[i].qtdVendas;
+        qtdProdutosRegiao[i] = res.data[i].qtdProdutos;
+        lucroRegiao[i] = res.data[i].lucro;
+        mediaRegiao[i] = res.data[i].media;
+        regiao[i] = res.data[i].regiao;
+        estado[i] = res.data[i].estado;
+      }
+    });
+
+    await axios.get('http://localhost:8080/api/analytics/geral-fornecedores').then(res => {
+      this.setState({
+        isLoading: false,
+      });
+      for (var i = 0; i < res.data.length; i++) {
+        mediaFornecedor[i] = res.data[i].media;
+        lucroFornecedor[i] = res.data[i].lucro;
+        vendaFornecedor[i] = res.data[i].qtdVendas;
+        fornecedores[i] = res.data[i].fornecedor;
+      }
+    });
+
     this.forceUpdate();
   }
 
@@ -279,7 +427,7 @@ class Charts extends Component {
           </Card>
           <Card>
             <CardHeader>
-              Quantidade de Vendas por Estado
+              Quantidade de Vendas, Produtos e Clientes por Estado
               <div className="card-header-actions" />
             </CardHeader>
             <CardBody>
@@ -329,6 +477,28 @@ class Charts extends Component {
             <CardBody>
               <div className="chart-wrapper">
                 <Polar data={polar} options={options} />
+              </div>
+            </CardBody>
+          </Card>
+          <Card>
+            <CardHeader>
+              Média e Faturamento por Estados
+              <div className="card-header-actions" />
+            </CardHeader>
+            <CardBody>
+              <div className="chart-wrapper">
+                <Bar data={bar2} options={options} />
+              </div>
+            </CardBody>
+          </Card>
+          <Card>
+            <CardHeader>
+              Média e Lucro por Fornecedores
+              <div className="card-header-actions" />
+            </CardHeader>
+            <CardBody>
+              <div className="chart-wrapper">
+                <HorizontalBar data={radar2} options={options} />
               </div>
             </CardBody>
           </Card>

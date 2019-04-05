@@ -47,9 +47,8 @@ class AprovarVendaForm extends Component {
       this.setState({
         vendas: res.data,
       });
-      console.log(res.data)
+      console.log(res.data);
     });
-
   }
 
   toggle() {
@@ -68,9 +67,9 @@ class AprovarVendaForm extends Component {
     });
   };
 
-  onSubmit(e) { }
+  onSubmit(e) {}
 
-  precoOnClick(e) { }
+  precoOnClick(e) {}
 
   render() {
     return (
@@ -105,10 +104,10 @@ class AprovarVendaForm extends Component {
                               venda.aprovacao === 'AGUARDANDO_APROVACAO'
                                 ? 'warning'
                                 : venda.aprovacao === 'APROVADA'
-                                  ? 'success'
-                                  : venda.aprovacao === 'REJEITADA'
-                                    ? 'danger'
-                                    : ''
+                                ? 'success'
+                                : venda.aprovacao === 'REJEITADA'
+                                ? 'danger'
+                                : ''
                             }
                           >
                             {venda.aprovacao === 'AGUARDANDO_APROVACAO'
@@ -129,14 +128,23 @@ class AprovarVendaForm extends Component {
                         </td>
                         <td>
                           {venda.aprovacao === 'AGUARDANDO_APROVACAO' && (
-                            <Button size="sm" color="success">
+                            <Button
+                              size="sm"
+                              href={'http://localhost:8080/api/vendas/aprovar-venda/' + venda.id}
+                              color="success"
+                            >
                               Aprovar
                             </Button>
                           )}
                         </td>
                         <td>
                           {venda.aprovacao === 'AGUARDANDO_APROVACAO' && (
-                            <Button size="sm" color="danger" href={''}>
+                            <Button
+                              size="sm"
+                              href={'http://localhost:8080/api/vendas/rejeitar-venda/' + venda.id}
+                              color="danger"
+                              href={''}
+                            >
                               Rejeitar
                             </Button>
                           )}
