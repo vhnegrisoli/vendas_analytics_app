@@ -303,7 +303,7 @@ const pie = {
 const polar = {
   datasets: [
     {
-      data: qtdClientesRegiao,
+      data: qtdProdutosRegiao,
       backgroundColor: [
         '#FF6384',
         '#36A2EB',
@@ -322,7 +322,7 @@ const polar = {
         '#ccffdd',
         '#990000',
       ],
-      label: 'Quantidade de clientes por região', // for legend
+      label: 'Quantidade de produtos vendidos por região', // for legend
     },
   ],
   labels: regiao,
@@ -471,7 +471,7 @@ class Charts extends Component {
           </Card>
           <Card>
             <CardHeader>
-              Quantidade de Clientes por Região
+              Quantidade de Produtos Vendidos por Região
               <div className="card-header-actions" />
             </CardHeader>
             <CardBody>

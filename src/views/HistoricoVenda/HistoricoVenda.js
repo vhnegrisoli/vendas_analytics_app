@@ -50,8 +50,22 @@ class HistoricoVenda extends Component {
                       <tr>
                         <td>{registro.codigoVenda}</td>
                         <td>{registro.situacaoVenda}</td>
-                        <td><Button size="sm" color={registro.aprovacaoVenda === 'APROVADA' ? 'success' :
-                          registro.aprovacaoVenda === 'AGUARDANDO APROVACAO' ? 'primary' : 'danger'}>{registro.aprovacaoVenda}</Button></td>
+                        <td>
+                          <Button
+                            size="sm"
+                            color={
+                              registro.aprovacaoVenda === 'APROVADA'
+                                ? 'success'
+                                : registro.aprovacaoVenda === 'AGUARDANDO_APROVACAO'
+                                ? 'warning'
+                                : 'danger'
+                            }
+                          >
+                            {registro.aprovacaoVenda === 'AGUARDANDO_APROVACAO'
+                              ? 'AGUARD. APROVAÇÃO'
+                              : registro.aprovacaoVenda}
+                          </Button>
+                        </td>
                         <td>{registro.quantidade}</td>
                         <td>{registro.nomeCliente}</td>
                         <td>{registro.emailCliente}</td>
