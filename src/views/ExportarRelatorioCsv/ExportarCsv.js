@@ -63,7 +63,7 @@ class ExportarCsv extends Component {
               <Form id="cliente-form" className="form-horizontal">
                 <FormGroup row>
                   <Col md="3">
-                    <Label htmlFor="date-input">Data de Inicial*</Label>
+                    <Label htmlFor="date-input">Data Inicial*</Label>
                   </Col>
                   <Col xs="12" md="9">
                     <Input
@@ -77,7 +77,7 @@ class ExportarCsv extends Component {
                 </FormGroup>
                 <FormGroup row>
                   <Col md="3">
-                    <Label htmlFor="date-input">Data de Final*</Label>
+                    <Label htmlFor="date-input">Data Final*</Label>
                   </Col>
                   <Col xs="12" md="9">
                     <Input
