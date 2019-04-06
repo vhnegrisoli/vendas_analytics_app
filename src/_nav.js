@@ -39,9 +39,14 @@ export default {
       icon: 'icon-cloud-download',
     },
     {
-      name: 'Analytics',
+      name: 'Analytics - Relatórios',
       url: '/charts',
       icon: 'icon-pie-chart',
+    },
+    {
+      name: 'Analytics - Personalizar',
+      url: '/relatorios-personalizados',
+      icon: 'cui-chart',
     },
     {
       title: true,

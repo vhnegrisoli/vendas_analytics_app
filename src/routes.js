@@ -55,7 +55,9 @@ const AprovarVendaForm = React.lazy(() => import('./views/TratarVenda/Aprovar/Ap
 const DetalharVendaForm = React.lazy(() =>
   import('./views/TratarVenda/Detalhar/DetalharVendaForm'),
 );
-
+const Custom = React.lazy(() =>
+  import('./views/Personalizados/Custom'),
+);
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
   { path: '/', exact: true, name: 'Home', component: DefaultLayout },
@@ -113,6 +115,7 @@ const routes = [
   { path: '/tratar-venda', name: 'TratarVendaFormAdmin', component: TratarVendaFormAdmin },
   { path: '/aprovar-venda', name: 'AprovarVendaForm', component: AprovarVendaForm },
   { path: '/detalhar-venda', name: 'DetalharVendaForm', component: DetalharVendaForm },
+  { path: '/relatorios-personalizados', name: 'Custom', component: Custom },
 ];
 
 export default routes;
