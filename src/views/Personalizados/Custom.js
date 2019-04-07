@@ -22,13 +22,13 @@ let dimensao = '';
 let metrica = '';
 let dadosDimensao = [];
 let dadosMetrica = [0];
-let dadosMetrica1 = [0];
 
 const grafico = {
   labels: dadosDimensao,
   datasets: [
     {
       data: dadosMetrica,
+      label: metrica.toString(),
       backgroundColor: [
         '#FF6384',
         '#36A2EB',
@@ -65,46 +65,7 @@ const grafico = {
         '#ccffdd',
         '#990000',
       ],
-    },
-    {
-      data: dadosMetrica1,
-      backgroundColor: [
-        '#FF6384',
-        '#36A2EB',
-        '#FFCE56',
-        '#E6f9FF',
-        '#ffd1b3',
-        '#ffff99',
-        '#1aff1a',
-        ,
-        '#004080',
-        ,
-        '#ffb3b3',
-        ,
-        '#b3ffb3',
-        ,
-        '#ccffdd',
-        '#990000',
-      ],
-      hoverBackgroundColor: [
-        '#FF6384',
-        '#36A2EB',
-        '#FFCE56',
-        '#E6f9FF',
-        '#ffd1b3',
-        '#ffff99',
-        '#1aff1a',
-        ,
-        '#004080',
-        ,
-        '#ffb3b3',
-        ,
-        '#b3ffb3',
-        ,
-        '#ccffdd',
-        '#990000',
-      ],
-    },
+    }
   ],
 };
 
@@ -126,6 +87,7 @@ class Custom extends Component {
       dadosDimensao: [],
       dadosMetrica: []
     };
+
   }
 
   toggle() {
@@ -149,6 +111,8 @@ class Custom extends Component {
         tipo = 'média de vendas'
         break;
     }
+    this.metrica = tipo;
+    console.log(this.metrica)
     return tipo;
   }
 
@@ -160,10 +124,27 @@ class Custom extends Component {
   }
 
   onChange = e => {
+    var nomeCampo = e.target.name;
     this.setState({
       [e.target.name]: e.target.value,
     });
-    console.log(this.state)
+    if (nomeCampo === 'dimensao' || nomeCampo === 'metrica') {
+      switch (this.state.dimensao) {
+        case 'CLIENTE':
+          this.getChamadasCliente()
+          break;
+        case 'PRODUTO':
+          this.getChamadasProduto()
+          break;
+        case 'VENDAS MENSAIS':
+          this.getChamadasVendas();
+          break;
+        case 'REGIAO':
+          this.getChamadasVendas()
+          break;
+      }
+    }
+    this.forceUpdate();
   };
 
   async getChamadasCliente() {
@@ -174,20 +155,44 @@ class Custom extends Component {
     await axios.get('http://localhost:8080/api/analytics/geral-produtos').then(res => {
       for (var i = 0; i < res.data.length; i++) {
         dadosDimensao[i] = res.data[i].produto;
-        dadosMetrica[i] = res.data[i].quantidade;
-        dadosMetrica1[i] = res.data[i].media;
+        if (this.state.metrica === 'COUNT') {
+          dadosMetrica[i] = res.data[i].quantidade;
+        }
+        if (this.state.metrica === 'SUM') {
+          dadosMetrica[i] = res.data[i].quantidade;
+        }
+        if (this.state.metrica === 'AVG') {
+          dadosMetrica[i] = res.data[i].media;
+        }
       }
     });
     this.state.dadosDimensao = dadosDimensao;
     this.state.dadosMetrica = dadosMetrica;
-    this.state.dadosMetrica1 = dadosMetrica;
     this.forceUpdate()
   }
   getChamadasRegiao() {
 
   }
-  getChamadasVendas() {
 
+  async getChamadasVendas() {
+    await axios.get('http://localhost:8080/api/dashboard/vendas-por-periodo').then(res => {
+      for (var i = 0; i < res.data.length; i++) {
+        dadosDimensao[i] = res.data[i].meses;
+        if (this.state.metrica === 'COUNT') {
+          dadosMetrica[i] = res.data[i].quantidade;
+          this.state.dadosMetrica[i] = res.data[i].quantidade;
+        }
+        if (this.state.metrica === 'SUM') {
+          dadosMetrica[i] = res.data[i].lucro;
+          this.state.dadosMetrica[i] = res.data[i].lucro;
+        }
+        if (this.state.metrica === 'AVG') {
+          dadosMetrica[i] = res.data[i].media;
+          this.state.dadosMetrica[i] = res.data[i].media;
+        }
+      }
+    });
+    this.forceUpdate()
   }
 
 
@@ -201,7 +206,7 @@ class Custom extends Component {
       case 'PRODUTO':
         this.getChamadasProduto()
         break;
-      case 'VENDAS':
+      case 'VENDAS MENSAIS':
         this.getChamadasVendas();
         break;
       case 'REGIAO':
@@ -245,8 +250,8 @@ class Custom extends Component {
                           <FormGroup check>
                             <Label check>
                               <Input value={this.state.descricao}
-                                onChange={e => this.onChange(e)} type="radio" name="dimensao" value="VENDA" />{' '}
-                              Analisar por vendas
+                                onChange={e => this.onChange(e)} type="radio" name="dimensao" value="VENDAS MENSAIS" />{' '}
+                              Analisar vendas por meses
                           </Label>
                           </FormGroup>
                           <FormGroup check>
@@ -327,80 +332,48 @@ class Custom extends Component {
                     </Row>
                   </CardFooter>
                 </Card>
-
-                <Row>
-                  <Col md={4}>
-                    <FormGroup>
-                      <Col xs="12" md="9">
-                        <Label htmlFor="date-input">Data Inicial</Label>
-                        <Input
-                          type="date"
-                          id="dataInicial"
-                          name="dataInicial"
-                          placeholder="date"
-                          value={this.state.descricao}
-                          onChange={e => this.onChange(e)}
-                        />
-                      </Col>
-                    </FormGroup>
-                  </Col>
-                  <Col md={4}>
-                    <FormGroup >
-                      <Col xs="12" md="9">
-                        <Label htmlFor="date-input">Data Final</Label>
-                        <Input
-                          type="date"
-                          id="dataFinal"
-                          name="dataFinal"
-                          placeholder="date"
-                          value={this.state.descricao}
-                          onChange={e => this.onChange(e)}
-                        />
-                      </Col>
-                    </FormGroup>
-                  </Col>
-                  <Col md={6}>
-                    <Col xs="12" md="9">
-                      <Button
-                        size="sm"
-                        color="success"
-                        onClick={e => this.fetch(e)}
-                      >
-                        <i className="fa fa-dot-circle-o" /> Gerar relatório
+                <Col md={6}>
+                  <Col xs="12" md="9">
+                    <Button
+                      size="sm"
+                      color="success"
+                      onClick={e => this.fetch(e)}
+                    >
+                      <i className="fa fa-dot-circle-o" /> Gerar relatório
                 </Button>
-                    </Col>
                   </Col>
-                </Row>
-
+                </Col>
               </Form>
             </CardBody>
           </Card>
         </Col>
-        {this.state.dadosMetrica && this.state.dadosMetrica.length > 0 ? (
-          <Col xs="12">
-            <Card>
-              <CardHeader>
-                {this.getTitulo()}
-                <div className="card-header-actions" />
-              </CardHeader>
-              <CardBody>
-                <div className="chart-wrapper">
-                  {this.state.tipoGrafico === 'Pie' ? (
-                    <Pie data={grafico} />
-                  ) : this.state.tipoGrafico === 'Bar' ? (
-                    <Bar data={grafico} />
-                  ) : this.state.tipoGrafico === 'Doughnut' ? (
-                    <Doughnut data={grafico} />
-                  ) : this.state.tipoGrafico === 'HorizontalBar' ? (
-                    <HorizontalBar data={grafico} />
-                  ) : this.state.tipoGrafico === 'Line' ? (
-                    <Line data={grafico} />
-                  ) : ''}
-                </div>
-              </CardBody>
-            </Card>
-          </Col>
-        ) : ('')}
+        {
+          this.state.dadosMetrica && this.state.dadosMetrica.length > 0 ? (
+            <Col xs="12">
+              <Card>
+                <CardHeader>
+                  {this.getTitulo()}
+                  <div className="card-header-actions" />
+                </CardHeader>
+                <CardBody>
+                  <div className="chart-wrapper">
+                    {this.state.tipoGrafico === 'Pie' ? (
+                      <Pie data={grafico} />
+                    ) : this.state.tipoGrafico === 'Bar' ? (
+                      <Bar data={grafico} />
+                    ) : this.state.tipoGrafico === 'Doughnut' ? (
+                      <Doughnut data={grafico} />
+                    ) : this.state.tipoGrafico === 'HorizontalBar' ? (
+                      <HorizontalBar data={grafico} />
+                    ) : this.state.tipoGrafico === 'Line' ? (
+                      <Line data={grafico} />
+                    ) : ''}
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
+          ) : ('')
+        }
       </div >
     );
   }
