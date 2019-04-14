@@ -49,6 +49,11 @@ export default {
       icon: 'cui-chart',
     },
     {
+      name: 'Analytics - Power BI',
+      url: '/relatorios-power-bi',
+      icon: 'cuis-chart-area',
+    },
+    {
       title: true,
       name: 'Gestão do Sistema',
       wrapper: {

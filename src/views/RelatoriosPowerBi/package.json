@@ -1,0 +1,6 @@
+{
+  "name": "RelatoriosPowerBi",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./RelatoriosPowerBi.js"
+}

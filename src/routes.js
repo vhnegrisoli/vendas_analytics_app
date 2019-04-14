@@ -58,6 +58,9 @@ const DetalharVendaForm = React.lazy(() =>
 const Custom = React.lazy(() =>
   import('./views/Personalizados/Custom'),
 );
+const RelatoriosPowerBi = React.lazy(() =>
+  import('./views/RelatoriosPowerBi/RelatoriosPowerBi'),
+);
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
   { path: '/', exact: true, name: 'Home', component: DefaultLayout },
@@ -116,6 +119,7 @@ const routes = [
   { path: '/aprovar-venda', name: 'AprovarVendaForm', component: AprovarVendaForm },
   { path: '/detalhar-venda', name: 'DetalharVendaForm', component: DetalharVendaForm },
   { path: '/relatorios-personalizados', name: 'Custom', component: Custom },
+  { path: '/relatorios-power-bi', name: 'RelatoriosPowerBi', component: RelatoriosPowerBi },
 ];
 
 export default routes;
