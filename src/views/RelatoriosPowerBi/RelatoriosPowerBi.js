@@ -27,6 +27,12 @@ import {
 } from 'reactstrap';
 import { format } from 'path';
 
+let link = '';
+let indice = 0;
+let usuarioId = null;
+let relatorioId = null;
+let relatorios = [];
+let titulo = '';
 class RelatoriosPowerBi extends Component {
   constructor(props) {
     super(props);
@@ -37,16 +43,10 @@ class RelatoriosPowerBi extends Component {
       collapse: true,
       fadeIn: true,
       timeout: 300,
-      relatorios: [],
-      relatorioId: null,
-      indiceRelatorio: null,
       usuarios: [],
-      usuarioId: '',
-      titulos: [],
-      links: []
     };
-    this.initialize()
-    this.forceUpdate()
+    this.initialize();
+    this.forceUpdate();
   }
 
   async initialize() {
@@ -55,7 +55,6 @@ class RelatoriosPowerBi extends Component {
         usuarios: res.data,
       });
     });
-
   }
 
   toggle() {
@@ -69,38 +68,39 @@ class RelatoriosPowerBi extends Component {
   }
 
   async getRelatorios() {
-    await axios.get('http://localhost:8080/api/relatorios-power-bi/buscar/' + this.state.usuarioId)
+    await axios
+      .get('http://localhost:8080/api/relatorios-power-bi/buscar/' + usuarioId)
       .then(res => {
-        this.setState({
-          relatorios: res.data
-        })
-      })
-    this.forceUpdate()
-    console.log(this.state)
+        relatorios = res.data;
+      });
+    this.forceUpdate();
   }
 
   onChange = e => {
-    this.setState({
-      [e.target.name]: e.target.value,
-    });
-    this.forceUpdate()
-    if (this.state.usuarioId || this.state.usuarioId != '') {
-      this.getRelatorios()
+    usuarioId = e.target.value;
+    if (usuarioId) {
+      this.getRelatorios();
     }
+    this.forceUpdate();
   };
 
   setIndice = e => {
-    this.setState({
-      [e.target.name]: e.target.value,
-    });
-    var indice = this.state.relatorios.findIndex(this.state.relatorioId)
-
-    this.setState({
-      indiceRelatorio: indice
-    })
-    console.log(indice)
-    console.log(this.state.ind)
-  }
+    relatorioId = e.target.value;
+    console.log('Id: ' + relatorioId);
+    var index = 0;
+    for (var i = 0; i < relatorios.length; i++) {
+      if (relatorioId === relatorios[i].id) {
+        index = i;
+        break;
+      }
+    }
+    link = relatorios[index].linkRelatorio;
+    titulo = relatorios[index].titulo;
+    this.forceUpdate();
+    console.log('Link: ' + link + ' | Título: ' + titulo);
+    index = 0;
+    relatorioId = null;
+  };
 
   render() {
     return (
@@ -122,7 +122,7 @@ class RelatoriosPowerBi extends Component {
                       name="usuarioId"
                       required
                       id="usuarioId"
-                      value={this.state.usuarioId}
+                      value={usuarioId}
                       onChange={e => this.onChange(e)}
                     >
                       <option value="0">Por favor, selecione o usuário:</option>
@@ -132,7 +132,7 @@ class RelatoriosPowerBi extends Component {
                     </Input>
                   </Col>
                 </FormGroup>
-                {this.state.relatorios && this.state.relatorios.length > 0 ? (
+                {relatorios[0] ? (
                   <FormGroup row>
                     <Col md="3">
                       <Label htmlFor="select">Selecione o Relatório: </Label>
@@ -143,34 +143,38 @@ class RelatoriosPowerBi extends Component {
                         name="relatorioId"
                         required
                         id="select"
-                        value={this.state.relatorioId}
+                        value={relatorioId}
                         onChange={e => this.setIndice(e)}
                       >
                         <option value="0">Por favor, selecione o relatório do usuário:</option>
-                        {this.state.relatorios.map(relatorio => (
+                        {relatorios.map(relatorio => (
                           <option value={relatorio.id}>{relatorio.titulo}</option>
                         ))}
                       </Input>
                     </Col>
                   </FormGroup>
                 ) : (
-                    <p>Você não tem relatórios. </p>
-                  )}
-                {this.state.relatorios && this.state.relatorios != undefined && (
+                  <p>Você não tem relatórios. </p>
+                )}
+                {link != '' && titulo != '' && (
                   <Card>
-                    <CardHeader>
-                    </CardHeader>
+                    <CardHeader>{titulo}</CardHeader>
                     <div class="resp-container">
-                      <iframe class="resp-iframe" src="https://app.powerbi.com/view?r=eyJrIjoiMWQwN2I5MGYtOWY2ZC00OWNiLThiMDgtNzkzNDQ2YTdhNjMzIiwidCI6Ijg2ZjhmOGY5LTk3YTQtNDZkMS05ZTc3LWY2ZGRkYTgwNjkzOCJ9" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
+                      <iframe
+                        class="resp-iframe"
+                        src={link}
+                        gesture="media"
+                        allow="encrypted-media"
+                        allowfullscreen
+                      />
                     </div>
                   </Card>
                 )}
-
               </Form>
             </CardBody>
           </Card>
-        </Col >
-      </div >
+        </Col>
+      </div>
     );
   }
 }
