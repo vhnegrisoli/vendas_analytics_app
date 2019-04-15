@@ -160,7 +160,9 @@ class RelatoriosPowerBi extends Component {
                   <Card>
                     <CardHeader>
                     </CardHeader>
-                    <iframe width="900" height="600" src="https://app.powerbi.com/view?r=eyJrIjoiMWQwN2I5MGYtOWY2ZC00OWNiLThiMDgtNzkzNDQ2YTdhNjMzIiwidCI6Ijg2ZjhmOGY5LTk3YTQtNDZkMS05ZTc3LWY2ZGRkYTgwNjkzOCJ9" frameborder="0" allowFullScreen="true"></iframe>
+                    <div class="resp-container">
+                      <iframe class="resp-iframe" src="https://app.powerbi.com/view?r=eyJrIjoiMWQwN2I5MGYtOWY2ZC00OWNiLThiMDgtNzkzNDQ2YTdhNjMzIiwidCI6Ijg2ZjhmOGY5LTk3YTQtNDZkMS05ZTc3LWY2ZGRkYTgwNjkzOCJ9" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
+                    </div>
                   </Card>
                 )}
 

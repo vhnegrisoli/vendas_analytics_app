@@ -39,19 +39,26 @@ export default {
       icon: 'icon-cloud-download',
     },
     {
-      name: 'Analytics - Relatórios',
-      url: '/charts',
-      icon: 'icon-pie-chart',
-    },
-    {
-      name: 'Analytics - Personalizar',
-      url: '/relatorios-personalizados',
-      icon: 'cui-chart',
-    },
-    {
-      name: 'Analytics - Power BI',
-      url: '/relatorios-power-bi',
-      icon: 'cuis-chart-area',
+      name: 'Analytics & BI',
+      url: '/analytics',
+      icon: 'fa fa-bar-chart',
+      children: [
+        {
+          name: 'Relatórios',
+          url: '/charts',
+          icon: 'icon-pie-chart',
+        },
+        {
+          name: 'Personalizados',
+          url: '/relatorios-personalizados',
+          icon: 'fa fa-line-chart',
+        },
+        {
+          name: 'Microsoft Power BI',
+          url: '/relatorios-power-bi',
+          icon: 'fa fa-pie-chart',
+        },
+      ],
     },
     {
       title: true,
@@ -145,7 +152,7 @@ export default {
           icon: 'icon-list',
         },
       ],
-    },/*
+    } /*
     {
       name: 'Pages',
       url: '/pages',
@@ -172,7 +179,7 @@ export default {
           icon: 'icon-star',
         },
       ],
-    },*/
+    },*/,
     {
       name: 'Sair',
       url: '/pages',
