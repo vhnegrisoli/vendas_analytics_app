@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { Bar, Doughnut, Line, Pie, HorizontalBar } from 'react-chartjs-2';
-import PropTypes from 'prop-types';
-import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
 import {
   Button,
@@ -16,9 +14,7 @@ import {
   Input,
   Label,
 } from 'reactstrap';
-import { format } from 'path';
 
-let dimensao = '';
 let metrica = '';
 let dadosDimensao = [];
 let dadosMetrica = [0];
@@ -65,7 +61,7 @@ const grafico = {
         '#ccffdd',
         '#990000',
       ],
-    }
+    },
   ],
 };
 
@@ -85,9 +81,8 @@ class Custom extends Component {
       dataInicial: '',
       dataFinal: '',
       dadosDimensao: [],
-      dadosMetrica: []
+      dadosMetrica: [],
     };
-
   }
 
   toggle() {
@@ -95,27 +90,31 @@ class Custom extends Component {
   }
 
   getTitulo() {
-    return 'Análise de ' + this.state.dimensao.toLocaleLowerCase() + ' por ' + this.getTituloMetrica(this.state.metrica)
+    return (
+      'Análise de ' +
+      this.state.dimensao.toLocaleLowerCase() +
+      ' por ' +
+      this.getTituloMetrica(this.state.metrica)
+    );
   }
 
   getTituloMetrica(metrica) {
-    var tipo = ''
+    var tipo = '';
     switch (metrica) {
       case 'COUNT':
-        tipo = 'quantidade total de vendas'
+        tipo = 'quantidade total de vendas';
         break;
       case 'SUM':
-        tipo = 'somatório de vendas'
+        tipo = 'somatório de vendas';
         break;
       case 'AVG':
-        tipo = 'média de vendas'
+        tipo = 'média de vendas';
         break;
     }
     this.metrica = tipo;
-    console.log(this.metrica)
+    console.log(this.metrica);
     return tipo;
   }
-
 
   toggleFade() {
     this.setState(prevState => {
@@ -131,25 +130,23 @@ class Custom extends Component {
     if (nomeCampo === 'dimensao' || nomeCampo === 'metrica') {
       switch (this.state.dimensao) {
         case 'CLIENTE':
-          this.getChamadasCliente()
+          this.getChamadasCliente();
           break;
         case 'PRODUTO':
-          this.getChamadasProduto()
+          this.getChamadasProduto();
           break;
         case 'VENDAS MENSAIS':
           this.getChamadasVendas();
           break;
         case 'REGIAO':
-          this.getChamadasVendas()
+          this.getChamadasVendas();
           break;
       }
     }
     this.forceUpdate();
   };
 
-  async getChamadasCliente() {
-
-  }
+  async getChamadasCliente() {}
 
   async getChamadasProduto() {
     await axios.get('http://localhost:8080/api/analytics/geral-produtos').then(res => {
@@ -168,11 +165,9 @@ class Custom extends Component {
     });
     this.state.dadosDimensao = dadosDimensao;
     this.state.dadosMetrica = dadosMetrica;
-    this.forceUpdate()
+    this.forceUpdate();
   }
-  getChamadasRegiao() {
-
-  }
+  getChamadasRegiao() {}
 
   async getChamadasVendas() {
     await axios.get('http://localhost:8080/api/dashboard/vendas-por-periodo').then(res => {
@@ -192,29 +187,29 @@ class Custom extends Component {
         }
       }
     });
-    this.forceUpdate()
+    this.forceUpdate();
   }
-
-
 
   fetch(e) {
     e.preventDefault();
     switch (this.state.dimensao) {
       case 'CLIENTE':
-        this.getChamadasCliente()
+        this.getChamadasCliente();
         break;
       case 'PRODUTO':
-        this.getChamadasProduto()
+        this.getChamadasProduto();
         break;
       case 'VENDAS MENSAIS':
         this.getChamadasVendas();
         break;
       case 'REGIAO':
-        this.getChamadasVendas()
+        this.getChamadasVendas();
+        break;
+      default:
         break;
     }
     this.forceUpdate();
-  };
+  }
 
   render() {
     return (
@@ -234,30 +229,50 @@ class Custom extends Component {
                           <Label>Selecione a dimensão de análise:</Label>
                           <FormGroup check>
                             <Label check>
-                              <Input value={this.state.descricao}
-                                onChange={e => this.onChange(e)} type="radio" name="dimensao" value="CLIENTE" />{' '}
+                              <Input
+                                value={this.state.descricao}
+                                onChange={e => this.onChange(e)}
+                                type="radio"
+                                name="dimensao"
+                                value="CLIENTE"
+                              />{' '}
                               Analisar por clientes
-            </Label>
+                            </Label>
                           </FormGroup>
                           <FormGroup check>
                             <Label check>
-                              <Input value={this.state.descricao}
-                                onChange={e => this.onChange(e)} type="radio" name="dimensao" value="PRODUTO" />{' '}
+                              <Input
+                                value={this.state.descricao}
+                                onChange={e => this.onChange(e)}
+                                type="radio"
+                                name="dimensao"
+                                value="PRODUTO"
+                              />{' '}
                               Analisar por produtos
-            </Label>
+                            </Label>
                           </FormGroup>
 
                           <FormGroup check>
                             <Label check>
-                              <Input value={this.state.descricao}
-                                onChange={e => this.onChange(e)} type="radio" name="dimensao" value="VENDAS MENSAIS" />{' '}
+                              <Input
+                                value={this.state.descricao}
+                                onChange={e => this.onChange(e)}
+                                type="radio"
+                                name="dimensao"
+                                value="VENDAS MENSAIS"
+                              />{' '}
                               Analisar vendas por meses
-                          </Label>
+                            </Label>
                           </FormGroup>
                           <FormGroup check>
                             <Label check>
-                              <Input value={this.state.descricao}
-                                onChange={e => this.onChange(e)} type="radio" name="dimensao" value="REGIAO" />{' '}
+                              <Input
+                                value={this.state.descricao}
+                                onChange={e => this.onChange(e)}
+                                type="radio"
+                                name="dimensao"
+                                value="REGIAO"
+                              />{' '}
                               Analisar por regiões
                             </Label>
                           </FormGroup>
@@ -268,24 +283,39 @@ class Custom extends Component {
                           <Label>Selecione a métrica de análise:</Label>
                           <FormGroup check>
                             <Label check>
-                              <Input value={this.state.descricao}
-                                onChange={e => this.onChange(e)} type="radio" name="metrica" value="SUM" />{' '}
+                              <Input
+                                value={this.state.descricao}
+                                onChange={e => this.onChange(e)}
+                                type="radio"
+                                name="metrica"
+                                value="SUM"
+                              />{' '}
                               Soma de lucro
-            </Label>
+                            </Label>
                           </FormGroup>
                           <FormGroup check>
                             <Label check>
-                              <Input value={this.state.descricao}
-                                onChange={e => this.onChange(e)} type="radio" name="metrica" value="AVG" />{' '}
+                              <Input
+                                value={this.state.descricao}
+                                onChange={e => this.onChange(e)}
+                                type="radio"
+                                name="metrica"
+                                value="AVG"
+                              />{' '}
                               Média de lucro
-            </Label>
+                            </Label>
                           </FormGroup>
                           <FormGroup check>
                             <Label check>
-                              <Input value={this.state.descricao}
-                                onChange={e => this.onChange(e)} type="radio" name="metrica" value="COUNT" />{' '}
+                              <Input
+                                value={this.state.descricao}
+                                onChange={e => this.onChange(e)}
+                                type="radio"
+                                name="metrica"
+                                value="COUNT"
+                              />{' '}
                               Quantidade de vendas
-            </Label>
+                            </Label>
                           </FormGroup>
                         </FormGroup>
                       </Col>
@@ -294,38 +324,63 @@ class Custom extends Component {
                           <Label>Selecione um tipo de gráfico:</Label>
                           <FormGroup check>
                             <Label check>
-                              <Input value={this.state.descricao}
-                                onChange={e => this.onChange(e)} type="radio" name="tipoGrafico" value="Bar" />{' '}
+                              <Input
+                                value={this.state.descricao}
+                                onChange={e => this.onChange(e)}
+                                type="radio"
+                                name="tipoGrafico"
+                                value="Bar"
+                              />{' '}
                               Gráfico de Barras
-            </Label>
+                            </Label>
                           </FormGroup>
                           <FormGroup check>
                             <Label check>
-                              <Input value={this.state.descricao}
-                                onChange={e => this.onChange(e)} type="radio" name="tipoGrafico" value="HorizontalBar" />{' '}
+                              <Input
+                                value={this.state.descricao}
+                                onChange={e => this.onChange(e)}
+                                type="radio"
+                                name="tipoGrafico"
+                                value="HorizontalBar"
+                              />{' '}
                               Gráfico de Barra Horizontal
-            </Label>
+                            </Label>
                           </FormGroup>
                           <FormGroup check>
                             <Label check>
-                              <Input value={this.state.descricao}
-                                onChange={e => this.onChange(e)} type="radio" name="tipoGrafico" value="Pie" />{' '}
+                              <Input
+                                value={this.state.descricao}
+                                onChange={e => this.onChange(e)}
+                                type="radio"
+                                name="tipoGrafico"
+                                value="Pie"
+                              />{' '}
                               Gráfico de Pizza
-            </Label>
+                            </Label>
                           </FormGroup>
                           <FormGroup check>
                             <Label check>
-                              <Input value={this.state.descricao}
-                                onChange={e => this.onChange(e)} type="radio" name="tipoGrafico" value="Doughnut" />{' '}
+                              <Input
+                                value={this.state.descricao}
+                                onChange={e => this.onChange(e)}
+                                type="radio"
+                                name="tipoGrafico"
+                                value="Doughnut"
+                              />{' '}
                               Gráfico de Donut
-            </Label>
+                            </Label>
                           </FormGroup>
                           <FormGroup check>
                             <Label check>
-                              <Input value={this.state.descricao}
-                                onChange={e => this.onChange(e)} type="radio" name="tipoGrafico" value="Line" />{' '}
+                              <Input
+                                value={this.state.descricao}
+                                onChange={e => this.onChange(e)}
+                                type="radio"
+                                name="tipoGrafico"
+                                value="Line"
+                              />{' '}
                               Gráfico de Linha
-            </Label>
+                            </Label>
                           </FormGroup>
                         </FormGroup>
                       </Col>
@@ -334,47 +389,45 @@ class Custom extends Component {
                 </Card>
                 <Col md={6}>
                   <Col xs="12" md="9">
-                    <Button
-                      size="sm"
-                      color="success"
-                      onClick={e => this.fetch(e)}
-                    >
+                    <Button size="sm" color="success" onClick={e => this.fetch(e)}>
                       <i className="fa fa-dot-circle-o" /> Gerar relatório
-                </Button>
+                    </Button>
                   </Col>
                 </Col>
               </Form>
             </CardBody>
           </Card>
         </Col>
-        {
-          this.state.dadosMetrica && this.state.dadosMetrica.length > 0 ? (
-            <Col xs="12">
-              <Card>
-                <CardHeader>
-                  {this.getTitulo()}
-                  <div className="card-header-actions" />
-                </CardHeader>
-                <CardBody>
-                  <div className="chart-wrapper">
-                    {this.state.tipoGrafico === 'Pie' ? (
-                      <Pie data={grafico} />
-                    ) : this.state.tipoGrafico === 'Bar' ? (
-                      <Bar data={grafico} />
-                    ) : this.state.tipoGrafico === 'Doughnut' ? (
-                      <Doughnut data={grafico} />
-                    ) : this.state.tipoGrafico === 'HorizontalBar' ? (
-                      <HorizontalBar data={grafico} />
-                    ) : this.state.tipoGrafico === 'Line' ? (
-                      <Line data={grafico} />
-                    ) : ''}
-                  </div>
-                </CardBody>
-              </Card>
-            </Col>
-          ) : ('')
-        }
-      </div >
+        {this.state.dadosMetrica && this.state.dadosMetrica.length > 0 ? (
+          <Col xs="12">
+            <Card>
+              <CardHeader>
+                {this.getTitulo()}
+                <div className="card-header-actions" />
+              </CardHeader>
+              <CardBody>
+                <div className="chart-wrapper">
+                  {this.state.tipoGrafico === 'Pie' ? (
+                    <Pie data={grafico} />
+                  ) : this.state.tipoGrafico === 'Bar' ? (
+                    <Bar data={grafico} />
+                  ) : this.state.tipoGrafico === 'Doughnut' ? (
+                    <Doughnut data={grafico} />
+                  ) : this.state.tipoGrafico === 'HorizontalBar' ? (
+                    <HorizontalBar data={grafico} />
+                  ) : this.state.tipoGrafico === 'Line' ? (
+                    <Line data={grafico} />
+                  ) : (
+                    ''
+                  )}
+                </div>
+              </CardBody>
+            </Card>
+          </Col>
+        ) : (
+          ''
+        )}
+      </div>
     );
   }
 }

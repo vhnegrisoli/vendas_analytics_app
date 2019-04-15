@@ -1,7 +1,6 @@
-import React, { Component, lazy } from 'react';
+import React, { Component } from 'react';
 import ReactLoading from 'react-loading';
-import { Link } from 'react-router-dom';
-import { Badge, Card, Button, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
+import { Card, Button, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
 import axios from 'axios';
 
 class HistoricoVenda extends Component {

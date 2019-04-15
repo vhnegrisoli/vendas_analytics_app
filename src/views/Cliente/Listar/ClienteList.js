@@ -1,6 +1,6 @@
-import React, { Component, lazy } from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Badge, Card, CardBody, Button, CardHeader, Col, Row, Table } from 'reactstrap';
+import { Card, CardBody, Button, CardHeader, Col, Row, Table } from 'reactstrap';
 import axios from 'axios';
 
 class ClienteList extends Component {

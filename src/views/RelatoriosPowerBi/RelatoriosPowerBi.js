@@ -1,34 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import {
-  Badge,
-  Button,
-  ButtonDropdown,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Col,
-  Collapse,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Fade,
-  Form,
-  FormGroup,
-  FormText,
-  FormFeedback,
-  Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  Label,
-  Row,
-} from 'reactstrap';
+import { Card, CardBody, CardHeader, Col, Form, FormGroup, Input, Label } from 'reactstrap';
 import { format } from 'path';
 
 let link = '';
-let indice = 0;
 let usuarioId = null;
 let relatorioId = null;
 let relatorios = [];
