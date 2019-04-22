@@ -1,18 +1,6 @@
 import React, { Component, lazy } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Badge,
-  Card,
-  CardBody,
-  DropdownMenu,
-  DropdownItem,
-  DropdownToggle,
-  Button,
-  CardHeader,
-  Col,
-  Row,
-  Table,
-} from 'reactstrap';
+import { Card, CardBody, Button, CardHeader, Col, Row, Table } from 'reactstrap';
 import axios from 'axios';
 
 const urlEditar = 'http://localhost:3000/#/categorias/cadastrar/';
@@ -25,15 +13,17 @@ class CategoriaList extends Component {
       dropdownOpen: false,
       categorias: [],
     };
+    this.initialize();
   }
 
-  componentDidMount = () => {
-    axios.get('http://localhost:8080/api/categorias/todas').then(res => {
+  async initialize() {
+    await axios.get('http://localhost:8080/api/categorias/todas').then(res => {
       this.setState({
         categorias: res.data,
       });
     });
-  };
+    this.forceUpdate();
+  }
 
   toggle() {
     this.setState(prevState => ({
@@ -41,8 +31,14 @@ class CategoriaList extends Component {
     }));
   }
 
-  remover(id) {
-    axios.get('http://localhost:8080/api/categorias/remover/' + id).then(res => {});
+  async remover(id, descricao) {
+    const confirmar = window.confirm(
+      'Você realmente deseja excluir a descrição ' + descricao + '?',
+    );
+    if (confirmar == true) {
+      await axios.get(urlRemover + id);
+      this.initialize();
+    }
   }
 
   render() {
@@ -75,7 +71,11 @@ class CategoriaList extends Component {
                           </Button>
                         </td>
                         <td>
-                          <Button size="sm" color="danger" href={urlRemover + categoria.id}>
+                          <Button
+                            size="sm"
+                            color="danger"
+                            onClick={() => this.remover(categoria.id, categoria.descricao)}
+                          >
                             Remover
                           </Button>
                         </td>

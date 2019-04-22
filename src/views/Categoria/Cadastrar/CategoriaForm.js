@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import {
   Button,
   Card,
@@ -12,6 +13,8 @@ import {
   Input,
   Label,
 } from 'reactstrap';
+
+const urlListarCategorias = 'http://localhost:3000/#/categorias/listar';
 
 class CategoriaForm extends Component {
   constructor(props) {
@@ -28,6 +31,19 @@ class CategoriaForm extends Component {
       descricao: '',
     };
     this.getUrlParameter();
+    this.initilize();
+  }
+
+  async initilize() {
+    if (this.getUrlParameter()) {
+      await axios
+        .get('http://localhost:8080/api/categorias/buscar/' + this.getUrlParameter())
+        .then(res => {
+          this.setState({
+            descricao: res.data.descricao,
+          });
+        });
+    }
   }
 
   getUrlParameter() {
@@ -64,7 +80,7 @@ class CategoriaForm extends Component {
       })
       .then(res => {
         if (res.status === 200) {
-          window.location.replace = 'http://localhost:3000/#/categorias/listar';
+          window.location.href = urlListarCategorias;
         }
       })
       .catch(error => {
@@ -81,7 +97,7 @@ class CategoriaForm extends Component {
       })
       .then(res => {
         if (res.status === 200) {
-          window.location.replace = 'http://localhost:3000/#/categorias/listar';
+          window.location.href = urlListarCategorias;
         }
       })
       .catch(error => {
