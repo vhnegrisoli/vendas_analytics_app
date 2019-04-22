@@ -31,6 +31,8 @@ import {
 import { format } from 'path';
 import { hidden } from 'ansi-colors';
 
+const urlAprovar = 'http://localhost:8080/api/vendas/aprovar-venda/';
+const urlReprovar = 'http://localhost:8080/api/vendas/rejeitar-venda/';
 class AprovarVendaForm extends Component {
   constructor(props) {
     super(props);
@@ -44,8 +46,11 @@ class AprovarVendaForm extends Component {
       timeout: 300,
       vendas: [],
     };
+    this.initialize();
+  }
 
-    axios.get('http://localhost:8080/api/vendas/todas').then(res => {
+  async initialize() {
+    await axios.get('http://localhost:8080/api/vendas/todas').then(res => {
       this.setState({
         vendas: res.data,
         isLoading: false,
@@ -73,7 +78,21 @@ class AprovarVendaForm extends Component {
 
   onSubmit(e) {}
 
-  precoOnClick(e) {}
+  async aprovarVenda(id) {
+    const confirmar = window.confirm('Você realmente deseja aprovar a venda ' + id + '?');
+    if (confirmar === true) {
+      await axios.get(urlAprovar + id);
+      this.initialize();
+    }
+  }
+
+  async reprovarVenda(id) {
+    const confirmar = window.confirm('Você realmente deseja reprovar a venda ' + id + '?');
+    if (confirmar === true) {
+      await axios.get(urlReprovar + id);
+      this.initialize();
+    }
+  }
 
   render() {
     return (
@@ -137,7 +156,7 @@ class AprovarVendaForm extends Component {
                             {venda.aprovacao === 'AGUARDANDO_APROVACAO' && (
                               <Button
                                 size="sm"
-                                href={'http://localhost:8080/api/vendas/aprovar-venda/' + venda.id}
+                                onClick={() => this.aprovarVenda(venda.id)}
                                 color="success"
                               >
                                 Aprovar
@@ -148,7 +167,7 @@ class AprovarVendaForm extends Component {
                             {venda.aprovacao === 'AGUARDANDO_APROVACAO' && (
                               <Button
                                 size="sm"
-                                href={'http://localhost:8080/api/vendas/rejeitar-venda/' + venda.id}
+                                onClick={() => this.reprovarVenda(venda.id)}
                                 color="danger"
                                 href={''}
                               >

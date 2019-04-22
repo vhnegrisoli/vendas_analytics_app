@@ -2,37 +2,21 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import ReactLoading from 'react-loading';
 import {
-  Badge,
   Button,
-  ButtonDropdown,
   Card,
   CardBody,
-  CardFooter,
   CardHeader,
   Col,
-  Collapse,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
   Table,
-  Fade,
   Form,
   FormGroup,
-  FormText,
-  FormFeedback,
   Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
   Label,
-  CustomInput,
-  Row,
 } from 'reactstrap';
 import { format } from 'path';
 import { hidden } from 'ansi-colors';
 
-let precoTotal = 0;
-
+const urlAprovacaoVendas = 'http://localhost:3000/#/aprovar-venda';
 class TratarVendaFormAdmin extends Component {
   constructor(props) {
     super(props);
@@ -84,12 +68,16 @@ class TratarVendaFormAdmin extends Component {
     });
   }
 
-  onSubmit(e) {
-    e.preventDefault();
-    axios.post('http://localhost:8080/api/vendas/salvar', {
-      clientes: { id: this.state.cliente },
-      produtos: this.state.produtoVenda,
-    });
+  async onSubmit(e) {
+    const confirmar = window.confirm('Confirmar compra?');
+    if (confirmar == true) {
+      e.preventDefault();
+      await axios.post('http://localhost:8080/api/vendas/salvar', {
+        clientes: { id: this.state.cliente },
+        produtos: this.state.produtoVenda,
+      });
+    }
+    window.location.href = urlAprovacaoVendas;
   }
 
   onChange = e => {
@@ -124,7 +112,20 @@ class TratarVendaFormAdmin extends Component {
       quantidade: 0,
     });
     this.forceUpdate();
-    console.log(this.state.produtosAdicionados);
+  }
+
+  removerProduto(id) {
+    var array = [];
+    for (var i = 0; i < this.state.produtosAdicionados.length; i++) {
+      if (!this.state.produtosAdicionados[i].id === id) {
+        array[i] = this.state.produtosAdicionados[i];
+      }
+    }
+    console.log(array);
+    this.setState({
+      produtosAdicionados: array,
+    });
+    this.forceUpdate();
   }
 
   render() {
@@ -231,6 +232,7 @@ class TratarVendaFormAdmin extends Component {
                                 <th scope="col">Nome do Produto</th>
                                 <th scope="col">Preço do Produto</th>
                                 <th scope="col">Quantidade</th>
+                                <th scope="col">Remover</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -240,6 +242,15 @@ class TratarVendaFormAdmin extends Component {
                                   <td>{item.nome}</td>
                                   <td>{'R$' + item.preco.toFixed(2)}</td>
                                   <td>{item.quantidade}</td>
+                                  <td>
+                                    <Button
+                                      size="sm"
+                                      color="danger"
+                                      onClick={() => this.removerProduto(item.id)}
+                                    >
+                                      Remover item
+                                    </Button>
+                                  </td>
                                 </tr>
                               ))}
                             </tbody>
