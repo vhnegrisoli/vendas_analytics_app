@@ -1,6 +1,6 @@
 import React, { Component, lazy } from 'react';
 import { Link } from 'react-router-dom';
-import { Card, CardBody, Button, CardHeader, Col, Row, Table } from 'reactstrap';
+import { Card, CardBody, Button, Modal, ModalHeader, ModalBody, ModalFooter, CardHeader, Col, Row, Table } from 'reactstrap';
 import axios from 'axios';
 
 const urlEditar = 'http://localhost:3000/#/categorias/cadastrar/';
@@ -10,7 +10,7 @@ class CategoriaList extends Component {
     super(props);
     this.toggle = this.toggle.bind(this);
     this.state = {
-      dropdownOpen: false,
+      modal: false,
       categorias: [],
     };
     this.initialize();
@@ -27,18 +27,14 @@ class CategoriaList extends Component {
 
   toggle() {
     this.setState(prevState => ({
-      dropdownOpen: !prevState.dropdownOpen,
+      modal: !prevState.modal
     }));
   }
 
-  async remover(id, descricao) {
-    const confirmar = window.confirm(
-      'Você realmente deseja excluir a descrição ' + descricao + '?',
-    );
-    if (confirmar == true) {
-      await axios.get(urlRemover + id);
-      this.initialize();
-    }
+  async remover(id) {
+    await axios.get(urlRemover + id);
+    this.initialize();
+    this.toggle()
   }
 
   render() {
@@ -74,10 +70,16 @@ class CategoriaList extends Component {
                           <Button
                             size="sm"
                             color="danger"
-                            onClick={() => this.remover(categoria.id, categoria.descricao)}
-                          >
+                            onClick={this.toggle}>
                             Remover
                           </Button>
+                          <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+                            <ModalHeader toggle={this.toggle}>Deseja remover a categoria {categoria.descricao}?</ModalHeader>
+                            <ModalFooter>
+                              <Button color="danger" onClick={() => this.remover(categoria.id)}>Remover</Button>{' '}
+                              <Button color="secondary" onClick={this.toggle}>Cancelar</Button>
+                            </ModalFooter>
+                          </Modal>
                         </td>
                       </tr>
                     ))}
