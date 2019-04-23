@@ -27,6 +27,8 @@ import {
 } from 'reactstrap';
 import { format } from 'path';
 
+const urlListarClientes = 'http://localhost:3000/#/cliente/listar'
+
 class ClienteForm extends Component {
   constructor(props) {
     super(props);
@@ -37,13 +39,50 @@ class ClienteForm extends Component {
       collapse: true,
       fadeIn: true,
       timeout: 300,
-      estados: []
+      estados: [],
+      nome: '',
+      email: '',
+      cpf: '',
+      rg: '',
+      dataNascimento: '',
+      telefone: '',
+      rua: '',
+      numero: '',
+      cep: '',
+      complemento: '',
+      cidade: '',
+      estado: ''
     };
-    axios.get('http://localhost:8080/api/estados/listar').then(res => {
+    this.getUrlParameter();
+    this.initilize();
+  }
+
+  async initilize() {
+    await axios.get('http://localhost:8080/api/estados/listar').then(res => {
       this.setState({
         estados: res.data,
       });
     });
+    if (this.getUrlParameter()) {
+      await axios
+        .get('http://localhost:8080/api/clientes/buscar/' + this.getUrlParameter())
+        .then(res => {
+          this.setState({
+            nome: res.data.nome,
+            email: res.data.email,
+            cpf: res.data.cpf,
+            rg: res.data.rg,
+            dataNascimento: res.data.dataNascimento,
+            telefone: res.data.telefone,
+            rua: res.data.rua,
+            numero: res.data.numero,
+            cep: res.data.cep,
+            complemento: res.data.complemento,
+            cidade: res.data.cidade,
+            estado: res.data.estado.id
+          });
+        });
+    }
   }
 
   toggle() {
@@ -60,8 +99,88 @@ class ClienteForm extends Component {
 
   }
 
-  onSubmit(e) {
+  onChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  };
 
+
+  getUrlParameter() {
+    var url = window.location.toString().split('/');
+    var id = url[url.length - 1];
+    if (!isNaN(id)) {
+      return parseInt(url[url.length - 1]);
+    } else {
+      return '';
+    }
+  }
+
+  editar() {
+    axios
+      .post('http://localhost:8080/api/clientes/salvar', {
+        id: this.getUrlParameter(),
+        nome: this.state.nome,
+        email: this.state.email,
+        cpf: this.state.cpf,
+        rg: this.state.rg,
+        telefone: this.state.telefone,
+        dataNascimento: this.state.dataNascimento,
+        rua: this.state.rua,
+        cep: this.state.cep,
+        complemento: this.state.complemento,
+        cidade: this.state.cidade,
+        numero: this.state.numero,
+        estado: { id: this.state.estado }
+      })
+      .then(res => {
+        if (res.status === 200) {
+          window.location.href = urlListarClientes;
+        }
+      })
+      .catch(error => {
+        this.setState = {
+          error: true,
+        };
+      });
+  }
+
+  salvar() {
+    axios
+      .post('http://localhost:8080/api/clientes/salvar', {
+        nome: this.state.nome,
+        email: this.state.email,
+        cpf: this.state.cpf,
+        rg: this.state.rg,
+        telefone: this.state.telefone,
+        dataNascimento: this.state.dataNascimento,
+        rua: this.state.rua,
+        cep: this.state.cep,
+        complemento: this.state.complemento,
+        cidade: this.state.cidade,
+        numero: this.state.numero,
+        estado: { id: this.state.estado }
+      })
+      .then(res => {
+        if (res.status === 200) {
+          window.location.href = urlListarClientes;
+        }
+      })
+      .catch(error => {
+        this.setState = {
+          error: true,
+        };
+      });
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+    console.log(this.state)
+    if (this.getUrlParameter()) {
+      this.editar();
+    } else {
+      this.salvar();
+    }
   }
 
   render() {
@@ -76,14 +195,15 @@ class ClienteForm extends Component {
               <Form
                 id="cliente-form"
                 className="form-horizontal"
-                onSubmit={this.onSubmit.bind(this)}
+                onSubmit={e => this.onSubmit(e)}
               >
                 <FormGroup row>
                   <Col md="3">
                     <Label htmlFor="text-input">Nome completo*</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <Input type="text" id="nome" required name="nome" placeholder="Nome completo" />
+                    <Input type="text" id="nome" value={this.state.nome}
+                      onChange={e => this.onChange(e)} required name="nome" placeholder="Nome completo" />
                     <FormText color="muted">Digite o nome completo do cliente.</FormText>
                   </Col>
                 </FormGroup>
@@ -98,6 +218,8 @@ class ClienteForm extends Component {
                       name="email"
                       placeholder="Email"
                       autoComplete="email"
+                      value={this.state.email}
+                      onChange={e => this.onChange(e)}
                     />
                     <FormText className="help-block">Digite o email.</FormText>
                   </Col>
@@ -107,7 +229,8 @@ class ClienteForm extends Component {
                     <Label htmlFor="cpf-input">CPF*</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <Input type="text" id="cpf" name="cpf" placeholder="CPF" autoComplete="cpf" />
+                    <Input type="text" id="cpf" name="cpf" placeholder="CPF" autoComplete="cpf" value={this.state.cpf}
+                      onChange={e => this.onChange(e)} />
                     <FormText className="help-block">Digite o CPF.</FormText>
                   </Col>
                 </FormGroup>
@@ -116,7 +239,8 @@ class ClienteForm extends Component {
                     <Label htmlFor="rg-input">RG*</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <Input type="text" id="rg" name="rg" placeholder="RG" autoComplete="rg" />
+                    <Input type="text" id="rg" name="rg" placeholder="RG" autoComplete="rg" value={this.state.rg}
+                      onChange={e => this.onChange(e)} />
                     <FormText className="help-block">Digite o RG.</FormText>
                   </Col>
                 </FormGroup>
@@ -131,6 +255,8 @@ class ClienteForm extends Component {
                       id="dataNascimento"
                       name="dataNascimento"
                       placeholder="date"
+                      value={this.state.dataNascimento}
+                      onChange={e => this.onChange(e)}
                     />
                   </Col>
                 </FormGroup>
@@ -145,6 +271,8 @@ class ClienteForm extends Component {
                       name="telefone"
                       placeholder="Telefone"
                       autoComplete="telefone"
+                      value={this.state.telefone}
+                      onChange={e => this.onChange(e)}
                     />
                     <FormText className="help-block">Digite o telefone.</FormText>
                   </Col>
@@ -158,7 +286,8 @@ class ClienteForm extends Component {
                     <Label htmlFor="text-input">Rua*</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <Input type="text" id="rua" required name="rua" placeholder="Rua" />
+                    <Input type="text" id="rua" required name="rua" placeholder="Rua" value={this.state.rua}
+                      onChange={e => this.onChange(e)} />
                     <FormText color="muted">Digite o nome da rua.</FormText>
                   </Col>
                 </FormGroup>
@@ -167,7 +296,8 @@ class ClienteForm extends Component {
                     <Label htmlFor="text-input">Número*</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <Input type="number" id="numero" required name="numero" placeholder="Número" />
+                    <Input type="number" id="numero" required name="numero" placeholder="Número" value={this.state.numero}
+                      onChange={e => this.onChange(e)} />
                     <FormText color="muted">Digite o número da rua.</FormText>
                   </Col>
                 </FormGroup>
@@ -176,7 +306,8 @@ class ClienteForm extends Component {
                     <Label htmlFor="text-input">CEP*</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <Input type="text" id="cep" required name="cep" placeholder="CEP" />
+                    <Input type="text" id="cep" required name="cep" placeholder="CEP" value={this.state.cep}
+                      onChange={e => this.onChange(e)} />
                     <FormText color="muted">Digite o CEP da rua.</FormText>
                   </Col>
                 </FormGroup>
@@ -191,6 +322,8 @@ class ClienteForm extends Component {
                       required
                       name="complemento"
                       placeholder="Complemento"
+                      value={this.state.complemento}
+                      onChange={e => this.onChange(e)}
                     />
                     <FormText color="muted">Digite algum complemento (opcional).</FormText>
                   </Col>
@@ -200,7 +333,8 @@ class ClienteForm extends Component {
                     <Label htmlFor="text-input">Cidade*</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <Input type="text" id="cidade" required name="cidade" placeholder="Cidade" />
+                    <Input type="text" id="cidade" required name="cidade" value={this.state.cidade}
+                      onChange={e => this.onChange(e)} placeholder="Cidade" />
                     <FormText color="muted">Digite a cidade.</FormText>
                   </Col>
                 </FormGroup>
@@ -215,6 +349,8 @@ class ClienteForm extends Component {
                       onClick={this.handleChange.bind(this)}
                       required
                       id="estado"
+                      value={this.state.estado}
+                      onChange={e => this.onChange(e)}
                     >
                       <option type="option" value="0">
                         Por favor, selecione um estado:
@@ -229,7 +365,7 @@ class ClienteForm extends Component {
                 </FormGroup>
                 <Button size="sm" color="success">
                   <i className="fa fa-dot-circle-o" />
-                  Cadastrar
+                  {' '}Salvar
                 </Button>
               </Form>
             </CardBody>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import ReactLoading from 'react-loading';
-import { Card, CardBody, CardHeader, Col, Table, Label, Row } from 'reactstrap';
+import { Card, CardBody, CardHeader, Col, Table, Button, Row } from 'reactstrap';
 
 class DetalharVendaForm extends Component {
   constructor(props) {
@@ -85,88 +85,100 @@ class DetalharVendaForm extends Component {
         {this.state.isLoading ? (
           <ReactLoading type={'spin'} />
         ) : (
-          <Row>
-            <Col xl={12}>
-              <Card>
-                <CardHeader>
-                  Detalhes da Venda <strong>{this.state.vendas.id}</strong>
-                </CardHeader>
-                <CardBody>
-                  <Card>
-                    <CardHeader>
-                      <Table responsive hover>
-                        <thead>
-                          <tr>
-                            <th scope="col">Código da Venda</th>
-                            <th scope="col">Situação</th>
-                            <th scope="col">Status de Aprovação</th>
-                            <th scope="col">Compra efetuada em</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>{this.state.vendas.id}</td>
-                            <td>{this.state.vendas.situacao}</td>
-                            <td>
-                              {' '}
-                              {this.state.vendas.aprovacao === 'AGUARDANDO_APROVACAO'
-                                ? 'AGUARDANDO APROVAÇÃO'
-                                : this.state.vendas.aprovacao}
-                            </td>
-                            <td>
-                              {this.getData().substring(8, 10) +
-                                ' de ' +
-                                this.state.vendas.mesCompra +
-                                ' de ' +
-                                this.getData().substring(11, 15)}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </Table>
-                    </CardHeader>
-                  </Card>
-                  <Table responsive hover>
-                    <thead>
-                      <tr>
-                        <th scope="col">Código do Produto</th>
-                        <th scope="col">Nome do Produto</th>
-                        <th scope="col">Descrição do Produto</th>
-                        <th scope="col">Fornecedor do Produto</th>
-                        <th scope="col">Categoria do Produto</th>
-                        <th scope="col">Preço do Produto</th>
-                        <th scope="col">Quantidade Comprado</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {this.state.produtos.map(produto => (
+            <Row>
+              <Col xl={12}>
+                <Card>
+                  <CardHeader>
+                    Detalhes da Venda <strong>{this.state.vendas.id}</strong>
+                  </CardHeader>
+                  <CardBody>
+                    <Card>
+                      <CardHeader>
+                        <Table responsive hover>
+                          <thead>
+                            <tr>
+                              <th scope="col">Código da Venda</th>
+                              <th scope="col">Situação</th>
+                              <th scope="col">Status de Aprovação</th>
+                              <th scope="col">Compra efetuada em</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>{this.state.vendas.id}</td>
+                              <td>{this.state.vendas.situacao}</td>
+                              <td>
+                                <Button
+                                  size="sm"
+                                  color={
+                                    this.state.vendas.aprovacao === 'AGUARDANDO_APROVACAO'
+                                      ? 'warning'
+                                      : this.state.vendas.aprovacao === 'APROVADA'
+                                        ? 'success'
+                                        : this.state.vendas.aprovacao === 'REJEITADA'
+                                          ? 'danger'
+                                          : ''
+                                  }
+                                >
+                                  {this.state.vendas.aprovacao === 'AGUARDANDO_APROVACAO'
+                                    ? 'AGUARD. APROVAÇÃO'
+                                    : this.state.vendas.aprovacao}
+                                </Button>
+                              </td>
+                              <td>
+                                {this.getData().substring(8, 10) +
+                                  ' de ' +
+                                  this.state.vendas.mesCompra +
+                                  ' de ' +
+                                  this.getData().substring(11, 15)}
+                              </td>
+                            </tr>
+                          </tbody>
+                        </Table>
+                      </CardHeader>
+                    </Card>
+                    <Table responsive hover>
+                      <thead>
                         <tr>
-                          <td>{produto.id}</td>
-                          <td>{produto.produto}</td>
-                          <td>{produto.descricao}</td>
-                          <td>{produto.fornecedor}</td>
-                          <td>{produto.categoria}</td>
-                          <td>{'R$' + produto.preco.toFixed(2)}</td>
-                          <td>{produto.quantidade}</td>
+                          <th scope="col">Código do Produto</th>
+                          <th scope="col">Nome do Produto</th>
+                          <th scope="col">Descrição do Produto</th>
+                          <th scope="col">Fornecedor do Produto</th>
+                          <th scope="col">Categoria do Produto</th>
+                          <th scope="col">Preço do Produto</th>
+                          <th scope="col">Quantidade Comprado</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                  <div className="column">
-                    <h5>
-                      Valor total da compra:{' '}
-                      <strong>R${this.getValorTotalDaCompra().toFixed(2)}</strong>
-                    </h5>
-                  </div>
-                  <div className="column">
-                    <h5>
-                      Total de itens da compra: <strong>{this.getQuantidadeTotalDaCompra()}</strong>
-                    </h5>
-                  </div>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
-        )}
+                      </thead>
+                      <tbody>
+                        {this.state.produtos.map(produto => (
+                          <tr>
+                            <td>{produto.id}</td>
+                            <td>{produto.produto}</td>
+                            <td>{produto.descricao}</td>
+                            <td>{produto.fornecedor}</td>
+                            <td>{produto.categoria}</td>
+                            <td>{'R$' + produto.preco.toFixed(2)}</td>
+                            <td>{produto.quantidade}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                    <div className="column">
+                      <h5>
+                        Valor total da compra:{' '}
+                        <strong>R${this.getValorTotalDaCompra().toFixed(2)}</strong>
+                      </h5>
+                    </div>
+                    <div className="column">
+                      <h5>
+                        Total de itens da compra: <strong>{this.getQuantidadeTotalDaCompra()}</strong>
+                      </h5>
+                    </div>
+                  </CardBody>
+                </Card>
+              </Col>
+            </Row>
+          )}
       </div>
     );
   }
