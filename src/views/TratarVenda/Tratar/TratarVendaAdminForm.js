@@ -10,15 +10,12 @@ import {
   Table,
   Modal,
   ModalHeader,
-  ModalBody,
   ModalFooter,
   Form,
   FormGroup,
   Input,
   Label,
 } from 'reactstrap';
-import { format } from 'path';
-import { hidden } from 'ansi-colors';
 
 const urlAprovacaoVendas = 'http://localhost:3000/#/aprovar-venda';
 class TratarVendaFormAdmin extends Component {
@@ -41,7 +38,6 @@ class TratarVendaFormAdmin extends Component {
       aprovacao: '',
       quantidade: 0,
       quantidades: [],
-      produtoVenda: [],
       isLoading: true,
     };
     this.initialize();

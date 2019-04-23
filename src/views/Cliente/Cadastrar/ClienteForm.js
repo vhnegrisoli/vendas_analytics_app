@@ -1,33 +1,19 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import {
-  Badge,
   Button,
-  ButtonDropdown,
   Card,
   CardBody,
-  CardFooter,
   CardHeader,
   Col,
-  Collapse,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Fade,
   Form,
   FormGroup,
   FormText,
-  FormFeedback,
   Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
   Label,
-  Row,
 } from 'reactstrap';
-import { format } from 'path';
 
-const urlListarClientes = 'http://localhost:3000/#/cliente/listar'
+const urlListarClientes = 'http://localhost:3000/#/cliente/listar';
 
 class ClienteForm extends Component {
   constructor(props) {
@@ -51,7 +37,7 @@ class ClienteForm extends Component {
       cep: '',
       complemento: '',
       cidade: '',
-      estado: ''
+      estado: '',
     };
     this.getUrlParameter();
     this.initilize();
@@ -79,7 +65,7 @@ class ClienteForm extends Component {
             cep: res.data.cep,
             complemento: res.data.complemento,
             cidade: res.data.cidade,
-            estado: res.data.estado.id
+            estado: res.data.estado.id,
           });
         });
     }
@@ -95,16 +81,13 @@ class ClienteForm extends Component {
     });
   }
 
-  handleChange(e) {
-
-  }
+  handleChange(e) {}
 
   onChange = e => {
     this.setState({
       [e.target.name]: e.target.value,
     });
   };
-
 
   getUrlParameter() {
     var url = window.location.toString().split('/');
@@ -131,7 +114,7 @@ class ClienteForm extends Component {
         complemento: this.state.complemento,
         cidade: this.state.cidade,
         numero: this.state.numero,
-        estado: { id: this.state.estado }
+        estado: { id: this.state.estado },
       })
       .then(res => {
         if (res.status === 200) {
@@ -159,7 +142,7 @@ class ClienteForm extends Component {
         complemento: this.state.complemento,
         cidade: this.state.cidade,
         numero: this.state.numero,
-        estado: { id: this.state.estado }
+        estado: { id: this.state.estado },
       })
       .then(res => {
         if (res.status === 200) {
@@ -175,7 +158,7 @@ class ClienteForm extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    console.log(this.state)
+    console.log(this.state);
     if (this.getUrlParameter()) {
       this.editar();
     } else {
@@ -192,18 +175,21 @@ class ClienteForm extends Component {
               <strong>Clientes </strong> - Cadastrar
             </CardHeader>
             <CardBody>
-              <Form
-                id="cliente-form"
-                className="form-horizontal"
-                onSubmit={e => this.onSubmit(e)}
-              >
+              <Form id="cliente-form" className="form-horizontal" onSubmit={e => this.onSubmit(e)}>
                 <FormGroup row>
                   <Col md="3">
                     <Label htmlFor="text-input">Nome completo*</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <Input type="text" id="nome" value={this.state.nome}
-                      onChange={e => this.onChange(e)} required name="nome" placeholder="Nome completo" />
+                    <Input
+                      type="text"
+                      id="nome"
+                      value={this.state.nome}
+                      onChange={e => this.onChange(e)}
+                      required
+                      name="nome"
+                      placeholder="Nome completo"
+                    />
                     <FormText color="muted">Digite o nome completo do cliente.</FormText>
                   </Col>
                 </FormGroup>
@@ -229,8 +215,15 @@ class ClienteForm extends Component {
                     <Label htmlFor="cpf-input">CPF*</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <Input type="text" id="cpf" name="cpf" placeholder="CPF" autoComplete="cpf" value={this.state.cpf}
-                      onChange={e => this.onChange(e)} />
+                    <Input
+                      type="text"
+                      id="cpf"
+                      name="cpf"
+                      placeholder="CPF"
+                      autoComplete="cpf"
+                      value={this.state.cpf}
+                      onChange={e => this.onChange(e)}
+                    />
                     <FormText className="help-block">Digite o CPF.</FormText>
                   </Col>
                 </FormGroup>
@@ -239,8 +232,15 @@ class ClienteForm extends Component {
                     <Label htmlFor="rg-input">RG*</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <Input type="text" id="rg" name="rg" placeholder="RG" autoComplete="rg" value={this.state.rg}
-                      onChange={e => this.onChange(e)} />
+                    <Input
+                      type="text"
+                      id="rg"
+                      name="rg"
+                      placeholder="RG"
+                      autoComplete="rg"
+                      value={this.state.rg}
+                      onChange={e => this.onChange(e)}
+                    />
                     <FormText className="help-block">Digite o RG.</FormText>
                   </Col>
                 </FormGroup>
@@ -286,8 +286,15 @@ class ClienteForm extends Component {
                     <Label htmlFor="text-input">Rua*</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <Input type="text" id="rua" required name="rua" placeholder="Rua" value={this.state.rua}
-                      onChange={e => this.onChange(e)} />
+                    <Input
+                      type="text"
+                      id="rua"
+                      required
+                      name="rua"
+                      placeholder="Rua"
+                      value={this.state.rua}
+                      onChange={e => this.onChange(e)}
+                    />
                     <FormText color="muted">Digite o nome da rua.</FormText>
                   </Col>
                 </FormGroup>
@@ -296,8 +303,15 @@ class ClienteForm extends Component {
                     <Label htmlFor="text-input">Número*</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <Input type="number" id="numero" required name="numero" placeholder="Número" value={this.state.numero}
-                      onChange={e => this.onChange(e)} />
+                    <Input
+                      type="number"
+                      id="numero"
+                      required
+                      name="numero"
+                      placeholder="Número"
+                      value={this.state.numero}
+                      onChange={e => this.onChange(e)}
+                    />
                     <FormText color="muted">Digite o número da rua.</FormText>
                   </Col>
                 </FormGroup>
@@ -306,8 +320,15 @@ class ClienteForm extends Component {
                     <Label htmlFor="text-input">CEP*</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <Input type="text" id="cep" required name="cep" placeholder="CEP" value={this.state.cep}
-                      onChange={e => this.onChange(e)} />
+                    <Input
+                      type="text"
+                      id="cep"
+                      required
+                      name="cep"
+                      placeholder="CEP"
+                      value={this.state.cep}
+                      onChange={e => this.onChange(e)}
+                    />
                     <FormText color="muted">Digite o CEP da rua.</FormText>
                   </Col>
                 </FormGroup>
@@ -333,8 +354,15 @@ class ClienteForm extends Component {
                     <Label htmlFor="text-input">Cidade*</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <Input type="text" id="cidade" required name="cidade" value={this.state.cidade}
-                      onChange={e => this.onChange(e)} placeholder="Cidade" />
+                    <Input
+                      type="text"
+                      id="cidade"
+                      required
+                      name="cidade"
+                      value={this.state.cidade}
+                      onChange={e => this.onChange(e)}
+                      placeholder="Cidade"
+                    />
                     <FormText color="muted">Digite a cidade.</FormText>
                   </Col>
                 </FormGroup>
@@ -364,8 +392,7 @@ class ClienteForm extends Component {
                   </Col>
                 </FormGroup>
                 <Button size="sm" color="success">
-                  <i className="fa fa-dot-circle-o" />
-                  {' '}Salvar
+                  <i className="fa fa-dot-circle-o" /> Salvar
                 </Button>
               </Form>
             </CardBody>

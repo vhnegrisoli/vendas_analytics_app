@@ -1,24 +1,52 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { Card, CardBody, Button, CardHeader, Col, Row, Table } from 'reactstrap';
+import {
+  Card,
+  CardBody,
+  Button,
+  Modal,
+  ModalHeader,
+  ModalFooter,
+  CardHeader,
+  Col,
+  Row,
+  Table,
+} from 'reactstrap';
 import axios from 'axios';
 
+const urlEditar = 'http://localhost:3000/#/cliente/cadastrar/';
+const urlRemover = 'http://localhost:8080/api/clientes/remover/';
 class ClienteList extends Component {
   constructor(props) {
     super(props);
+    this.toggle = this.toggle.bind(this);
     this.state = {
+      modal: false,
       clientes: [],
     };
+    this.initialize();
+    this.forceUpdate();
   }
 
-  componentDidMount = () => {
-    axios.get('http://localhost:8080/api/clientes/todos').then(res => {
+  async initialize() {
+    await axios.get('http://localhost:8080/api/clientes/todos').then(res => {
       this.setState({
         clientes: res.data,
       });
     });
-  };
+    this.forceUpdate();
+  }
 
+  toggle() {
+    var aberta = this.state.modal;
+    this.state.modal = !aberta;
+    this.forceUpdate();
+  }
+
+  async remover(id) {
+    await axios.get(urlRemover + id);
+    this.initialize();
+    this.toggle();
+  }
   render() {
     return (
       <div className="animated fadeIn">
@@ -29,7 +57,7 @@ class ClienteList extends Component {
                 <i className="fa fa-align-justify" /> Clientes
               </CardHeader>
               <CardBody>
-                <Table responsive hover>
+                <Table responsive hover id="myTable">
                   <thead>
                     <tr>
                       <th scope="col">Código</th>
@@ -52,14 +80,31 @@ class ClienteList extends Component {
                         <td>{cliente.email}</td>
                         <td>{cliente.rua + ', nº ' + cliente.numero}</td>
                         <td>
-                          <Button size="sm" color="primary" href={''}>
+                          <Button size="sm" color="primary" href={urlEditar + cliente.id}>
                             Editar
                           </Button>
                         </td>
                         <td>
-                          <Button size="sm" color="danger" href={''}>
+                          <Button size="sm" color="danger" onClick={this.toggle}>
                             Remover
                           </Button>
+                          <Modal
+                            isOpen={this.state.modal}
+                            toggle={this.toggle}
+                            className={this.props.className}
+                          >
+                            <ModalHeader toggle={this.toggle}>
+                              Deseja remover o cliente {cliente.id}?
+                            </ModalHeader>
+                            <ModalFooter>
+                              <Button color="danger" onClick={() => this.remover(cliente.id)}>
+                                Remover
+                              </Button>
+                              <Button color="secondary" onClick={this.toggle}>
+                                Cancelar
+                              </Button>
+                            </ModalFooter>
+                          </Modal>
                         </td>
                       </tr>
                     ))}

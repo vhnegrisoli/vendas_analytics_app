@@ -1,6 +1,16 @@
-import React, { Component, lazy } from 'react';
-import { Link } from 'react-router-dom';
-import { Card, CardBody, Button, Modal, ModalHeader, ModalBody, ModalFooter, CardHeader, Col, Row, Table } from 'reactstrap';
+import React, { Component } from 'react';
+import {
+  Card,
+  CardBody,
+  Button,
+  Modal,
+  ModalHeader,
+  ModalFooter,
+  CardHeader,
+  Col,
+  Row,
+  Table,
+} from 'reactstrap';
 import axios from 'axios';
 
 const urlEditar = 'http://localhost:3000/#/categorias/cadastrar/';
@@ -14,6 +24,7 @@ class CategoriaList extends Component {
       categorias: [],
     };
     this.initialize();
+    this.forceUpdate();
   }
 
   async initialize() {
@@ -27,14 +38,14 @@ class CategoriaList extends Component {
 
   toggle() {
     this.setState(prevState => ({
-      modal: !prevState.modal
+      modal: !prevState.modal,
     }));
   }
 
   async remover(id) {
     await axios.get(urlRemover + id);
     this.initialize();
-    this.toggle()
+    this.toggle();
   }
 
   render() {
@@ -67,17 +78,24 @@ class CategoriaList extends Component {
                           </Button>
                         </td>
                         <td>
-                          <Button
-                            size="sm"
-                            color="danger"
-                            onClick={this.toggle}>
+                          <Button size="sm" color="danger" onClick={this.toggle}>
                             Remover
                           </Button>
-                          <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-                            <ModalHeader toggle={this.toggle}>Deseja remover a categoria {categoria.descricao}?</ModalHeader>
+                          <Modal
+                            isOpen={this.state.modal}
+                            toggle={this.toggle}
+                            className={this.props.className}
+                          >
+                            <ModalHeader toggle={this.toggle}>
+                              Deseja remover a categoria {categoria.descricao}?
+                            </ModalHeader>
                             <ModalFooter>
-                              <Button color="danger" onClick={() => this.remover(categoria.id)}>Remover</Button>{' '}
-                              <Button color="secondary" onClick={this.toggle}>Cancelar</Button>
+                              <Button color="danger" onClick={() => this.remover(categoria.id)}>
+                                Remover
+                              </Button>{' '}
+                              <Button color="secondary" onClick={this.toggle}>
+                                Cancelar
+                              </Button>
                             </ModalFooter>
                           </Modal>
                         </td>
