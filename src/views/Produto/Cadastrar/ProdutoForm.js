@@ -1,31 +1,19 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import {
-  Badge,
   Button,
-  ButtonDropdown,
   Card,
   CardBody,
-  CardFooter,
   CardHeader,
   Col,
-  Collapse,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Fade,
   Form,
   FormGroup,
   FormText,
-  FormFeedback,
   Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
   Label,
-  Row,
 } from 'reactstrap';
-import { format } from 'path';
+
+const urlListarprodutos = 'http://localhost:3000/#/produtos/listar';
 
 class ProdutoForm extends Component {
   constructor(props) {
@@ -45,21 +33,49 @@ class ProdutoForm extends Component {
       categoria: '',
       fornecedor: '',
     };
+    this.initialize();
+    console.log(this.getUrlParameter())
   }
 
-  componentDidMount() {
-    axios.get('http://localhost:8080/api/categorias/todas').then(res => {
+  async initialize() {
+
+    if (this.getUrlParameter()) {
+      await axios
+        .get('http://localhost:8080/api/produtos/buscar/' + this.getUrlParameter())
+        .then(res => {
+          this.setState({
+            nomeProduto: res.data.nomeProduto,
+            descricao: res.data.descricao,
+            preco: res.data.preco,
+            fornecedor: res.data.fornecedor.id,
+            categoria: res.data.categoria.id
+          });
+        });
+    }
+
+    await axios.get('http://localhost:8080/api/categorias/todas').then(res => {
       this.setState({
         categorias: res.data,
       });
     });
 
-    axios.get('http://localhost:8080/api/fornecedores/todos').then(res => {
+    await axios.get('http://localhost:8080/api/fornecedores/todos').then(res => {
       this.setState({
         fornecedores: res.data,
       });
     });
   }
+
+  getUrlParameter() {
+    var url = window.location.toString().split('/');
+    var id = url[url.length - 1];
+    if (!isNaN(id)) {
+      return parseInt(url[url.length - 1]);
+    } else {
+      return '';
+    }
+  }
+
 
   toggle() {
     this.setState({ collapse: !this.state.collapse });
@@ -71,6 +87,49 @@ class ProdutoForm extends Component {
     });
   }
 
+  editar() {
+    axios
+      .post('http://localhost:8080/api/produtos/salvar', {
+        id: this.getUrlParameter(),
+        nomeProduto: this.state.nomeProduto,
+        descricao: this.state.descricao,
+        preco: this.state.preco,
+        fornecedor: { id: this.state.fornecedor },
+        categoria: { id: this.state.categoria }
+      })
+      .then(res => {
+        if (res.status === 200) {
+          window.location.href = urlListarprodutos;
+        }
+      })
+      .catch(error => {
+        this.setState = {
+          error: true,
+        };
+      });
+  }
+
+  salvar() {
+    axios
+      .post('http://localhost:8080/api/produtos/salvar', {
+        nomeProduto: this.state.nomeProduto,
+        descricao: this.state.descricao,
+        preco: this.state.preco,
+        fornecedor: { id: this.state.fornecedor },
+        categoria: { id: this.state.categoria }
+      })
+      .then(res => {
+        if (res.status === 200) {
+          window.location.href = urlListarprodutos;
+        }
+      })
+      .catch(error => {
+        this.setState = {
+          error: true,
+        };
+      });
+  }
+
   onChange = e => {
     this.setState({
       [e.target.name]: e.target.value,
@@ -79,17 +138,13 @@ class ProdutoForm extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    axios
-      .post('http://localhost:8080/api/produtos/salvar', {
-        nomeProduto: this.state.nomeProduto,
-        descricao: this.state.descricao,
-        preco: this.state.preco,
-        categoria: { id: this.state.categoria },
-        fornecedor: { id: this.state.fornecedor },
-      })
-      .then(res => {
-        console.log(res.status);
-      });
+    console.log(this.state);
+    if (this.getUrlParameter()) {
+      this.editar();
+    } else {
+      console.log('Vou salvar!' + this.getUrlParameter())
+      //this.salvar();
+    }
   }
 
   render() {
@@ -200,7 +255,7 @@ class ProdutoForm extends Component {
                 <FormGroup row />
                 <Button type="submit" size="sm" color="success">
                   <i className="fa fa-dot-circle-o" />
-                  Cadastrar
+                  {' '}Cadastrar
                 </Button>
               </Form>
             </CardBody>
