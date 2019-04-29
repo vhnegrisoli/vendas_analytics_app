@@ -18,9 +18,10 @@ const urlRemover = 'http://localhost:8080/api/categorias/remover/';
 class CategoriaList extends Component {
   constructor(props) {
     super(props);
-    this.toggle = this.toggle.bind(this);
     this.state = {
       modal: false,
+      idModal: '',
+      descricaoModal: '',
       categorias: [],
     };
     this.initialize();
@@ -36,16 +37,24 @@ class CategoriaList extends Component {
     this.forceUpdate();
   }
 
-  toggle() {
-    this.setState(prevState => ({
-      modal: !prevState.modal,
-    }));
+  openModal(id, descricao) {
+    this.setState({
+      modal: true,
+      idModal: id,
+      descricaoModal: descricao,
+    });
+  }
+
+  closeModal() {
+    this.setState({
+      modal: false,
+    });
   }
 
   async remover(id) {
     await axios.get(urlRemover + id);
     this.initialize();
-    this.toggle();
+    this.closeModal();
   }
 
   render() {
@@ -78,22 +87,25 @@ class CategoriaList extends Component {
                           </Button>
                         </td>
                         <td>
-                          <Button size="sm" color="danger" onClick={this.toggle}>
+                          <Button
+                            size="sm"
+                            color="danger"
+                            onClick={() => this.openModal(categoria.id, categoria.descricao)}
+                          >
                             Remover
                           </Button>
-                          <Modal
-                            isOpen={this.state.modal}
-                            toggle={this.toggle}
-                            className={this.props.className}
-                          >
-                            <ModalHeader toggle={this.toggle}>
-                              Deseja remover a categoria {categoria.descricao}?
+                          <Modal isOpen={this.state.modal} className={this.props.className}>
+                            <ModalHeader>
+                              Deseja remover a categoria {this.state.descricaoModal}?
                             </ModalHeader>
                             <ModalFooter>
-                              <Button color="danger" onClick={() => this.remover(categoria.id)}>
+                              <Button
+                                color="danger"
+                                onClick={() => this.remover(this.state.idModal)}
+                              >
                                 Remover
                               </Button>{' '}
-                              <Button color="secondary" onClick={this.toggle}>
+                              <Button color="secondary" onClick={() => this.closeModal()}>
                                 Cancelar
                               </Button>
                             </ModalFooter>
