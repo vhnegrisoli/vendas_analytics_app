@@ -31,15 +31,13 @@ const urlReprovar = 'http://localhost:8080/api/vendas/rejeitar-venda/';
 class AprovarVendaForm extends Component {
   constructor(props) {
     super(props);
-
-    this.toggle = this.toggle.bind(this);
-    this.toggleFade = this.toggleFade.bind(this);
     this.state = {
       modal: false,
       fadeIn: true,
       isLoading: true,
       timeout: 300,
       vendas: [],
+      idVenda: '',
     };
     this.initialize();
   }
@@ -55,34 +53,28 @@ class AprovarVendaForm extends Component {
     this.forceUpdate();
   }
 
-  toggle() {
-    this.setState(prevState => ({
-      modal: !prevState.modal
-    }));
-  }
-
-  toggleFade() {
-    this.setState(prevState => {
-      return { fadeIn: !prevState };
-    });
-  }
-
-  onChange = e => {
+  openModal(id) {
     this.setState({
-      [e.target.name]: e.target.value,
+      modal: true,
+      idVenda: id,
     });
-  };
+  }
+
+  closeModal() {
+    this.setState({
+      modal: false,
+    });
+  }
 
   async aprovarVenda(id) {
     await axios.get(urlAprovar + id);
-    this.toggle()
+    this.closeModal();
     this.initialize();
-
   }
 
   async reprovarVenda(id) {
     await axios.get(urlReprovar + id);
-    this.toggle()
+    this.closeModal();
     this.initialize();
   }
 
@@ -94,81 +86,94 @@ class AprovarVendaForm extends Component {
             {this.state.isLoading ? (
               <ReactLoading type={'spin'} />
             ) : (
-                <Card>
-                  <CardHeader>Aprovar ou Rejeitar Vendas</CardHeader>
-                  <CardBody>
-                    <Table responsive hover>
-                      <thead>
+              <Card>
+                <CardHeader>Aprovar ou Rejeitar Vendas</CardHeader>
+                <CardBody>
+                  <Table responsive hover>
+                    <thead>
+                      <tr>
+                        <th scope="col">Código da Venda</th>
+                        <th scope="col">Situação</th>
+                        <th scope="col">Aprovação</th>
+                        <th scope="col">Cliente</th>
+                        <th scope="col">Data de Efetuação</th>
+                        <th scope="col">Detalhar Venda</th>
+                        <th scope="col">Aprovar/Rejeitar Venda</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {this.state.vendas.map(venda => (
                         <tr>
-                          <th scope="col">Código da Venda</th>
-                          <th scope="col">Situação</th>
-                          <th scope="col">Aprovação</th>
-                          <th scope="col">Cliente</th>
-                          <th scope="col">Data de Efetuação</th>
-                          <th scope="col">Detalhar Venda</th>
-                          <th scope="col">Aprovar/Rejeitar Venda</th>
+                          <td>{venda.id}</td>
+                          <td>{venda.situacao}</td>
+                          <td>
+                            <Button
+                              size="sm"
+                              color={
+                                venda.aprovacao === 'AGUARDANDO_APROVACAO'
+                                  ? 'warning'
+                                  : venda.aprovacao === 'APROVADA'
+                                  ? 'success'
+                                  : venda.aprovacao === 'REJEITADA'
+                                  ? 'danger'
+                                  : ''
+                              }
+                            >
+                              {venda.aprovacao === 'AGUARDANDO_APROVACAO'
+                                ? 'AGUARD. APROVAÇÃO'
+                                : venda.aprovacao}
+                            </Button>
+                          </td>
+                          <td>{venda.clientes.nome}</td>
+                          <td>
+                            {venda.dataCompra.substring(8, 10) +
+                              '/' +
+                              venda.dataCompra.substring(5, 7) +
+                              '/' +
+                              venda.dataCompra.substring(0, 4)}
+                          </td>
+                          <td>
+                            <Button href={'#/detalhar-venda/' + venda.id}>Detalhar </Button>
+                          </td>
+                          <td>
+                            {venda.aprovacao === 'AGUARDANDO_APROVACAO' && (
+                              <div>
+                                <Button
+                                  size="sm"
+                                  onClick={() => this.openModal(venda.id)}
+                                  color="primary"
+                                >
+                                  Aprovar/Rejeitar Venda {venda.id}
+                                </Button>
+                                <Modal isOpen={this.state.modal} className={this.props.className}>
+                                  <ModalHeader>
+                                    Deseja aprovar a venda {this.state.idVenda}?
+                                  </ModalHeader>
+                                  <ModalFooter>
+                                    <Button
+                                      color="primary"
+                                      onClick={() => this.aprovarVenda(this.state.idVenda)}
+                                    >
+                                      Aprovar
+                                    </Button>
+                                    <Button
+                                      color="danger"
+                                      onClick={() => this.reprovarVenda(this.state.idVenda)}
+                                    >
+                                      Rejeitar
+                                    </Button>
+                                  </ModalFooter>
+                                </Modal>
+                              </div>
+                            )}
+                          </td>
                         </tr>
-                      </thead>
-                      <tbody>
-                        {this.state.vendas.map(venda => (
-                          <tr>
-                            <td>{venda.id}</td>
-                            <td>{venda.situacao}</td>
-                            <td>
-                              <Button
-                                size="sm"
-                                color={
-                                  venda.aprovacao === 'AGUARDANDO_APROVACAO'
-                                    ? 'warning'
-                                    : venda.aprovacao === 'APROVADA'
-                                      ? 'success'
-                                      : venda.aprovacao === 'REJEITADA'
-                                        ? 'danger'
-                                        : ''
-                                }
-                              >
-                                {venda.aprovacao === 'AGUARDANDO_APROVACAO'
-                                  ? 'AGUARD. APROVAÇÃO'
-                                  : venda.aprovacao}
-                              </Button>
-                            </td>
-                            <td>{venda.clientes.nome}</td>
-                            <td>
-                              {venda.dataCompra.substring(8, 10) +
-                                '/' +
-                                venda.dataCompra.substring(5, 7) +
-                                '/' +
-                                venda.dataCompra.substring(0, 4)}
-                            </td>
-                            <td>
-                              <Button href={'#/detalhar-venda/' + venda.id}>Detalhar </Button>
-                            </td>
-                            <td>
-                              {venda.aprovacao === 'AGUARDANDO_APROVACAO' && (
-                                <div>
-                                  <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-                                    <ModalHeader toggle={this.toggle}>Deseja aprovar a venda {venda.id}?</ModalHeader>
-                                    <ModalFooter>
-                                      <Button color="primary" onClick={() => this.aprovarVenda(venda.id)}>Aprovar</Button>
-                                      <Button color="danger" onClick={() => this.reprovarVenda(venda.id)}>Rejeitar</Button>
-                                    </ModalFooter>
-                                  </Modal>
-                                  <Button
-                                    size="sm"
-                                    onClick={() => this.toggle()}
-                                    color="primary"
-                                  >Aprovar/Rejeitar Venda {venda.id}
-                                  </Button>
-                                </div>
-                              )}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </Table>
-                  </CardBody>
-                </Card>
-              )}
+                      ))}
+                    </tbody>
+                  </Table>
+                </CardBody>
+              </Card>
+            )}
           </Col>
         </Row>
       </div>
