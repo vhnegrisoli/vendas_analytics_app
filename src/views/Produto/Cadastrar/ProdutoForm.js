@@ -34,11 +34,10 @@ class ProdutoForm extends Component {
       fornecedor: '',
     };
     this.initialize();
-    console.log(this.getUrlParameter())
+    console.log(this.getUrlParameter());
   }
 
   async initialize() {
-
     if (this.getUrlParameter()) {
       await axios
         .get('http://localhost:8080/api/produtos/buscar/' + this.getUrlParameter())
@@ -48,7 +47,7 @@ class ProdutoForm extends Component {
             descricao: res.data.descricao,
             preco: res.data.preco,
             fornecedor: res.data.fornecedor.id,
-            categoria: res.data.categoria.id
+            categoria: res.data.categoria.id,
           });
         });
     }
@@ -76,7 +75,6 @@ class ProdutoForm extends Component {
     }
   }
 
-
   toggle() {
     this.setState({ collapse: !this.state.collapse });
   }
@@ -88,15 +86,17 @@ class ProdutoForm extends Component {
   }
 
   editar() {
+    var editar = {
+      id: this.getUrlParameter(),
+      nomeProduto: this.state.nomeProduto,
+      descricao: this.state.descricao,
+      preco: this.state.preco,
+      fornecedor: { id: this.state.fornecedor },
+      categoria: { id: this.state.categoria },
+    };
+    console.log(editar);
     axios
-      .post('http://localhost:8080/api/produtos/salvar', {
-        id: this.getUrlParameter(),
-        nomeProduto: this.state.nomeProduto,
-        descricao: this.state.descricao,
-        preco: this.state.preco,
-        fornecedor: { id: this.state.fornecedor },
-        categoria: { id: this.state.categoria }
-      })
+      .post('http://localhost:8080/api/produtos/salvar', editar)
       .then(res => {
         if (res.status === 200) {
           window.location.href = urlListarprodutos;
@@ -116,7 +116,7 @@ class ProdutoForm extends Component {
         descricao: this.state.descricao,
         preco: this.state.preco,
         fornecedor: { id: this.state.fornecedor },
-        categoria: { id: this.state.categoria }
+        categoria: { id: this.state.categoria },
       })
       .then(res => {
         if (res.status === 200) {
@@ -142,7 +142,7 @@ class ProdutoForm extends Component {
     if (this.getUrlParameter()) {
       this.editar();
     } else {
-      console.log('Vou salvar!' + this.getUrlParameter())
+      console.log('Vou salvar!' + this.getUrlParameter());
       //this.salvar();
     }
   }
@@ -254,8 +254,7 @@ class ProdutoForm extends Component {
                 </FormGroup>
                 <FormGroup row />
                 <Button type="submit" size="sm" color="success">
-                  <i className="fa fa-dot-circle-o" />
-                  {' '}Cadastrar
+                  <i className="fa fa-dot-circle-o" /> Cadastrar
                 </Button>
               </Form>
             </CardBody>
