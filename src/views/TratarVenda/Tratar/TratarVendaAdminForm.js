@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import ReactLoading from 'react-loading';
 import {
+  Alert,
   Button,
   Card,
   CardBody,
   CardHeader,
+  CardFooter,
   Col,
   Table,
   Modal,
@@ -16,8 +18,6 @@ import {
   Input,
   Label,
 } from 'reactstrap';
-
-let mensagemErro = '';
 
 const urlAprovacaoVendas = 'http://localhost:3000/#/aprovar-venda';
 class TratarVendaFormAdmin extends Component {
@@ -196,8 +196,8 @@ class TratarVendaFormAdmin extends Component {
                           <th scope="col">Descrição do Produto</th>
                           <th scope="col">Preço</th>
                           <th scope="col">Fornecedor</th>
-                          <th scope="col">Selecionar Item</th>
                           <th scope="col">Quantidade</th>
+                          <th scope="col">Adicionar</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -232,7 +232,7 @@ class TratarVendaFormAdmin extends Component {
                                   )
                                 }
                               >
-                                Adicionar produto
+                                <span class="cui-cart" aria-hidden="true" />
                               </Button>
                             </td>
                           </tr>
@@ -241,11 +241,13 @@ class TratarVendaFormAdmin extends Component {
                     </Table>
                     <Card>
                       <CardHeader>
-                        Itens adicionados:
-                        <br />
+                        <span class="cui-cart" aria-hidden="true" />{' '}
+                        <strong>Carrinho de Compras</strong>
+                      </CardHeader>
+                      <CardBody>
                         {this.state.produtosAdicionados.length === 0 ? (
                           <label>
-                            <strong> Você não possui produtos adicionados</strong>
+                            <strong> Carrinho vazio</strong>
                           </label>
                         ) : (
                           <Table>
@@ -255,7 +257,7 @@ class TratarVendaFormAdmin extends Component {
                                 <th scope="col">Nome do Produto</th>
                                 <th scope="col">Preço do Produto</th>
                                 <th scope="col">Quantidade</th>
-                                <th scope="col">Remover</th>
+                                <th scope="col">Remover Item</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -271,7 +273,7 @@ class TratarVendaFormAdmin extends Component {
                                       color="danger"
                                       onClick={() => this.removerProduto(item.id)}
                                     >
-                                      Remover item
+                                      <span class="cui-delete" aria-hidden="true" /> Remover
                                     </Button>
                                   </td>
                                 </tr>
@@ -279,18 +281,20 @@ class TratarVendaFormAdmin extends Component {
                             </tbody>
                           </Table>
                         )}
-                      </CardHeader>
+                      </CardBody>
+                      <CardFooter>
+                        <Table>
+                          <tr>
+                            <td>
+                              <strong>Total de itens: {this.getQtd()}</strong>
+                            </td>
+                            <td>
+                              <strong>Total a pagar: R${this.getPreco().toFixed(2)}</strong>
+                            </td>
+                          </tr>
+                        </Table>
+                      </CardFooter>
                     </Card>
-                    <Table>
-                      <tr>
-                        <td>
-                          <strong>Total de itens: {this.getQtd()}</strong>
-                        </td>
-                        <td>
-                          <strong>Total a pagar: R${this.getPreco().toFixed(2)}</strong>
-                        </td>
-                      </tr>
-                    </Table>
                   </FormGroup>
                   <br />
                   <Button onClick={this.toggle} size="sm" color="success">
@@ -330,16 +334,9 @@ class TratarVendaFormAdmin extends Component {
               </CardBody>
             </Card>
             {this.state.detalheErro.details && (
-              <Card>
-                <CardHeader className="text-danger">
-                  <strong>Erro ao salvar venda</strong>
-                </CardHeader>
-                <CardBody>
-                  <h6 className="text-danger">
-                    <strong>* {this.state.detalheErro.details}</strong>
-                  </h6>
-                </CardBody>
-              </Card>
+              <Alert color="danger">
+                <strong>* Erro ao salvar venda: {this.state.detalheErro.details}</strong>
+              </Alert>
             )}
           </Col>
         )}
