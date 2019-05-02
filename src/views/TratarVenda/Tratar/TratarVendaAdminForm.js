@@ -139,15 +139,19 @@ class TratarVendaFormAdmin extends Component {
 
   removerProduto(id) {
     var array = [];
-    for (var i = 0; i < this.state.produtosAdicionados.length; i++) {
-      if (!this.state.produtosAdicionados[i].id === id) {
-        array[i] = this.state.produtosAdicionados[i];
+    var arrayProdutoVenda = [];
+    this.state.produtosAdicionados.map(produto => {
+      if (produto.id !== id) {
+        array.push(produto);
       }
-    }
-    console.log(array);
-    this.setState({
-      produtosAdicionados: array,
     });
+    this.state.produtoVenda.map(produto => {
+      if (produto.id.produtoId !== id) {
+        arrayProdutoVenda.push(produto);
+      }
+    });
+    this.state.produtosAdicionados = array;
+    this.state.produtoVenda = arrayProdutoVenda;
     this.forceUpdate();
   }
 
