@@ -1,23 +1,60 @@
-import React, { Component, lazy } from 'react';
-import { Link } from 'react-router-dom';
-import { Badge, Card, CardBody, Button, CardHeader, Col, Row, Table } from 'reactstrap';
+import React, { Component } from 'react';
+import {
+  Card,
+  CardBody,
+  Modal,
+  ModalHeader,
+  ModalFooter,
+  Button,
+  CardHeader,
+  Col,
+  Row,
+  Table,
+} from 'reactstrap';
 import axios from 'axios';
+
+const urlEditar = 'http://localhost:3000/#/fornecedores/cadastrar/';
+const urlRemover = 'http://localhost:8080/api/fornecedores/remover/';
 
 class FornecedorList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       fornecedores: [],
+      idFornecedor: '',
+      nomeFantasia: '',
+      modal: false,
     };
+    this.initialize();
   }
 
-  componentDidMount = () => {
-    axios.get('http://localhost:8080/api/fornecedores/todos').then(res => {
+  async initialize() {
+    await axios.get('http://localhost:8080/api/fornecedores/todos').then(res => {
       this.setState({
         fornecedores: res.data,
       });
     });
-  };
+  }
+
+  openModal(id, nomeFantasia) {
+    this.setState({
+      modal: true,
+      idFornecedor: id,
+      nomeFantasia: nomeFantasia,
+    });
+  }
+
+  closeModal() {
+    this.setState({
+      modal: false,
+    });
+  }
+
+  async remover(id) {
+    await axios.get(urlRemover + id);
+    this.initialize();
+    this.closeModal();
+  }
 
   render() {
     return (
@@ -50,14 +87,34 @@ class FornecedorList extends Component {
                         <td>{fornecedor.cnpj}</td>
                         <td>{fornecedor.endereco}</td>
                         <td>
-                          <Button size="sm" color="primary" href={''}>
+                          <Button size="sm" color="primary" href={urlEditar + fornecedor.id}>
                             Editar
                           </Button>
                         </td>
                         <td>
-                          <Button size="sm" color="danger" href={''}>
+                          <Button
+                            size="sm"
+                            color="danger"
+                            onClick={() => this.openModal(fornecedor.id, fornecedor.nomeFantasia)}
+                          >
                             Remover
                           </Button>
+                          <Modal isOpen={this.state.modal} className={this.props.className}>
+                            <ModalHeader>
+                              Deseja remover o fornecedor {this.state.nomeFantasia}?
+                            </ModalHeader>
+                            <ModalFooter>
+                              <Button
+                                color="danger"
+                                onClick={() => this.remover(this.state.idFornecedor)}
+                              >
+                                Remover
+                              </Button>{' '}
+                              <Button color="secondary" onClick={() => this.closeModal()}>
+                                Cancelar
+                              </Button>
+                            </ModalFooter>
+                          </Modal>
                         </td>
                       </tr>
                     ))}

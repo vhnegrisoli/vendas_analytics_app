@@ -1,32 +1,19 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import {
-  Badge,
   Button,
-  ButtonDropdown,
   Card,
   CardBody,
-  CardFooter,
   CardHeader,
   Col,
-  Collapse,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Fade,
   Form,
   FormGroup,
   FormText,
-  FormFeedback,
   Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
   Label,
-  Row,
 } from 'reactstrap';
-import { format } from 'path';
 
+const urlListarFornecedores = 'http://localhost:3000/#/fornecedores/listar';
 class FornecedorForm extends Component {
   constructor(props) {
     super(props);
@@ -39,7 +26,37 @@ class FornecedorForm extends Component {
       timeout: 300,
       categorias: [],
       produtos: [],
+      razaoSocial: '',
+      nomeFantasia: '',
+      cnpj: '',
+      endereco: '',
     };
+    this.initilize();
+  }
+
+  async initilize() {
+    if (this.getUrlParameter()) {
+      await axios
+        .get('http://localhost:8080/api/fornecedores/buscar/' + this.getUrlParameter())
+        .then(res => {
+          this.setState({
+            razaoSocial: res.data.razaoSocial,
+            nomeFantasia: res.data.nomeFantasia,
+            cnpj: res.data.cnpj,
+            endereco: res.data.endereco,
+          });
+        });
+    }
+  }
+
+  getUrlParameter() {
+    var url = window.location.toString().split('/');
+    var id = url[url.length - 1];
+    if (!isNaN(id)) {
+      return parseInt(url[url.length - 1]);
+    } else {
+      return '';
+    }
   }
 
   toggle() {
@@ -52,12 +69,61 @@ class FornecedorForm extends Component {
     });
   }
 
-  onSubmit() {
-    var form = document.querySelector('cliente-form');
-    var data = new FormData(form);
-    axios.post('localhost:8080/api/fornecedores/salvar', {
-      data: data,
+  onChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value,
     });
+  };
+
+  editar() {
+    axios
+      .post('http://localhost:8080/api/fornecedores/salvar', {
+        id: this.getUrlParameter(),
+        nomeFantasia: this.state.nomeFantasia,
+        razaoSocial: this.state.razaoSocial,
+        cnpj: this.state.cnpj,
+        endereco: this.state.endereco,
+      })
+      .then(res => {
+        if (res.status === 200) {
+          window.location.href = urlListarFornecedores;
+        }
+      })
+      .catch(error => {
+        this.setState = {
+          error: true,
+        };
+      });
+  }
+
+  salvar() {
+    axios
+      .post('http://localhost:8080/api/fornecedores/salvar', {
+        nomeFantasia: this.state.nomeFantasia,
+        razaoSocial: this.state.razaoSocial,
+        cnpj: this.state.cnpj,
+        endereco: this.state.endereco,
+      })
+      .then(res => {
+        if (res.status === 200) {
+          window.location.href = urlListarFornecedores;
+        }
+      })
+      .catch(error => {
+        this.setState = {
+          error: true,
+        };
+      });
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+    console.log(this.state);
+    if (this.getUrlParameter()) {
+      this.editar();
+    } else {
+      this.salvar();
+    }
   }
 
   render() {
@@ -69,13 +135,7 @@ class FornecedorForm extends Component {
               <strong>Fornecedor </strong> - Cadastrar
             </CardHeader>
             <CardBody>
-              <Form
-                id="cliente-form"
-                action=""
-                method="post"
-                encType="multipart/form-data"
-                className="form-horizontal"
-              >
+              <Form id="cliente-form" className="form-horizontal" onSubmit={e => this.onSubmit(e)}>
                 <FormGroup row>
                   <Col md="3">
                     <Label htmlFor="text-input">Razão Social do Fornecedor*</Label>
@@ -85,8 +145,10 @@ class FornecedorForm extends Component {
                       type="text"
                       id="text-input"
                       required
-                      name="text-input"
+                      name="razaoSocial"
                       placeholder="Razão social"
+                      value={this.state.razaoSocial}
+                      onChange={e => this.onChange(e)}
                     />
                     <FormText color="muted">Digite a razão social.</FormText>
                   </Col>
@@ -99,9 +161,11 @@ class FornecedorForm extends Component {
                     <Input
                       type="text"
                       id="descricao-input"
-                      name="descricao-input"
+                      name="nomeFantasia"
                       placeholder="Nome Fantasia"
                       autoComplete="descricao"
+                      value={this.state.nomeFantasia}
+                      onChange={e => this.onChange(e)}
                     />
                     <FormText className="help-block">Digite o nome fantasia.</FormText>
                   </Col>
@@ -115,9 +179,11 @@ class FornecedorForm extends Component {
                     <Input
                       type="text"
                       id="descricao-input"
-                      name="descricao-input"
+                      name="cnpj"
                       placeholder="CNPJ"
                       autoComplete="descricao"
+                      value={this.state.cnpj}
+                      onChange={e => this.onChange(e)}
                     />
                     <FormText className="help-block">Digite o CNPJ.</FormText>
                   </Col>
@@ -131,23 +197,22 @@ class FornecedorForm extends Component {
                     <Input
                       type="text"
                       id="descricao-input"
-                      name="descricao-input"
+                      name="endereco"
                       placeholder="Endereço"
                       autoComplete="descricao"
+                      value={this.state.endereco}
+                      onChange={e => this.onChange(e)}
                     />
                     <FormText className="help-block">Digite o endereço.</FormText>
                   </Col>
                 </FormGroup>
 
                 <FormGroup row />
+                <Button size="sm" color="success">
+                  <i className="fa fa-dot-circle-o" /> Cadastrar
+                </Button>
               </Form>
             </CardBody>
-            <CardFooter>
-              <Button type="submit" size="sm" color="primary">
-                <i className="fa fa-dot-circle-o" />
-                Cadastrar
-              </Button>
-            </CardFooter>
           </Card>
         </Col>
       </div>
