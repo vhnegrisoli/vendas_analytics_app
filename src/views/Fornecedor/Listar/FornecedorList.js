@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  Alert,
   Card,
   CardBody,
   Modal,
@@ -12,6 +13,7 @@ import {
   Table,
 } from 'reactstrap';
 import axios from 'axios';
+import ReactLoading from 'react-loading';
 
 const urlEditar = 'http://localhost:3000/#/fornecedores/cadastrar/';
 const urlRemover = 'http://localhost:8080/api/fornecedores/remover/';
@@ -20,10 +22,12 @@ class FornecedorList extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoading: true,
       fornecedores: [],
       idFornecedor: '',
       nomeFantasia: '',
       modal: false,
+      errors: [],
     };
     this.initialize();
   }
@@ -32,6 +36,7 @@ class FornecedorList extends Component {
     await axios.get('http://localhost:8080/api/fornecedores/todos').then(res => {
       this.setState({
         fornecedores: res.data,
+        isLoading: false,
       });
     });
   }
@@ -51,7 +56,9 @@ class FornecedorList extends Component {
   }
 
   async remover(id) {
-    await axios.get(urlRemover + id);
+    await axios.get(urlRemover + id).catch(res => {
+      this.state.errors = res.response.data;
+    });
     this.initialize();
     this.closeModal();
   }
@@ -60,69 +67,78 @@ class FornecedorList extends Component {
     return (
       <div className="animated fadeIn">
         <Row>
-          <Col xl={10}>
-            <Card>
-              <CardHeader>
-                <i className="fa fa-align-justify" /> Fornecedores
-              </CardHeader>
-              <CardBody>
-                <Table responsive hover id="myTable">
-                  <thead>
-                    <tr>
-                      <th scope="col">Código</th>
-                      <th scope="col">Razão Social</th>
-                      <th scope="col">Nome Fantasia</th>
-                      <th scope="col">CNPJ</th>
-                      <th scope="col">Endereço</th>
-                      <th scope="col">Editar</th>
-                      <th scope="col">Remover</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {this.state.fornecedores.map(fornecedor => (
+          {this.state.isLoading ? (
+            <ReactLoading type={'spin'} />
+          ) : (
+            <Col xl={10}>
+              <Card>
+                <CardHeader>
+                  <i className="fa fa-align-justify" /> Fornecedores
+                </CardHeader>
+                <CardBody>
+                  <Table responsive hover id="myTable">
+                    <thead>
                       <tr>
-                        <td>{fornecedor.id}</td>
-                        <td>{fornecedor.razaoSocial}</td>
-                        <td>{fornecedor.nomeFantasia}</td>
-                        <td>{fornecedor.cnpj}</td>
-                        <td>{fornecedor.endereco}</td>
-                        <td>
-                          <Button size="sm" color="primary" href={urlEditar + fornecedor.id}>
-                            Editar
-                          </Button>
-                        </td>
-                        <td>
-                          <Button
-                            size="sm"
-                            color="danger"
-                            onClick={() => this.openModal(fornecedor.id, fornecedor.nomeFantasia)}
-                          >
-                            Remover
-                          </Button>
-                          <Modal isOpen={this.state.modal} className={this.props.className}>
-                            <ModalHeader>
-                              Deseja remover o fornecedor {this.state.nomeFantasia}?
-                            </ModalHeader>
-                            <ModalFooter>
-                              <Button
-                                color="danger"
-                                onClick={() => this.remover(this.state.idFornecedor)}
-                              >
-                                Remover
-                              </Button>{' '}
-                              <Button color="secondary" onClick={() => this.closeModal()}>
-                                Cancelar
-                              </Button>
-                            </ModalFooter>
-                          </Modal>
-                        </td>
+                        <th scope="col">Código</th>
+                        <th scope="col">Razão Social</th>
+                        <th scope="col">Nome Fantasia</th>
+                        <th scope="col">CNPJ</th>
+                        <th scope="col">Endereço</th>
+                        <th scope="col">Editar</th>
+                        <th scope="col">Remover</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              </CardBody>
-            </Card>
-          </Col>
+                    </thead>
+                    <tbody>
+                      {this.state.fornecedores.map(fornecedor => (
+                        <tr>
+                          <td>{fornecedor.id}</td>
+                          <td>{fornecedor.razaoSocial}</td>
+                          <td>{fornecedor.nomeFantasia}</td>
+                          <td>{fornecedor.cnpj}</td>
+                          <td>{fornecedor.endereco}</td>
+                          <td>
+                            <Button size="sm" color="primary" href={urlEditar + fornecedor.id}>
+                              Editar
+                            </Button>
+                          </td>
+                          <td>
+                            <Button
+                              size="sm"
+                              color="danger"
+                              onClick={() => this.openModal(fornecedor.id, fornecedor.nomeFantasia)}
+                            >
+                              Remover
+                            </Button>
+                            <Modal isOpen={this.state.modal} className={this.props.className}>
+                              <ModalHeader>
+                                Deseja remover o fornecedor {this.state.nomeFantasia}?
+                              </ModalHeader>
+                              <ModalFooter>
+                                <Button
+                                  color="danger"
+                                  onClick={() => this.remover(this.state.idFornecedor)}
+                                >
+                                  Remover
+                                </Button>{' '}
+                                <Button color="secondary" onClick={() => this.closeModal()}>
+                                  Cancelar
+                                </Button>
+                              </ModalFooter>
+                            </Modal>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </CardBody>
+                {this.state.errors.details && (
+                  <Alert color="danger">
+                    <strong>* Erro ao remover fornecedor: {this.state.errors.details}</strong>
+                  </Alert>
+                )}
+              </Card>
+            </Col>
+          )}
         </Row>
       </div>
     );

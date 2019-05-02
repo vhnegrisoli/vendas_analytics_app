@@ -1,8 +1,16 @@
 import React, { Component, lazy } from 'react';
 import {
-  Card, CardBody, Button, CardHeader, Col, Row, Table, Modal,
+  Alert,
+  Card,
+  CardBody,
+  Button,
+  CardHeader,
+  Col,
+  Row,
+  Table,
+  Modal,
   ModalHeader,
-  ModalFooter
+  ModalFooter,
 } from 'reactstrap';
 import axios from 'axios';
 import ReactLoading from 'react-loading';
@@ -18,7 +26,8 @@ class ProdutoList extends Component {
       isLoading: true,
       modal: false,
       nomeProduto: '',
-      idProduto: ''
+      idProduto: '',
+      errors: [],
     };
     this.initialize();
   }
@@ -27,11 +36,11 @@ class ProdutoList extends Component {
     await axios.get('http://localhost:8080/api/produtos/todos').then(res => {
       this.setState({
         produtos: res.data,
-        isLoading: false
+        isLoading: false,
       });
     });
     this.forceUpdate();
-  };
+  }
 
   openModal(id, nome) {
     this.setState({
@@ -48,7 +57,9 @@ class ProdutoList extends Component {
   }
 
   async remover(id) {
-    await axios.get(urlRemover + id);
+    await axios.get(urlRemover + id).catch(res => {
+      this.state.errors = res.response.data;
+    });
     this.initialize();
     this.closeModal();
   }
@@ -61,68 +72,75 @@ class ProdutoList extends Component {
             {this.state.isLoading ? (
               <ReactLoading type={'spin'} />
             ) : (
-                <Card>
-                  <CardHeader>
-                    <i className="fa fa-align-justify" /> Produtos
-              </CardHeader>
-                  <CardBody>
-                    <Table responsive hover id="myTable">
-                      <thead>
+              <Card>
+                <CardHeader>
+                  <i className="fa fa-align-justify" /> Produtos
+                </CardHeader>
+                <CardBody>
+                  <Table responsive hover id="myTable">
+                    <thead>
+                      <tr>
+                        <th scope="col">Código</th>
+                        <th scope="col">Nome do Produto</th>
+                        <th scope="col">Descrição</th>
+                        <th scope="col">Preço</th>
+                        <th scope="col">Fornecedor</th>
+                        <th scope="col">Categoria</th>
+                        <th scope="col">Editar</th>
+                        <th scope="col">Remover</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {this.state.produtos.map(produto => (
                         <tr>
-                          <th scope="col">Código</th>
-                          <th scope="col">Nome do Produto</th>
-                          <th scope="col">Descrição</th>
-                          <th scope="col">Preço</th>
-                          <th scope="col">Fornecedor</th>
-                          <th scope="col">Categoria</th>
-                          <th scope="col">Editar</th>
-                          <th scope="col">Remover</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {this.state.produtos.map(produto => (
-                          <tr>
-                            <td>{produto.id}</td>
-                            <td>{produto.nomeProduto}</td>
-                            <td>{produto.descricao}</td>
-                            <td>{'R$' + produto.preco.toFixed(2)}</td>
-                            <td>{produto.categoria.descricao}</td>
-                            <td>{produto.fornecedor.nomeFantasia}</td>
-                            <td>
-                              <Button size="sm" color="primary" href={urlEditar + produto.id}>
-                                Editar
-                          </Button>
-                            </td>
-                            <td>
-                              <Button
-                                size="sm"
-                                color="danger"
-                                onClick={() => this.openModal(produto.id, produto.nomeProduto)}
-                              >Remover</Button>
-                              <Modal isOpen={this.state.modal} className={this.props.className}>
-                                <ModalHeader>
-                                  Deseja remover a categoria {this.state.nomeProduto}?
+                          <td>{produto.id}</td>
+                          <td>{produto.nomeProduto}</td>
+                          <td>{produto.descricao}</td>
+                          <td>{'R$' + produto.preco.toFixed(2)}</td>
+                          <td>{produto.categoria.descricao}</td>
+                          <td>{produto.fornecedor.nomeFantasia}</td>
+                          <td>
+                            <Button size="sm" color="primary" href={urlEditar + produto.id}>
+                              Editar
+                            </Button>
+                          </td>
+                          <td>
+                            <Button
+                              size="sm"
+                              color="danger"
+                              onClick={() => this.openModal(produto.id, produto.nomeProduto)}
+                            >
+                              Remover
+                            </Button>
+                            <Modal isOpen={this.state.modal} className={this.props.className}>
+                              <ModalHeader>
+                                Deseja remover a categoria {this.state.nomeProduto}?
                               </ModalHeader>
-                                <ModalFooter>
-                                  <Button
-                                    color="danger"
-                                    onClick={() => this.remover(this.state.idProduto)}
-                                  >
-                                    Remover
+                              <ModalFooter>
+                                <Button
+                                  color="danger"
+                                  onClick={() => this.remover(this.state.idProduto)}
+                                >
+                                  Remover
                                 </Button>{' '}
-                                  <Button color="secondary" onClick={() => this.closeModal()}>
-                                    Cancelar
+                                <Button color="secondary" onClick={() => this.closeModal()}>
+                                  Cancelar
                                 </Button>
-                                </ModalFooter>
-                              </Modal>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </Table>
-                  </CardBody>
-                </Card>
-              )}
+                              </ModalFooter>
+                            </Modal>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </CardBody>
+                {this.state.errors.details && (
+                  <Alert color="danger">
+                    <strong>* Erro ao remover produto: {this.state.errors.details}</strong>
+                  </Alert>
+                )}
+              </Card>
+            )}
           </Col>
         </Row>
       </div>

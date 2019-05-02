@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  Alert,
   Card,
   CardBody,
   Button,
@@ -25,6 +26,7 @@ class CategoriaList extends Component {
       descricaoModal: '',
       categorias: [],
       isLoading: true,
+      errors: [],
     };
     this.initialize();
     this.forceUpdate();
@@ -55,7 +57,9 @@ class CategoriaList extends Component {
   }
 
   async remover(id) {
-    await axios.get(urlRemover + id);
+    await axios.get(urlRemover + id).catch(res => {
+      this.state.errors = res.response.data;
+    });
     this.initialize();
     this.closeModal();
   }
@@ -122,6 +126,11 @@ class CategoriaList extends Component {
                     </tbody>
                   </Table>
                 </CardBody>
+                {this.state.errors.details && (
+                  <Alert color="danger">
+                    <strong>* Erro ao remover categoria: {this.state.errors.details}</strong>
+                  </Alert>
+                )}
               </Card>
             )}
           </Col>

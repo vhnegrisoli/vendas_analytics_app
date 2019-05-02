@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  Alert,
   Card,
   CardBody,
   Button,
@@ -25,6 +26,7 @@ class ClienteList extends Component {
       idCliente: '',
       nomeCliente: '',
       isLoading: true,
+      errors: [],
     };
     this.initialize();
     this.forceUpdate();
@@ -54,7 +56,10 @@ class ClienteList extends Component {
   }
 
   async remover(id) {
-    await axios.get(urlRemover + id);
+    await axios.get(urlRemover + id).catch(res => {
+      this.state.errors = res.response.data;
+    });
+    this.forceUpdate();
     this.initialize();
     this.closeModal();
   }
@@ -128,6 +133,11 @@ class ClienteList extends Component {
                     </tbody>
                   </Table>
                 </CardBody>
+                {this.state.errors.details && (
+                  <Alert color="danger">
+                    <strong>* Erro ao remover cliente: {this.state.errors.details}</strong>
+                  </Alert>
+                )}
               </Card>
             )}
           </Col>

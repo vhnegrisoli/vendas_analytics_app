@@ -1,32 +1,20 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import {
-  Badge,
+  Alert,
   Button,
-  ButtonDropdown,
   Card,
   CardBody,
-  CardFooter,
   CardHeader,
   Col,
-  Collapse,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Fade,
   Form,
   FormGroup,
   FormText,
-  FormFeedback,
   Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
   Label,
-  Row,
 } from 'reactstrap';
-import { format } from 'path';
 
+const urlListarUsuarios = 'http://localhost:3000/#/usuarios/listar';
 class UsuarioForm extends Component {
   constructor(props) {
     super(props);
@@ -43,19 +31,38 @@ class UsuarioForm extends Component {
       nome: '',
       email: '',
       senha: '',
+      situacao: null,
+      situacoes: [{ situacao: 'ATIVO' }, { situacao: 'INATIVO' }],
       cliente: '',
       permissoesUsuario: '',
+      errors: [],
     };
+    this.initialize();
   }
 
-  componentDidMount() {
-    axios.get('http://localhost:8080/api/clientes/todos').then(res => {
+  async initialize() {
+    if (this.getUrlParameter()) {
+      await axios
+        .get('http://localhost:8080/api/usuarios/buscar/' + this.getUrlParameter())
+        .then(res => {
+          this.setState({
+            nome: res.data.nome,
+            email: res.data.email,
+            senha: res.data.senha,
+            cliente: res.data.cliente.id,
+            permissoesUsuario: res.data.permissoesUsuario.id,
+            situacao: res.data.situacao,
+          });
+        });
+    }
+
+    await axios.get('http://localhost:8080/api/clientes/todos').then(res => {
       this.setState({
         clientes: res.data,
       });
     });
 
-    axios.get('http://localhost:8080/api/usuarios/permissoes').then(res => {
+    await axios.get('http://localhost:8080/api/usuarios/permissoes').then(res => {
       this.setState({
         permissoes: res.data,
       });
@@ -78,8 +85,39 @@ class UsuarioForm extends Component {
     });
   };
 
-  onSubmit(e) {
-    e.preventDefault();
+  getUrlParameter() {
+    var url = window.location.toString().split('/');
+    var id = url[url.length - 1];
+    if (!isNaN(id)) {
+      return parseInt(url[url.length - 1]);
+    } else {
+      return '';
+    }
+  }
+
+  editar() {
+    axios
+      .post('http://localhost:8080/api/usuarios/salvar', {
+        id: this.getUrlParameter(),
+        nome: this.state.nome,
+        email: this.state.email,
+        senha: this.state.senha,
+        cliente: { id: this.state.cliente },
+        permissoesUsuario: { id: this.state.permissoesUsuario },
+        situacao: this.state.situacao,
+      })
+      .then(res => {
+        if (res.status === 200) {
+          window.location.href = urlListarUsuarios;
+        }
+      })
+      .catch(res => {
+        this.state.errors = res.response.data;
+      });
+    this.forceUpdate();
+  }
+
+  salvar() {
     axios
       .post('http://localhost:8080/api/usuarios/salvar', {
         nome: this.state.nome,
@@ -89,8 +127,23 @@ class UsuarioForm extends Component {
         permissoesUsuario: { id: this.state.permissoesUsuario },
       })
       .then(res => {
-        console.log(res.status);
+        if (res.status === 200) {
+          window.location.href = urlListarUsuarios;
+        }
+      })
+      .catch(res => {
+        this.state.errors = res.response.data;
       });
+    this.forceUpdate();
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+    if (this.getUrlParameter()) {
+      this.editar();
+    } else {
+      this.salvar();
+    }
   }
 
   render() {
@@ -201,12 +254,38 @@ class UsuarioForm extends Component {
                     <FormText className="help-block">Crie uma senha.</FormText>
                   </Col>
                 </FormGroup>
-                <Button type="submit" size="sm" color="success">
-                  <i className="fa fa-dot-circle-o" />
-                  Cadastrar
+                {this.getUrlParameter() && (
+                  <FormGroup row>
+                    <Col md="3">
+                      <Label htmlFor="select">Situações</Label>
+                    </Col>
+                    <Col xs="12" md="9">
+                      <Input
+                        type="select"
+                        name="situacao"
+                        required
+                        id="permissoesUsuario"
+                        value={this.state.situacao}
+                        onChange={e => this.onChange(e)}
+                      >
+                        <option value="0">Por favor, selecione a situação do usuário:</option>
+                        {this.state.situacoes.map(situacao => (
+                          <option value={situacao.situacao}>{situacao.situacao}</option>
+                        ))}
+                      </Input>
+                    </Col>
+                  </FormGroup>
+                )}
+                <Button size="sm" color="success">
+                  <i className="fa fa-dot-circle-o" /> Cadastrar
                 </Button>
               </Form>
             </CardBody>
+            {this.state.errors.details && (
+              <Alert color="danger">
+                <strong>* Erro ao remover usuário: {this.state.errors.details}</strong>
+              </Alert>
+            )}
           </Card>
         </Col>
       </div>
