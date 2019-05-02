@@ -95,8 +95,8 @@ class UsuarioForm extends Component {
     }
   }
 
-  editar() {
-    axios
+  async editar() {
+    await axios
       .post('http://localhost:8080/api/usuarios/salvar', {
         id: this.getUrlParameter(),
         nome: this.state.nome,
@@ -117,8 +117,8 @@ class UsuarioForm extends Component {
     this.forceUpdate();
   }
 
-  salvar() {
-    axios
+  async salvar() {
+    await axios
       .post('http://localhost:8080/api/usuarios/salvar', {
         nome: this.state.nome,
         email: this.state.email,
@@ -204,7 +204,7 @@ class UsuarioForm extends Component {
                       value={this.state.cliente}
                       onChange={e => this.onChange(e)}
                     >
-                      <option value="0">Por favor, selecione o cliente:</option>
+                      <option value={''}>Por favor, selecione o cliente:</option>
                       {this.state.clientes.map(cliente => (
                         <option value={cliente.id}>{cliente.nome}</option>
                       ))}
@@ -268,7 +268,7 @@ class UsuarioForm extends Component {
                         value={this.state.situacao}
                         onChange={e => this.onChange(e)}
                       >
-                        <option value="0">Por favor, selecione a situação do usuário:</option>
+                        <option value="">Por favor, selecione a situação do usuário:</option>
                         {this.state.situacoes.map(situacao => (
                           <option value={situacao.situacao}>{situacao.situacao}</option>
                         ))}
@@ -283,7 +283,7 @@ class UsuarioForm extends Component {
             </CardBody>
             {this.state.errors.details && (
               <Alert color="danger">
-                <strong>* Erro ao remover usuário: {this.state.errors.details}</strong>
+                <strong>* Erro ao salvar usuário: {this.state.errors.details}</strong>
               </Alert>
             )}
           </Card>
