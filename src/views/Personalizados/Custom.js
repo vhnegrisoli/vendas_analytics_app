@@ -276,7 +276,10 @@ class Custom extends Component {
         this.getChamadasVendas();
         break;
       case 'REGIAO':
-        this.getChamadasVendas();
+        this.getChamadasRegiao();
+        break;
+      case 'ESTADO':
+        this.getChamadasEstados();
         break;
       default:
         break;
