@@ -147,6 +147,7 @@ class Custom extends Component {
   };
 
   async getChamadasCliente() {
+    this.zerarDadosDosGraficos();
     await axios.get('http://localhost:8080/api/analytics/geral-clientes').then(res => {
       for (var i = 0; i < res.data.length; i++) {
         dadosDimensao[i] = res.data[i].cliente;
@@ -165,6 +166,7 @@ class Custom extends Component {
   }
 
   async getChamadasProduto() {
+    this.zerarDadosDosGraficos();
     await axios.get('http://localhost:8080/api/analytics/geral-produtos').then(res => {
       for (var i = 0; i < res.data.length; i++) {
         dadosDimensao[i] = res.data[i].produto;
@@ -186,6 +188,7 @@ class Custom extends Component {
   }
 
   async getChamadasRegiao() {
+    this.zerarDadosDosGraficos();
     await axios
       .get('http://localhost:8080/api/analytics/geral-regioes-personalizados')
       .then(res => {
@@ -209,6 +212,7 @@ class Custom extends Component {
   }
 
   async getChamadasVendas() {
+    this.zerarDadosDosGraficos();
     await axios.get('http://localhost:8080/api/dashboard/vendas-por-periodo').then(res => {
       for (var i = 0; i < res.data.length; i++) {
         dadosDimensao[i] = res.data[i].meses;
@@ -229,14 +233,9 @@ class Custom extends Component {
     this.forceUpdate();
   }
 
-  async zerarDadosDosGraficos() {
-    this.setState({
-      dadosDimensao: [],
-      dadosMetrica: [],
-    });
-    dadosDimensao = [];
-    dadosMetrica = [];
-    this.forceUpdate();
+  zerarDadosDosGraficos() {
+    dadosMetrica.length = 0;
+    dadosDimensao.length = 0;
   }
 
   fetch(e) {
