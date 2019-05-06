@@ -141,6 +141,9 @@ class Custom extends Component {
         case 'REGIAO':
           this.getChamadasRegiao();
           break;
+        case 'ESTADO':
+          this.getChamadasEstados();
+          break;
       }
     }
     this.forceUpdate();
@@ -208,6 +211,28 @@ class Custom extends Component {
           }
         }
       });
+    this.forceUpdate();
+  }
+
+  async getChamadasEstados() {
+    this.zerarDadosDosGraficos();
+    await axios.get('http://localhost:8080/api/analytics/geral-estados').then(res => {
+      for (var i = 0; i < res.data.length; i++) {
+        dadosDimensao[i] = res.data[i].estado;
+        if (this.state.metrica === 'COUNT') {
+          dadosMetrica[i] = res.data[i].quantidade;
+          this.state.dadosMetrica[i] = res.data[i].quantidade;
+        }
+        if (this.state.metrica === 'SUM') {
+          dadosMetrica[i] = res.data[i].lucro;
+          this.state.dadosMetrica[i] = res.data[i].lucro;
+        }
+        if (this.state.metrica === 'AVG') {
+          dadosMetrica[i] = res.data[i].media;
+          this.state.dadosMetrica[i] = res.data[i].media;
+        }
+      }
+    });
     this.forceUpdate();
   }
 
@@ -322,6 +347,18 @@ class Custom extends Component {
                                 value="REGIAO"
                               />{' '}
                               Analisar por regiões
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                value={this.state.descricao}
+                                onChange={e => this.onChange(e)}
+                                type="radio"
+                                name="dimensao"
+                                value="ESTADO"
+                              />{' '}
+                              Analisar por Estados
                             </Label>
                           </FormGroup>
                         </FormGroup>
