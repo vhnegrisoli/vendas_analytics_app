@@ -24,7 +24,7 @@ const grafico = {
   datasets: [
     {
       data: dadosMetrica,
-      label: metrica.toString(),
+      label: metrica,
       backgroundColor: [
         '#FF6384',
         '#36A2EB',
@@ -139,14 +139,30 @@ class Custom extends Component {
           this.getChamadasVendas();
           break;
         case 'REGIAO':
-          this.getChamadasVendas();
+          this.getChamadasRegiao();
           break;
       }
     }
     this.forceUpdate();
   };
 
-  async getChamadasCliente() {}
+  async getChamadasCliente() {
+    await axios.get('http://localhost:8080/api/analytics/geral-clientes').then(res => {
+      for (var i = 0; i < res.data.length; i++) {
+        dadosDimensao[i] = res.data[i].cliente;
+        if (this.state.metrica === 'COUNT') {
+          dadosMetrica[i] = res.data[i].quantidade;
+        }
+        if (this.state.metrica === 'SUM') {
+          dadosMetrica[i] = res.data[i].lucro;
+        }
+        if (this.state.metrica === 'AVG') {
+          dadosMetrica[i] = res.data[i].media;
+        }
+      }
+    });
+    this.forceUpdate();
+  }
 
   async getChamadasProduto() {
     await axios.get('http://localhost:8080/api/analytics/geral-produtos').then(res => {
@@ -154,20 +170,43 @@ class Custom extends Component {
         dadosDimensao[i] = res.data[i].produto;
         if (this.state.metrica === 'COUNT') {
           dadosMetrica[i] = res.data[i].quantidade;
+          this.state.dadosMetrica[i] = res.data[i].quantidade;
         }
         if (this.state.metrica === 'SUM') {
-          dadosMetrica[i] = res.data[i].quantidade;
+          dadosMetrica[i] = res.data[i].lucro;
+          this.state.dadosMetrica[i] = res.data[i].lucro;
         }
         if (this.state.metrica === 'AVG') {
           dadosMetrica[i] = res.data[i].media;
+          this.state.dadosMetrica[i] = res.data[i].media;
         }
       }
     });
-    this.state.dadosDimensao = dadosDimensao;
-    this.state.dadosMetrica = dadosMetrica;
     this.forceUpdate();
   }
-  getChamadasRegiao() {}
+
+  async getChamadasRegiao() {
+    await axios
+      .get('http://localhost:8080/api/analytics/geral-regioes-personalizados')
+      .then(res => {
+        for (var i = 0; i < res.data.length; i++) {
+          dadosDimensao[i] = res.data[i].regiao;
+          if (this.state.metrica === 'COUNT') {
+            dadosMetrica[i] = res.data[i].quantidade;
+            this.state.dadosMetrica[i] = res.data[i].quantidade;
+          }
+          if (this.state.metrica === 'SUM') {
+            dadosMetrica[i] = res.data[i].lucro;
+            this.state.dadosMetrica[i] = res.data[i].lucro;
+          }
+          if (this.state.metrica === 'AVG') {
+            dadosMetrica[i] = res.data[i].media;
+            this.state.dadosMetrica[i] = res.data[i].media;
+          }
+        }
+      });
+    this.forceUpdate();
+  }
 
   async getChamadasVendas() {
     await axios.get('http://localhost:8080/api/dashboard/vendas-por-periodo').then(res => {
@@ -187,6 +226,16 @@ class Custom extends Component {
         }
       }
     });
+    this.forceUpdate();
+  }
+
+  async zerarDadosDosGraficos() {
+    this.setState({
+      dadosDimensao: [],
+      dadosMetrica: [],
+    });
+    dadosDimensao = [];
+    dadosMetrica = [];
     this.forceUpdate();
   }
 
