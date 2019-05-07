@@ -144,6 +144,12 @@ class Custom extends Component {
         case 'ESTADO':
           this.getChamadasEstados();
           break;
+        case 'FORNECEDOR':
+          this.getChamadasFornecedor();
+          break;
+        case 'CATEGORIA':
+          this.getChamadasCategoria();
+          break;
       }
     }
     this.forceUpdate();
@@ -258,33 +264,53 @@ class Custom extends Component {
     this.forceUpdate();
   }
 
+  async getChamadasFornecedor() {
+    this.zerarDadosDosGraficos();
+    await axios.get('http://localhost:8080/api/analytics/geral-fornecedores').then(res => {
+      for (var i = 0; i < res.data.length; i++) {
+        dadosDimensao[i] = res.data[i].fornecedor;
+        if (this.state.metrica === 'COUNT') {
+          dadosMetrica[i] = res.data[i].qtdVendas;
+          this.state.dadosMetrica[i] = res.data[i].qtdVendas;
+        }
+        if (this.state.metrica === 'SUM') {
+          dadosMetrica[i] = res.data[i].lucro;
+          this.state.dadosMetrica[i] = res.data[i].lucro;
+        }
+        if (this.state.metrica === 'AVG') {
+          dadosMetrica[i] = res.data[i].media;
+          this.state.dadosMetrica[i] = res.data[i].media;
+        }
+      }
+    });
+    this.forceUpdate();
+  }
+
+  async getChamadasCategoria() {
+    this.zerarDadosDosGraficos();
+    await axios.get('http://localhost:8080/api/analytics/vendas-por-categoria').then(res => {
+      for (var i = 0; i < res.data.length; i++) {
+        dadosDimensao[i] = res.data[i].categoria;
+        if (this.state.metrica === 'COUNT') {
+          dadosMetrica[i] = res.data[i].quantidade;
+          this.state.dadosMetrica[i] = res.data[i].quantidade;
+        }
+        if (this.state.metrica === 'SUM') {
+          dadosMetrica[i] = res.data[i].lucro;
+          this.state.dadosMetrica[i] = res.data[i].lucro;
+        }
+        if (this.state.metrica === 'AVG') {
+          dadosMetrica[i] = res.data[i].media;
+          this.state.dadosMetrica[i] = res.data[i].media;
+        }
+      }
+    });
+    this.forceUpdate();
+  }
+
   zerarDadosDosGraficos() {
     dadosMetrica.length = 0;
     dadosDimensao.length = 0;
-  }
-
-  fetch(e) {
-    e.preventDefault();
-    switch (this.state.dimensao) {
-      case 'CLIENTE':
-        this.getChamadasCliente();
-        break;
-      case 'PRODUTO':
-        this.getChamadasProduto();
-        break;
-      case 'VENDAS MENSAIS':
-        this.getChamadasVendas();
-        break;
-      case 'REGIAO':
-        this.getChamadasRegiao();
-        break;
-      case 'ESTADO':
-        this.getChamadasEstados();
-        break;
-      default:
-        break;
-    }
-    this.forceUpdate();
   }
 
   render() {
@@ -361,7 +387,31 @@ class Custom extends Component {
                                 name="dimensao"
                                 value="ESTADO"
                               />{' '}
-                              Analisar por Estados
+                              Analisar por estados
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                value={this.state.descricao}
+                                onChange={e => this.onChange(e)}
+                                type="radio"
+                                name="dimensao"
+                                value="FORNECEDOR"
+                              />{' '}
+                              Analisar por fornecedores
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                value={this.state.descricao}
+                                onChange={e => this.onChange(e)}
+                                type="radio"
+                                name="dimensao"
+                                value="CATEGORIA"
+                              />{' '}
+                              Analisar por categorias
                             </Label>
                           </FormGroup>
                         </FormGroup>
@@ -475,13 +525,6 @@ class Custom extends Component {
                     </Row>
                   </CardFooter>
                 </Card>
-                <Col md={6}>
-                  <Col xs="12" md="9">
-                    <Button size="sm" color="success" onClick={e => this.fetch(e)}>
-                      <i className="fa fa-dot-circle-o" /> Gerar relatório
-                    </Button>
-                  </Col>
-                </Col>
               </Form>
             </CardBody>
           </Card>
