@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Bar, Doughnut, Line, Pie, HorizontalBar } from 'react-chartjs-2';
 import axios from 'axios';
 import {
-  Button,
   Card,
   CardBody,
   CardFooter,

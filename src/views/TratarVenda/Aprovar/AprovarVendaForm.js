@@ -11,20 +11,8 @@ import {
   ModalHeader,
   ModalFooter,
   Table,
-  Form,
-  FormGroup,
-  FormText,
-  FormFeedback,
-  Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  Label,
-  CustomInput,
   Row,
 } from 'reactstrap';
-import { format } from 'path';
-import { hidden } from 'ansi-colors';
 
 const urlAprovar = 'http://localhost:8080/api/vendas/aprovar-venda/';
 const urlReprovar = 'http://localhost:8080/api/vendas/rejeitar-venda/';

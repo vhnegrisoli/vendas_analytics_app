@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Card, CardBody, CardHeader, Col, Form, FormGroup, Input, Label } from 'reactstrap';
-import { format } from 'path';
 
 let link = '';
 let usuarioId = null;
@@ -131,7 +130,7 @@ class RelatoriosPowerBi extends Component {
                 ) : (
                   <p>Você não tem relatórios. </p>
                 )}
-                {link != '' && titulo != '' && (
+                {link !== '' && titulo !== '' && (
                   <Card>
                     <CardHeader>{titulo}</CardHeader>
                     <div class="resp-container">

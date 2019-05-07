@@ -1,22 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Badge,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Nav,
-  NavItem,
-  NavLink,
-} from 'reactstrap';
+import { Nav, NavItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 
-import {
-  AppAsideToggler,
-  AppHeaderDropdown,
-  AppNavbarBrand,
-  AppSidebarToggler,
-} from '@coreui/react';
+import { AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 import logo from '../../assets/img/brand/logo.svg';
 import sygnet from '../../assets/img/brand/sygnet.svg';
 
@@ -47,8 +34,7 @@ class DefaultHeader extends Component {
             </Link>
           </NavItem>
         </Nav>
-        <Nav className="ml-auto" navbar>
-         </Nav>
+        <Nav className="ml-auto" navbar />
         {/*<AppAsideToggler className="d-lg-none" mobile />*/}
       </React.Fragment>
     );

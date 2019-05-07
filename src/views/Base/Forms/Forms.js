@@ -1,31 +1,18 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import {
-  Badge,
   Button,
-  ButtonDropdown,
   Card,
   CardBody,
   CardFooter,
   CardHeader,
   Col,
-  Collapse,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Fade,
   Form,
   FormGroup,
   FormText,
-  FormFeedback,
   Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
   Label,
-  Row,
 } from 'reactstrap';
-import { format } from 'path';
 
 class Forms extends Component {
   constructor(props) {

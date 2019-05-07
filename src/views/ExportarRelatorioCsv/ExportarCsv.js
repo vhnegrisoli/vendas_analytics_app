@@ -1,24 +1,7 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Redirect, Link } from 'react-router-dom';
-import axios from 'axios';
-import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Col,
-  Form,
-  FormGroup,
-  Input,
-  Label,
-} from 'reactstrap';
-import { format } from 'path';
+import { Button, Card, CardBody, CardHeader, Col, Form, FormGroup, Input, Label } from 'reactstrap';
 
 const urlDownload = 'http://localhost:8080/api/vendas/relatorio-csv?dataInicial=';
-const message =
-  '* Os campos de data inicial e final estão vazios, desta forma todos os dados serão recuperados';
 class ExportarCsv extends Component {
   constructor(props) {
     super(props);

@@ -1,4 +1,4 @@
-import React, { Component, lazy, Suspense } from 'react';
+import React, { Component } from 'react';
 import { Bar, Line, Pie } from 'react-chartjs-2';
 import axios from 'axios';
 import ReactLoading from 'react-loading';
@@ -15,13 +15,9 @@ import {
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities';
 
-const Widget03 = lazy(() => import('../../views/Widgets/Widget03'));
-
 const brandPrimary = getStyle('--primary');
 const brandSuccess = getStyle('--success');
 const brandInfo = getStyle('--info');
-const brandWarning = getStyle('--warning');
-const brandDanger = getStyle('--danger');
 
 let clientes = [0];
 let produtos = [0];
@@ -299,7 +295,7 @@ const mainChartOpts = {
     mode: 'index',
     position: 'nearest',
     callbacks: {
-      labelColor: function (tooltipItem, chart) {
+      labelColor: function(tooltipItem, chart) {
         return { backgroundColor: chart.data.datasets[tooltipItem.datasetIndex].borderColor };
       },
     },
@@ -345,7 +341,7 @@ const mainChartOpts2 = {
     mode: 'index',
     position: 'nearest',
     callbacks: {
-      labelColor: function (tooltipItem, chart) {
+      labelColor: function(tooltipItem, chart) {
         return { backgroundColor: chart.data.datasets[tooltipItem.datasetIndex].borderColor };
       },
     },
@@ -552,69 +548,69 @@ class Dashboard extends Component {
         {this.state.isLoading ? (
           <ReactLoading type={'bars'} />
         ) : (
-            <Row>
-              <Col>
-                <Card>
-                  <CardBody>
-                    <Row>
-                      <Col sm="5">
-                        <CardTitle className="mb-0">Vendas totais por período</CardTitle>
-                      </Col>
-                      <Col sm="7" className="d-none d-sm-inline-block" />
-                    </Row>
-                    <div
-                      className="chart-wrapper"
-                      style={{ height: 300 + 'px', marginTop: 40 + 'px' }}
-                    >
-                      <Line data={mainChart} options={mainChartOpts} height={300} />
-                    </div>
-                  </CardBody>
-                </Card>
-              </Col>
-            </Row>
-          )}
+          <Row>
+            <Col>
+              <Card>
+                <CardBody>
+                  <Row>
+                    <Col sm="5">
+                      <CardTitle className="mb-0">Vendas totais por período</CardTitle>
+                    </Col>
+                    <Col sm="7" className="d-none d-sm-inline-block" />
+                  </Row>
+                  <div
+                    className="chart-wrapper"
+                    style={{ height: 300 + 'px', marginTop: 40 + 'px' }}
+                  >
+                    <Line data={mainChart} options={mainChartOpts} height={300} />
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+        )}
         {this.state.isLoading ? (
           <label>Aguarde, estamos processando sua análise</label>
         ) : (
-            <Row>
-              <Col>
-                <Card>
-                  <CardBody>
-                    <Row>
-                      <Col sm="5">
-                        <CardTitle className="mb-0">Média de vendas por meses</CardTitle>
-                      </Col>
-                      <Col sm="7" className="d-none d-sm-inline-block" />
-                    </Row>
-                    <div
-                      className="chart-wrapper"
-                      style={{ height: 300 + 'px', marginTop: 40 + 'px' }}
-                    >
-                      <Bar data={mainChart2} options={mainChartOpts2} height={300} />
-                    </div>
-                  </CardBody>
-                </Card>
-              </Col>
-              <Col>
-                <Card>
-                  <CardBody>
-                    <Row>
-                      <Col sm="5">
-                        <CardTitle className="mb-0">Lucro total por meses</CardTitle>
-                      </Col>
-                      <Col sm="7" className="d-none d-sm-inline-block" />
-                    </Row>
-                    <div
-                      className="chart-wrapper"
-                      style={{ height: 300 + 'px', marginTop: 40 + 'px' }}
-                    >
-                      <Pie data={mainChart3} options={mainChartOpts2} height={300} />
-                    </div>
-                  </CardBody>
-                </Card>
-              </Col>
-            </Row>
-          )}
+          <Row>
+            <Col>
+              <Card>
+                <CardBody>
+                  <Row>
+                    <Col sm="5">
+                      <CardTitle className="mb-0">Média de vendas por meses</CardTitle>
+                    </Col>
+                    <Col sm="7" className="d-none d-sm-inline-block" />
+                  </Row>
+                  <div
+                    className="chart-wrapper"
+                    style={{ height: 300 + 'px', marginTop: 40 + 'px' }}
+                  >
+                    <Bar data={mainChart2} options={mainChartOpts2} height={300} />
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
+            <Col>
+              <Card>
+                <CardBody>
+                  <Row>
+                    <Col sm="5">
+                      <CardTitle className="mb-0">Lucro total por meses</CardTitle>
+                    </Col>
+                    <Col sm="7" className="d-none d-sm-inline-block" />
+                  </Row>
+                  <div
+                    className="chart-wrapper"
+                    style={{ height: 300 + 'px', marginTop: 40 + 'px' }}
+                  >
+                    <Pie data={mainChart3} options={mainChartOpts2} height={300} />
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+        )}
       </div>
     );
   }

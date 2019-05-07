@@ -1,21 +1,20 @@
 import React, { Component } from 'react';
-import { Badge, Card, CardBody, CardHeader, Col, ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText, Row, TabContent, TabPane } from 'reactstrap';
+import { Card, CardBody, CardHeader, Col, ListGroup, ListGroupItem, Row } from 'reactstrap';
 
 class ListGroups extends Component {
-
   constructor(props) {
     super(props);
 
     this.toggle = this.toggle.bind(this);
     this.state = {
-      activeTab: 1
+      activeTab: 1,
     };
   }
 
   toggle(tab) {
     if (this.state.activeTab !== tab) {
       this.setState({
-        activeTab: tab
+        activeTab: tab,
       });
     }
   }
@@ -27,9 +26,15 @@ class ListGroups extends Component {
           <Col sm="12" xl="12">
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i><strong>List Group</strong>
+                <i className="fa fa-align-justify" />
+                <strong>List Group</strong>
                 <div className="card-header-actions">
-                  <a href="https://reactstrap.github.io/components/listgroup/" rel="noreferrer noopener" target="_blank" className="card-header-action">
+                  <a
+                    href="https://reactstrap.github.io/components/listgroup/"
+                    rel="noreferrer noopener"
+                    target="_blank"
+                    className="card-header-action"
+                  >
                     <small className="text-muted">docs</small>
                   </a>
                 </div>
