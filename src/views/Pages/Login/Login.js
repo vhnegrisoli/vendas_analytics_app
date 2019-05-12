@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import {
+  Alert,
   Button,
   Card,
   CardBody,
@@ -14,8 +14,67 @@ import {
   InputGroupText,
   Row,
 } from 'reactstrap';
+import axios from 'axios';
+import ReactLoading from 'react-loading';
+
+const urlValidarLogin = 'http://localhost:8080/login';
+const urlCriarConta = 'http://localhost:3000/#/clientes/cadastrar';
 
 class Login extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: false,
+      email: '',
+      senha: '',
+      isSucess: false,
+      successData: '',
+      errors: []
+    }
+  }
+
+  onChange(e) {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  async login() {
+    await axios.post(urlValidarLogin, {
+      email: this.state.email,
+      senha: this.state.senha
+    })
+      .then(res => {
+        this.setState = {
+          isLoading: false,
+        }
+        if (res.status === 200) {
+          this.setState = {
+            successData: res.data,
+            isSucess: true
+          }
+        } else {
+          this.setState = {
+            errors: res.response.data,
+            isSucess: false
+          }
+        }
+      }
+      );
+  }
+
+  onsubmit(e) {
+    e.preventDefault();
+    this.setState = {
+      isLoading: true
+    }
+    this.forceUpdate()
+    //this.login();
+  }
+
+
+
   render() {
     return (
       <div className="app flex-row align-items-center">
@@ -25,16 +84,22 @@ class Login extends Component {
               <CardGroup>
                 <Card className="p-4">
                   <CardBody>
-                    <Form>
+                    <Form onSubmit={e => this.onSubmit(e)}>
                       <h1>Login</h1>
-                      <p className="text-muted">Sign In to your account</p>
+                      <p className="text-muted">Entre com sua conta</p>
                       <InputGroup className="mb-3">
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>
                             <i className="icon-user" />
                           </InputGroupText>
                         </InputGroupAddon>
-                        <Input type="text" placeholder="Username" autoComplete="username" />
+                        <Input
+                          type="email"
+                          name="email"
+                          placeholder="Digite seu email"
+                          value={this.state.email}
+                          required
+                          onChange={e => this.onChange(e)} />
                       </InputGroup>
                       <InputGroup className="mb-4">
                         <InputGroupAddon addonType="prepend">
@@ -44,21 +109,35 @@ class Login extends Component {
                         </InputGroupAddon>
                         <Input
                           type="password"
-                          placeholder="Password"
-                          autoComplete="current-password"
+                          name="senha"
+                          placeholder="Digite sua senha"
+                          required
+                          value={this.state.senha}
+                          onChange={e => this.onChange(e)}
                         />
                       </InputGroup>
                       <Row>
                         <Col xs="6">
-                          <Button color="primary" className="px-4">
+                          <Button color="primary">
                             Login
                           </Button>
                         </Col>
                         <Col xs="6" className="text-right">
-                          <Button color="link" className="px-0">
-                            Forgot password?
-                          </Button>
+                          <a color="link" className="px-0">
+                            Esqueceu sua senha?
+                          </a>
                         </Col>
+                        {this.state.isLoading && <ReactLoading type={'spin'} />}
+                        {this.state.isSucess && (
+                          <Alert color="success">
+                            <strong>{this.state.successData}</strong>
+                          </Alert>
+                        )}
+                        {!this.state.isSucess && this.state.errors.details && (
+                          <Alert color="danger">
+                            <strong>{this.state.errors.details}</strong>
+                          </Alert>
+                        )}
                       </Row>
                     </Form>
                   </CardBody>
@@ -69,16 +148,14 @@ class Login extends Component {
                 >
                   <CardBody className="text-center">
                     <div>
-                      <h2>Sign up</h2>
+                      <h2>Crie sua conta!</h2>
                       <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                        tempor incididunt ut labore et dolore magna aliqua.
+                        Crie uma conta e começe agora a utilizar essa ferramenta de Business Intelligence e Analytics
+                       para o tratamento de suas vendas!
                       </p>
-                      <Link to="/cliente/cadastrar">
-                        <Button color="primary" className="mt-3" active tabIndex={-1}>
-                          Register Now!
+                      <Button color="primary" className="mt-3" href={urlCriarConta}>
+                        Cadastre-se!
                         </Button>
-                      </Link>
                     </div>
                   </CardBody>
                 </Card>
@@ -86,7 +163,7 @@ class Login extends Component {
             </Col>
           </Row>
         </Container>
-      </div>
+      </div >
     );
   }
 }

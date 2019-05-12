@@ -61,6 +61,8 @@ const Custom = React.lazy(() =>
 const RelatoriosPowerBi = React.lazy(() =>
   import('./views/RelatoriosPowerBi/RelatoriosPowerBi'),
 );
+
+const Login = React.lazy(() => import('./views/Pages/Login/Login'));
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
   { path: '/', exact: true, name: 'Home', component: DefaultLayout },
@@ -120,6 +122,7 @@ const routes = [
   { path: '/detalhar-venda', name: 'DetalharVendaForm', component: DetalharVendaForm },
   { path: '/relatorios-personalizados', name: 'Custom', component: Custom },
   { path: '/relatorios-power-bi', name: 'RelatoriosPowerBi', component: RelatoriosPowerBi },
+  { path: 'login', name: 'Login', component: Login },
 ];
 
 export default routes;
