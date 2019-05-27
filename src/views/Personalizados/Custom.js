@@ -548,15 +548,15 @@ class Custom extends Component {
                   ) : this.state.tipoGrafico === 'Line' ? (
                     <Line data={grafico} />
                   ) : (
-                    ''
-                  )}
+                              ''
+                            )}
                 </div>
               </CardBody>
             </Card>
           </Col>
         ) : (
-          ''
-        )}
+            ''
+          )}
       </div>
     );
   }

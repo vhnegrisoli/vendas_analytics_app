@@ -88,7 +88,7 @@ class TratarVendaFormAdmin extends Component {
     this.toggle();
     await axios
       .post('http://localhost:8080/api/vendas/salvar', {
-        clientes: { id: this.state.cliente },
+        vendedor: { id: this.state.cliente },
         produtos: this.state.produtoVenda,
         clienteNome: this.state.nome,
         clienteEmail: this.state.email,
@@ -168,248 +168,248 @@ class TratarVendaFormAdmin extends Component {
         {this.state.isLoading ? (
           <ReactLoading type={'spin'} />
         ) : (
-          <Col xs="12" md="12">
-            <Card>
-              <CardHeader>
-                <strong>Tratar Venda </strong> - Administrador
+            <Col xs="12" md="12">
+              <Card>
+                <CardHeader>
+                  <strong>Tratar Venda </strong> - Administrador
               </CardHeader>
-              <CardBody>
-                <Form id="venda" className="form-horizontal" onSubmit={e => this.onSubmit(e)}>
-                  <FormGroup row>
-                    <Col md="3">
-                      <Label htmlFor="select">Vendedor*</Label>
-                    </Col>
-                    <Col xs="12" md="9">
-                      <Input
-                        type="select"
-                        name="cliente"
-                        required
-                        id="cliente"
-                        value={this.state.cliente}
-                        onChange={e => this.onChange(e)}
-                      >
-                        <option type="option" value="0">
-                          Por favor, selecione um vendedor:
+                <CardBody>
+                  <Form id="venda" className="form-horizontal" onSubmit={e => this.onSubmit(e)}>
+                    <FormGroup row>
+                      <Col md="3">
+                        <Label htmlFor="select">Vendedor*</Label>
+                      </Col>
+                      <Col xs="12" md="9">
+                        <Input
+                          type="select"
+                          name="cliente"
+                          required
+                          id="cliente"
+                          value={this.state.cliente}
+                          onChange={e => this.onChange(e)}
+                        >
+                          <option type="option" value="0">
+                            Por favor, selecione um vendedor:
                         </option>
-                        {this.state.clientes.map(cliente => (
-                          <option type="option" value={cliente.id}>
-                            {cliente.nome}
-                          </option>
-                        ))}
-                      </Input>
-                    </Col>
-                  </FormGroup>
-                  <FormGroup name="produtos">
-                    <Table responsive hover>
-                      <thead>
-                        <tr>
-                          <th scope="col">Produto</th>
-                          <th scope="col">Descrição do Produto</th>
-                          <th scope="col">Preço</th>
-                          <th scope="col">Fornecedor</th>
-                          <th scope="col">Quantidade</th>
-                          <th scope="col">Adicionar</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {this.state.produtos.map(produto => (
+                          {this.state.clientes.map(cliente => (
+                            <option type="option" value={cliente.id}>
+                              {cliente.nome}
+                            </option>
+                          ))}
+                        </Input>
+                      </Col>
+                    </FormGroup>
+                    <FormGroup name="produtos">
+                      <Table responsive hover>
+                        <thead>
                           <tr>
-                            <td>{produto.nomeProduto}</td>
-                            <td>{produto.descricao}</td>
-                            <td>{'R$' + parseFloat(produto.preco).toFixed(2)}</td>
-                            <td>{produto.fornecedor.nomeFantasia}</td>
-                            <td>
+                            <th scope="col">Produto</th>
+                            <th scope="col">Descrição do Produto</th>
+                            <th scope="col">Preço</th>
+                            <th scope="col">Fornecedor</th>
+                            <th scope="col">Quantidade</th>
+                            <th scope="col">Adicionar</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {this.state.produtos.map(produto => (
+                            <tr>
+                              <td>{produto.nomeProduto}</td>
+                              <td>{produto.descricao}</td>
+                              <td>{'R$' + parseFloat(produto.preco).toFixed(2)}</td>
+                              <td>{produto.fornecedor.nomeFantasia}</td>
+                              <td>
+                                <Input
+                                  type="number"
+                                  name="quantidade"
+                                  id="quantidade"
+                                  value={this.state.produtoVenda.quantidade}
+                                  onChange={e => this.onChange(e)}
+                                />
+                              </td>
+                              <td>
+                                <Button
+                                  color="primary"
+                                  onClick={e =>
+                                    this.adicionaProduto(
+                                      {
+                                        id: produto.id,
+                                        nome: produto.nomeProduto,
+                                        descricao: produto.descricao,
+                                        preco: produto.preco,
+                                        quantidade: null,
+                                      },
+                                      e,
+                                    )
+                                  }
+                                >
+                                  <span class="cui-cart" aria-hidden="true" />
+                                </Button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                      <Card>
+                        <CardHeader>
+                          <span class="cui-cart" aria-hidden="true" />{' '}
+                          <strong>Carrinho de Compras</strong>
+                        </CardHeader>
+                        <CardBody>
+                          {this.state.produtosAdicionados.length === 0 ? (
+                            <label>
+                              <strong> Carrinho vazio</strong>
+                            </label>
+                          ) : (
+                              <Table>
+                                <thead>
+                                  <tr>
+                                    <th scope="col">Código do Produto</th>
+                                    <th scope="col">Nome do Produto</th>
+                                    <th scope="col">Preço do Produto</th>
+                                    <th scope="col">Quantidade</th>
+                                    <th scope="col">Remover Item</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {this.state.produtosAdicionados.map(item => (
+                                    <tr>
+                                      <td>{item.id}</td>
+                                      <td>{item.nome}</td>
+                                      <td>{'R$' + item.preco.toFixed(2)}</td>
+                                      <td>{item.quantidade}</td>
+                                      <td>
+                                        <Button
+                                          size="sm"
+                                          color="danger"
+                                          onClick={() => this.removerProduto(item.id)}
+                                        >
+                                          <span class="cui-delete" aria-hidden="true" /> Remover
+                                    </Button>
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </Table>
+                            )}
+                        </CardBody>
+                        <CardFooter>
+                          <Table>
+                            <tr>
+                              <td>
+                                <strong>Total de itens: {this.getQtd()}</strong>
+                              </td>
+                              <td>
+                                <strong>Total a pagar: R${this.getPreco().toFixed(2)}</strong>
+                              </td>
+                            </tr>
+                          </Table>
+                        </CardFooter>
+                      </Card>
+                      <Card>
+                        <CardHeader>
+                          <span class="cui-user" aria-hidden="true" />{' '}
+                          <strong>Dados do Cliente</strong>
+                        </CardHeader>
+                        <CardBody>
+                          <FormGroup row>
+                            <Col md="3">
+                              <Label htmlFor="text-input">Nome completo*</Label>
+                            </Col>
+                            <Col xs="12" md="9">
                               <Input
-                                type="number"
-                                name="quantidade"
-                                id="quantidade"
-                                value={this.state.produtoVenda.quantidade}
+                                type="text"
+                                id="nome"
+                                value={this.state.nome}
+                                onChange={e => this.onChange(e)}
+                                required
+                                name="nome"
+                                placeholder="Nome completo"
+                              />
+                              <FormText color="muted">Digite o nome completo do vendedor.</FormText>
+                            </Col>
+                          </FormGroup>
+                          <FormGroup row>
+                            <Col md="3">
+                              <Label htmlFor="email-input">Email*</Label>
+                            </Col>
+                            <Col xs="12" md="9">
+                              <Input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="Email"
+                                autoComplete="email"
+                                value={this.state.email}
                                 onChange={e => this.onChange(e)}
                               />
-                            </td>
-                            <td>
-                              <Button
-                                color="primary"
-                                onClick={e =>
-                                  this.adicionaProduto(
-                                    {
-                                      id: produto.id,
-                                      nome: produto.nomeProduto,
-                                      descricao: produto.descricao,
-                                      preco: produto.preco,
-                                      quantidade: null,
-                                    },
-                                    e,
-                                  )
-                                }
-                              >
-                                <span class="cui-cart" aria-hidden="true" />
-                              </Button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </Table>
-                    <Card>
-                      <CardHeader>
-                        <span class="cui-cart" aria-hidden="true" />{' '}
-                        <strong>Carrinho de Compras</strong>
-                      </CardHeader>
-                      <CardBody>
-                        {this.state.produtosAdicionados.length === 0 ? (
-                          <label>
-                            <strong> Carrinho vazio</strong>
-                          </label>
-                        ) : (
-                          <Table>
-                            <thead>
-                              <tr>
-                                <th scope="col">Código do Produto</th>
-                                <th scope="col">Nome do Produto</th>
-                                <th scope="col">Preço do Produto</th>
-                                <th scope="col">Quantidade</th>
-                                <th scope="col">Remover Item</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {this.state.produtosAdicionados.map(item => (
-                                <tr>
-                                  <td>{item.id}</td>
-                                  <td>{item.nome}</td>
-                                  <td>{'R$' + item.preco.toFixed(2)}</td>
-                                  <td>{item.quantidade}</td>
-                                  <td>
-                                    <Button
-                                      size="sm"
-                                      color="danger"
-                                      onClick={() => this.removerProduto(item.id)}
-                                    >
-                                      <span class="cui-delete" aria-hidden="true" /> Remover
-                                    </Button>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </Table>
-                        )}
-                      </CardBody>
-                      <CardFooter>
-                        <Table>
-                          <tr>
-                            <td>
-                              <strong>Total de itens: {this.getQtd()}</strong>
-                            </td>
-                            <td>
-                              <strong>Total a pagar: R${this.getPreco().toFixed(2)}</strong>
-                            </td>
-                          </tr>
-                        </Table>
-                      </CardFooter>
-                    </Card>
-                    <Card>
-                      <CardHeader>
-                        <span class="cui-user" aria-hidden="true" />{' '}
-                        <strong>Dados do Cliente</strong>
-                      </CardHeader>
-                      <CardBody>
-                        <FormGroup row>
-                          <Col md="3">
-                            <Label htmlFor="text-input">Nome completo*</Label>
-                          </Col>
-                          <Col xs="12" md="9">
-                            <Input
-                              type="text"
-                              id="nome"
-                              value={this.state.nome}
-                              onChange={e => this.onChange(e)}
-                              required
-                              name="nome"
-                              placeholder="Nome completo"
-                            />
-                            <FormText color="muted">Digite o nome completo do vendedor.</FormText>
-                          </Col>
-                        </FormGroup>
-                        <FormGroup row>
-                          <Col md="3">
-                            <Label htmlFor="email-input">Email*</Label>
-                          </Col>
-                          <Col xs="12" md="9">
-                            <Input
-                              type="email"
-                              id="email"
-                              name="email"
-                              placeholder="Email"
-                              autoComplete="email"
-                              value={this.state.email}
-                              onChange={e => this.onChange(e)}
-                            />
-                            <FormText className="help-block">Digite o email.</FormText>
-                          </Col>
-                        </FormGroup>
-                        <FormGroup row>
-                          <Col md="3">
-                            <Label htmlFor="cpf-input">CPF*</Label>
-                          </Col>
-                          <Col xs="12" md="9">
-                            <Input
-                              type="text"
-                              id="cpf"
-                              name="cpf"
-                              placeholder="CPF"
-                              autoComplete="cpf"
-                              value={this.state.cpf}
-                              onChange={e => this.onChange(e)}
-                            />
-                            <FormText className="help-block">Digite o CPF.</FormText>
-                          </Col>
-                        </FormGroup>
-                      </CardBody>
-                    </Card>
-                  </FormGroup>
-                  <br />
-                  <Button onClick={this.toggle} size="sm" color="success">
-                    <i className="fa fa-dot-circle-o" /> Tratar venda
+                              <FormText className="help-block">Digite o email.</FormText>
+                            </Col>
+                          </FormGroup>
+                          <FormGroup row>
+                            <Col md="3">
+                              <Label htmlFor="cpf-input">CPF*</Label>
+                            </Col>
+                            <Col xs="12" md="9">
+                              <Input
+                                type="text"
+                                id="cpf"
+                                name="cpf"
+                                placeholder="CPF"
+                                autoComplete="cpf"
+                                value={this.state.cpf}
+                                onChange={e => this.onChange(e)}
+                              />
+                              <FormText className="help-block">Digite o CPF.</FormText>
+                            </Col>
+                          </FormGroup>
+                        </CardBody>
+                      </Card>
+                    </FormGroup>
+                    <br />
+                    <Button onClick={this.toggle} size="sm" color="success">
+                      <i className="fa fa-dot-circle-o" /> Tratar venda
                   </Button>
 
-                  <Modal
-                    isOpen={this.state.modal}
-                    toggle={this.toggle}
-                    className={this.props.className}
-                  >
-                    <ModalHeader toggle={this.toggle}>Deseja salvar a venda?</ModalHeader>
-                    <ModalFooter>
-                      <Button color="primary" onClick={() => this.onSubmit()}>
-                        Salvar
+                    <Modal
+                      isOpen={this.state.modal}
+                      toggle={this.toggle}
+                      className={this.props.className}
+                    >
+                      <ModalHeader toggle={this.toggle}>Deseja salvar a venda?</ModalHeader>
+                      <ModalFooter>
+                        <Button color="primary" onClick={() => this.onSubmit()}>
+                          Salvar
                       </Button>{' '}
-                      <Button color="secondary" onClick={this.toggle}>
-                        Cancelar
+                        <Button color="secondary" onClick={this.toggle}>
+                          Cancelar
                       </Button>
-                    </ModalFooter>
-                  </Modal>
-                  <Modal
-                    isOpen={this.state.errorModal}
-                    toggle={this.errorModal}
-                    className={this.props.className}
-                  >
-                    <ModalHeader>
-                      Selecione ao menos uma quantidade para cada item e um cliente.
+                      </ModalFooter>
+                    </Modal>
+                    <Modal
+                      isOpen={this.state.errorModal}
+                      toggle={this.errorModal}
+                      className={this.props.className}
+                    >
+                      <ModalHeader>
+                        Selecione ao menos uma quantidade para cada item e um cliente.
                     </ModalHeader>
-                    <ModalFooter>
-                      <Button color="secondary" onClick={() => this.errorModal()}>
-                        Voltar
+                      <ModalFooter>
+                        <Button color="secondary" onClick={() => this.errorModal()}>
+                          Voltar
                       </Button>
-                    </ModalFooter>
-                  </Modal>
-                </Form>
-              </CardBody>
-            </Card>
-            {this.state.detalheErro.details && (
-              <Alert color="danger">
-                <strong>* Erro ao salvar venda: {this.state.detalheErro.details}</strong>
-              </Alert>
-            )}
-          </Col>
-        )}
+                      </ModalFooter>
+                    </Modal>
+                  </Form>
+                </CardBody>
+              </Card>
+              {this.state.detalheErro.details && (
+                <Alert color="danger">
+                  <strong>* Erro ao salvar venda: {this.state.detalheErro.details}</strong>
+                </Alert>
+              )}
+            </Col>
+          )}
       </div>
     );
   }
