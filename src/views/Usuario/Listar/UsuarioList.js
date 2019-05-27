@@ -85,6 +85,7 @@ class UsuarioList extends Component {
                         <th scope="col">Autorizado a</th>
                         <th scope="col">Situação</th>
                         <th scope="col">Vendedor Proprietário</th>
+                        <th scope="col">Código Administrador</th>
                         <th scope="col">Editar</th>
                         <th scope="col">Remover</th>
                       </tr>
@@ -117,6 +118,11 @@ class UsuarioList extends Component {
                             </Button>
                           </td>
                           <td>{usuario.cliente.nome + ' (Código: ' + usuario.cliente.id + ')'}</td>
+                          {usuario.usuarioProprietario ? (
+                            <td>{usuario.usuarioProprietario}</td>
+                          ) : (
+                            <td>Admin</td>
+                          )}
                           <td>
                             <Button size="sm" color="primary" href={urlEditar + usuario.id}>
                               Editar

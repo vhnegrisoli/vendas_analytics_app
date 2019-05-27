@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import ReactLoading from 'react-loading';
-import { Card, CardBody, CardHeader, Col, Table, Button, Row } from 'reactstrap';
+import { Card, CardBody, CardHeader, CardFooter, Col, Table, Button, Row } from 'reactstrap';
 
 class DetalharVendaForm extends Component {
   constructor(props) {
@@ -135,6 +135,11 @@ class DetalharVendaForm extends Component {
                           </tr>
                         </tbody>
                       </Table>
+                    </CardHeader>
+                  </Card>
+                  <Card>
+                    <CardHeader>Detalhes do Cliente</CardHeader>
+                    <CardBody>
                       <Table responsive hover>
                         <thead>
                           <tr>
@@ -153,7 +158,7 @@ class DetalharVendaForm extends Component {
                           </tr>
                         </tbody>
                       </Table>
-                    </CardHeader>
+                    </CardBody>
                   </Card>
                   <Table responsive hover>
                     <thead>
