@@ -138,6 +138,7 @@ class DetalharVendaForm extends Component {
                       <Table responsive hover>
                         <thead>
                           <tr>
+                            <th scope="col">Vendedor Responsável</th>
                             <th scope="col">Nome do Cliente</th>
                             <th scope="col">Email do Cliente</th>
                             <th scope="col">CPF do Cliente</th>
@@ -145,6 +146,7 @@ class DetalharVendaForm extends Component {
                         </thead>
                         <tbody>
                           <tr>
+                            <td>{this.state.vendas.clientes.nome}</td>
                             <td>{this.state.vendas.clienteNome}</td>
                             <td>{this.state.vendas.clienteEmail}</td>
                             <td>{this.state.vendas.clienteCpf}</td>
