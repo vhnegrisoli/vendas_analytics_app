@@ -204,7 +204,7 @@ class UsuarioForm extends Component {
                       value={this.state.cliente}
                       onChange={e => this.onChange(e)}
                     >
-                      <option value={''}>Por favor, selecione o cliente:</option>
+                      <option value={''}>Por favor, selecione o vendedor:</option>
                       {this.state.clientes.map(cliente => (
                         <option value={cliente.id}>{cliente.nome}</option>
                       ))}

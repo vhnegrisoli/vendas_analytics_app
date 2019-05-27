@@ -190,7 +190,7 @@ class ClienteForm extends Component {
                       name="nome"
                       placeholder="Nome completo"
                     />
-                    <FormText color="muted">Digite o nome completo do cliente.</FormText>
+                    <FormText color="muted">Digite o nome completo do vendedor.</FormText>
                   </Col>
                 </FormGroup>
                 <FormGroup row>

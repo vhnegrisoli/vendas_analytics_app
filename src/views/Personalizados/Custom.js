@@ -337,7 +337,7 @@ class Custom extends Component {
                                 name="dimensao"
                                 value="CLIENTE"
                               />{' '}
-                              Analisar por clientes
+                              Analisar por vendedores
                             </Label>
                           </FormGroup>
                           <FormGroup check>

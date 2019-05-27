@@ -9,12 +9,13 @@ import {
   CardHeader,
   CardFooter,
   Col,
+  Form,
+  FormText,
+  FormGroup,
   Table,
   Modal,
   ModalHeader,
   ModalFooter,
-  Form,
-  FormGroup,
   Input,
   Label,
 } from 'reactstrap';
@@ -41,6 +42,9 @@ class TratarVendaFormAdmin extends Component {
       aprovacao: '',
       quantidade: 0,
       quantidades: [],
+      nome: '',
+      email: '',
+      cpf: '',
       isLoading: true,
       detalheErro: [],
     };
@@ -86,6 +90,9 @@ class TratarVendaFormAdmin extends Component {
       .post('http://localhost:8080/api/vendas/salvar', {
         clientes: { id: this.state.cliente },
         produtos: this.state.produtoVenda,
+        clienteNome: this.state.nome,
+        clienteEmail: this.state.email,
+        clienteCpf: this.state.cpf,
       })
       .then(res => {
         if (res.status === 200) {
@@ -182,7 +189,7 @@ class TratarVendaFormAdmin extends Component {
                         onChange={e => this.onChange(e)}
                       >
                         <option type="option" value="0">
-                          Por favor, selecione um cliente:
+                          Por favor, selecione um vendedor:
                         </option>
                         {this.state.clientes.map(cliente => (
                           <option type="option" value={cliente.id}>
@@ -298,6 +305,65 @@ class TratarVendaFormAdmin extends Component {
                           </tr>
                         </Table>
                       </CardFooter>
+                    </Card>
+                    <Card>
+                      <CardHeader>
+                        <span class="cui-user" aria-hidden="true" />{' '}
+                        <strong>Dados do Cliente</strong>
+                      </CardHeader>
+                      <CardBody>
+                        <FormGroup row>
+                          <Col md="3">
+                            <Label htmlFor="text-input">Nome completo*</Label>
+                          </Col>
+                          <Col xs="12" md="9">
+                            <Input
+                              type="text"
+                              id="nome"
+                              value={this.state.nome}
+                              onChange={e => this.onChange(e)}
+                              required
+                              name="nome"
+                              placeholder="Nome completo"
+                            />
+                            <FormText color="muted">Digite o nome completo do vendedor.</FormText>
+                          </Col>
+                        </FormGroup>
+                        <FormGroup row>
+                          <Col md="3">
+                            <Label htmlFor="email-input">Email*</Label>
+                          </Col>
+                          <Col xs="12" md="9">
+                            <Input
+                              type="email"
+                              id="email"
+                              name="email"
+                              placeholder="Email"
+                              autoComplete="email"
+                              value={this.state.email}
+                              onChange={e => this.onChange(e)}
+                            />
+                            <FormText className="help-block">Digite o email.</FormText>
+                          </Col>
+                        </FormGroup>
+                        <FormGroup row>
+                          <Col md="3">
+                            <Label htmlFor="cpf-input">CPF*</Label>
+                          </Col>
+                          <Col xs="12" md="9">
+                            <Input
+                              type="text"
+                              id="cpf"
+                              name="cpf"
+                              placeholder="CPF"
+                              autoComplete="cpf"
+                              value={this.state.cpf}
+                              onChange={e => this.onChange(e)}
+                            />
+                            <FormText className="help-block">Digite o CPF.</FormText>
+                          </Col>
+                        </FormGroup>
+                      </CardBody>
                     </Card>
                   </FormGroup>
                   <br />

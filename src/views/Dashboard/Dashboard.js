@@ -94,7 +94,7 @@ let cardChartData2 = {
   labels: mesesGrafico,
   datasets: [
     {
-      label: 'Quantidade de Compras por Clientes',
+      label: 'Quantidade de Compras por Vendedores',
       backgroundColor: brandInfo,
       borderColor: 'rgba(255,255,255,.55)',
       data: clientes,
