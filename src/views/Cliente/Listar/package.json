@@ -1,6 +1,0 @@
-{
-  "name": "ClienteList",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./ClienteList.js"
-}

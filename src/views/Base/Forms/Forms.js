@@ -52,7 +52,7 @@ class Forms extends Component {
   onSubmit() {
     var form = document.querySelector('cliente-form');
     var data = new FormData(form);
-    axios.post('localhost:8080/api/clientes/salvar', {
+    axios.post('localhost:8080/api/vendedores/salvar', {
       data: data,
     });
   }

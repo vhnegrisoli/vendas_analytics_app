@@ -13,9 +13,9 @@ import {
   Label,
 } from 'reactstrap';
 
-const urlListarClientes = 'http://localhost:3000/#/cliente/listar';
+const urlListarClientes = 'http://localhost:3000/#/vendedores/listar';
 
-class ClienteForm extends Component {
+class VendedorForm extends Component {
   constructor(props) {
     super(props);
 
@@ -51,7 +51,7 @@ class ClienteForm extends Component {
     });
     if (this.getUrlParameter()) {
       await axios
-        .get('http://localhost:8080/api/clientes/buscar/' + this.getUrlParameter())
+        .get('http://localhost:8080/api/vendedores/buscar/' + this.getUrlParameter())
         .then(res => {
           this.setState({
             nome: res.data.nome,
@@ -101,7 +101,7 @@ class ClienteForm extends Component {
 
   editar() {
     axios
-      .post('http://localhost:8080/api/clientes/salvar', {
+      .post('http://localhost:8080/api/vendedores/salvar', {
         id: this.getUrlParameter(),
         nome: this.state.nome,
         email: this.state.email,
@@ -130,7 +130,7 @@ class ClienteForm extends Component {
 
   salvar() {
     axios
-      .post('http://localhost:8080/api/clientes/salvar', {
+      .post('http://localhost:8080/api/vendedores/salvar', {
         nome: this.state.nome,
         email: this.state.email,
         cpf: this.state.cpf,
@@ -403,4 +403,4 @@ class ClienteForm extends Component {
   }
 }
 
-export default ClienteForm;
+export default VendedorForm;

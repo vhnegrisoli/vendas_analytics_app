@@ -128,8 +128,8 @@ class Custom extends Component {
     });
     if (nomeCampo === 'dimensao' || nomeCampo === 'metrica') {
       switch (this.state.dimensao) {
-        case 'CLIENTE':
-          this.getChamadasCliente();
+        case 'VENDEDOR':
+          this.getChamadasVendedor();
           break;
         case 'PRODUTO':
           this.getChamadasProduto();
@@ -154,9 +154,9 @@ class Custom extends Component {
     this.forceUpdate();
   };
 
-  async getChamadasCliente() {
+  async getChamadasVendedor() {
     this.zerarDadosDosGraficos();
-    await axios.get('http://localhost:8080/api/analytics/geral-clientes').then(res => {
+    await axios.get('http://localhost:8080/api/analytics/geral-vendedores').then(res => {
       for (var i = 0; i < res.data.length; i++) {
         dadosDimensao[i] = res.data[i].cliente;
         if (this.state.metrica === 'COUNT') {
@@ -335,7 +335,7 @@ class Custom extends Component {
                                 onChange={e => this.onChange(e)}
                                 type="radio"
                                 name="dimensao"
-                                value="CLIENTE"
+                                value="VENDEDOR"
                               />{' '}
                               Analisar por vendedores
                             </Label>

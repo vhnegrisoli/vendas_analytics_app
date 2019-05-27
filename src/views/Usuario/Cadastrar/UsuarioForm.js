@@ -65,7 +65,7 @@ class UsuarioForm extends Component {
       });
     });
 
-    await axios.get('http://localhost:8080/api/clientes/todos').then(res => {
+    await axios.get('http://localhost:8080/api/vendedores/todos').then(res => {
       this.setState({
         clientes: res.data,
       });

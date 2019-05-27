@@ -37,8 +37,8 @@ const Widgets = React.lazy(() => import('./views/Widgets/Widgets'));
 const Users = React.lazy(() => import('./views/Users/Users'));
 const User = React.lazy(() => import('./views/Users/User'));
 const HistoricoVenda = React.lazy(() => import('./views/HistoricoVenda/HistoricoVenda'));
-const ClienteForm = React.lazy(() => import('./views/Cliente/Cadastrar/ClienteForm'));
-const ClienteList = React.lazy(() => import('./views/Cliente/Listar/ClienteList'));
+const VendedorForm = React.lazy(() => import('./views/Vendedor/Cadastrar/VendedorForm'));
+const VendedorList = React.lazy(() => import('./views/Vendedor/Listar/VendedorList'));
 const ProdutoForm = React.lazy(() => import('./views/Produto/Cadastrar/ProdutoForm'));
 const ProdutoList = React.lazy(() => import('./views/Produto/Listar/ProdutoList'));
 const CategoriaForm = React.lazy(() => import('./views/Categoria/Cadastrar/CategoriaForm'));
@@ -102,8 +102,8 @@ const routes = [
   { path: '/charts', name: 'Charts', component: Charts },
   { path: '/users', name: 'Users', component: Users },
   { path: '/historicovenda', name: 'Histórico de Vendas', component: HistoricoVenda },
-  { path: '/vendedores/cadastrar', name: ' Cadastrar Vendedor', component: ClienteForm },
-  { path: '/vendedores/listar', name: 'Listar Vendedores', component: ClienteList },
+  { path: '/vendedores/cadastrar', name: ' Cadastrar Vendedor', component: VendedorForm },
+  { path: '/vendedores/listar', name: 'Listar Vendedores', component: VendedorList },
   { path: '/produtos/cadastrar', name: 'Cadastrar Produto', component: ProdutoForm },
   { path: '/produtos/listar', name: 'Listar Produtos', component: ProdutoList },
   { path: '/categorias/cadastrar', name: 'Cadastrar Categoria', component: CategoriaForm },

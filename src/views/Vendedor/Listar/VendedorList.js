@@ -15,9 +15,9 @@ import {
 import axios from 'axios';
 import ReactLoading from 'react-loading';
 
-const urlEditar = 'http://localhost:3000/#/cliente/cadastrar/';
-const urlRemover = 'http://localhost:8080/api/clientes/remover/';
-class ClienteList extends Component {
+const urlEditar = 'http://localhost:3000/#/vendedores/cadastrar/';
+const urlRemover = 'http://localhost:8080/api/vendedores/remover/';
+class VendedorList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -33,7 +33,7 @@ class ClienteList extends Component {
   }
 
   async initialize() {
-    await axios.get('http://localhost:8080/api/clientes/todos').then(res => {
+    await axios.get('http://localhost:8080/api/vendedores/todos').then(res => {
       this.setState({
         clientes: res.data,
         isLoading: false,
@@ -147,4 +147,4 @@ class ClienteList extends Component {
   }
 }
 
-export default ClienteList;
+export default VendedorList;
