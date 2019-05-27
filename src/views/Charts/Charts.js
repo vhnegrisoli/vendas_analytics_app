@@ -99,7 +99,7 @@ const bar = {
       data: qtdProdutosRegiao,
     },
     {
-      label: 'Quantidade de clientes por estado',
+      label: 'Quantidade de vendedores por estado',
       backgroundColor: '#FFCE56',
       borderColor: '#ffff99',
       borderWidth: 1,
@@ -403,7 +403,7 @@ class Charts extends Component {
           </Card>
           <Card>
             <CardHeader>
-              Quantidade de Vendas, Produtos e Clientes por Estado
+              Quantidade de Vendas, Produtos e Vendedores por Estado
               <div className="card-header-actions" />
             </CardHeader>
             <CardBody>

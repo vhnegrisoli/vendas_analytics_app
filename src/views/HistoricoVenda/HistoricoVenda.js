@@ -31,7 +31,7 @@ class HistoricoVenda extends Component {
             <Col xl={12}>
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify" /> Clientes
+                  <i className="fa fa-align-justify" /> Vendedores
                 </CardHeader>
                 <CardBody>
                   <Table responsive hover>
@@ -42,8 +42,8 @@ class HistoricoVenda extends Component {
                         <th scope="col">Aprovação da Venda</th>
                         <th scope="col">Quantidade de Itens</th>
                         <th scope="col">Cliente</th>
-                        <th scope="col">Email do Cliente</th>
-                        <th scope="col">Endereço do Cliente</th>
+                        <th scope="col">Email do Vendedor</th>
+                        <th scope="col">Endereço do Vendedor</th>
                         <th scope="col">Cidade e Estado</th>
                         <th scope="col">Produto</th>
                         <th scope="col">Descrição do Produto</th>

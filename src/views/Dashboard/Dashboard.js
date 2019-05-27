@@ -295,7 +295,7 @@ const mainChartOpts = {
     mode: 'index',
     position: 'nearest',
     callbacks: {
-      labelColor: function (tooltipItem, chart) {
+      labelColor: function(tooltipItem, chart) {
         return { backgroundColor: chart.data.datasets[tooltipItem.datasetIndex].borderColor };
       },
     },
@@ -341,7 +341,7 @@ const mainChartOpts2 = {
     mode: 'index',
     position: 'nearest',
     callbacks: {
-      labelColor: function (tooltipItem, chart) {
+      labelColor: function(tooltipItem, chart) {
         return { backgroundColor: chart.data.datasets[tooltipItem.datasetIndex].borderColor };
       },
     },
@@ -471,7 +471,7 @@ class Dashboard extends Component {
                   />
                 </ButtonGroup>
                 <div className="text-value">{this.state.qtdClientes}</div>
-                <div>Clientes ativos</div>
+                <div>Vendedores ativos</div>
               </CardBody>
               <div className="chart-wrapper mx-3" style={{ height: '70px' }}>
                 <Line data={cardChartData2} options={cardChartOpts2} height={70} />
@@ -548,69 +548,69 @@ class Dashboard extends Component {
         {this.state.isLoading ? (
           <ReactLoading type={'bars'} />
         ) : (
-            <Row>
-              <Col>
-                <Card>
-                  <CardBody>
-                    <Row>
-                      <Col sm="5">
-                        <CardTitle className="mb-0">Vendas totais por período</CardTitle>
-                      </Col>
-                      <Col sm="7" className="d-none d-sm-inline-block" />
-                    </Row>
-                    <div
-                      className="chart-wrapper"
-                      style={{ height: 300 + 'px', marginTop: 40 + 'px' }}
-                    >
-                      <Line data={mainChart} options={mainChartOpts} height={300} />
-                    </div>
-                  </CardBody>
-                </Card>
-              </Col>
-            </Row>
-          )}
+          <Row>
+            <Col>
+              <Card>
+                <CardBody>
+                  <Row>
+                    <Col sm="5">
+                      <CardTitle className="mb-0">Vendas totais por período</CardTitle>
+                    </Col>
+                    <Col sm="7" className="d-none d-sm-inline-block" />
+                  </Row>
+                  <div
+                    className="chart-wrapper"
+                    style={{ height: 300 + 'px', marginTop: 40 + 'px' }}
+                  >
+                    <Line data={mainChart} options={mainChartOpts} height={300} />
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+        )}
         {this.state.isLoading ? (
           <label>Aguarde, estamos processando sua análise</label>
         ) : (
-            <Row>
-              <Col>
-                <Card>
-                  <CardBody>
-                    <Row>
-                      <Col sm="5">
-                        <CardTitle className="mb-0">Média de vendas por meses</CardTitle>
-                      </Col>
-                      <Col sm="7" className="d-none d-sm-inline-block" />
-                    </Row>
-                    <div
-                      className="chart-wrapper"
-                      style={{ height: 300 + 'px', marginTop: 40 + 'px' }}
-                    >
-                      <Bar data={mainChart2} options={mainChartOpts2} height={300} />
-                    </div>
-                  </CardBody>
-                </Card>
-              </Col>
-              <Col>
-                <Card>
-                  <CardBody>
-                    <Row>
-                      <Col sm="5">
-                        <CardTitle className="mb-0">Lucro total por meses</CardTitle>
-                      </Col>
-                      <Col sm="7" className="d-none d-sm-inline-block" />
-                    </Row>
-                    <div
-                      className="chart-wrapper"
-                      style={{ height: 300 + 'px', marginTop: 40 + 'px' }}
-                    >
-                      <Pie data={mainChart3} options={mainChartOpts2} height={300} />
-                    </div>
-                  </CardBody>
-                </Card>
-              </Col>
-            </Row>
-          )}
+          <Row>
+            <Col>
+              <Card>
+                <CardBody>
+                  <Row>
+                    <Col sm="5">
+                      <CardTitle className="mb-0">Média de vendas por meses</CardTitle>
+                    </Col>
+                    <Col sm="7" className="d-none d-sm-inline-block" />
+                  </Row>
+                  <div
+                    className="chart-wrapper"
+                    style={{ height: 300 + 'px', marginTop: 40 + 'px' }}
+                  >
+                    <Bar data={mainChart2} options={mainChartOpts2} height={300} />
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
+            <Col>
+              <Card>
+                <CardBody>
+                  <Row>
+                    <Col sm="5">
+                      <CardTitle className="mb-0">Lucro total por meses</CardTitle>
+                    </Col>
+                    <Col sm="7" className="d-none d-sm-inline-block" />
+                  </Row>
+                  <div
+                    className="chart-wrapper"
+                    style={{ height: 300 + 'px', marginTop: 40 + 'px' }}
+                  >
+                    <Pie data={mainChart3} options={mainChartOpts2} height={300} />
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+        )}
       </div>
     );
   }

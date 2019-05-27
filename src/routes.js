@@ -55,12 +55,8 @@ const AprovarVendaForm = React.lazy(() => import('./views/TratarVenda/Aprovar/Ap
 const DetalharVendaForm = React.lazy(() =>
   import('./views/TratarVenda/Detalhar/DetalharVendaForm'),
 );
-const Custom = React.lazy(() =>
-  import('./views/Personalizados/Custom'),
-);
-const RelatoriosPowerBi = React.lazy(() =>
-  import('./views/RelatoriosPowerBi/RelatoriosPowerBi'),
-);
+const Custom = React.lazy(() => import('./views/Personalizados/Custom'));
+const RelatoriosPowerBi = React.lazy(() => import('./views/RelatoriosPowerBi/RelatoriosPowerBi'));
 
 const Login = React.lazy(() => import('./views/Pages/Login/Login'));
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
@@ -105,23 +101,27 @@ const routes = [
   { path: '/widgets', name: 'Widgets', component: Widgets },
   { path: '/charts', name: 'Charts', component: Charts },
   { path: '/users', name: 'Users', component: Users },
-  { path: '/historicovenda', name: 'HistoricoVenda', component: HistoricoVenda },
-  { path: '/cliente/cadastrar', name: ' ClienteForm', component: ClienteForm },
-  { path: '/cliente/listar', name: 'ClienteList', component: ClienteList },
-  { path: '/produtos/cadastrar', name: 'ProdutoForm', component: ProdutoForm },
-  { path: '/produtos/listar', name: 'ProdutoList', component: ProdutoList },
-  { path: '/categorias/cadastrar', name: 'CategoriaForm', component: CategoriaForm },
-  { path: '/categorias/listar', name: 'CategoriaList', component: CategoriaList },
-  { path: '/fornecedores/cadastrar', name: 'FornecedorForm', component: FornecedorForm },
-  { path: '/fornecedores/listar', name: 'FornecedorList', component: FornecedorList },
-  { path: '/usuarios/cadastrar', name: 'UsuarioForm', component: UsuarioForm },
-  { path: '/usuarios/listar', name: 'UsuarioList', component: UsuarioList },
-  { path: '/exportar', name: 'ExportarCsv', component: ExportarCsv },
-  { path: '/tratar-venda', name: 'TratarVendaFormAdmin', component: TratarVendaFormAdmin },
-  { path: '/aprovar-venda', name: 'AprovarVendaForm', component: AprovarVendaForm },
-  { path: '/detalhar-venda', name: 'DetalharVendaForm', component: DetalharVendaForm },
-  { path: '/relatorios-personalizados', name: 'Custom', component: Custom },
-  { path: '/relatorios-power-bi', name: 'RelatoriosPowerBi', component: RelatoriosPowerBi },
+  { path: '/historicovenda', name: 'Histórico de Vendas', component: HistoricoVenda },
+  { path: '/vendedores/cadastrar', name: ' Cadastrar Vendedor', component: ClienteForm },
+  { path: '/vendedores/listar', name: 'Listar Vendedores', component: ClienteList },
+  { path: '/produtos/cadastrar', name: 'Cadastrar Produto', component: ProdutoForm },
+  { path: '/produtos/listar', name: 'Listar Produtos', component: ProdutoList },
+  { path: '/categorias/cadastrar', name: 'Cadastrar Categoria', component: CategoriaForm },
+  { path: '/categorias/listar', name: 'Listar Categorias', component: CategoriaList },
+  { path: '/fornecedores/cadastrar', name: 'Cadastrar Fornecedor', component: FornecedorForm },
+  { path: '/fornecedores/listar', name: 'Listar Fornecedores', component: FornecedorList },
+  { path: '/usuarios/cadastrar', name: 'Cadastrar Usuário', component: UsuarioForm },
+  { path: '/usuarios/listar', name: 'Listar Usuários', component: UsuarioList },
+  { path: '/exportar', name: 'Exportar Relatório', component: ExportarCsv },
+  { path: '/tratar-venda', name: 'Tratar Venda', component: TratarVendaFormAdmin },
+  { path: '/aprovar-venda', name: 'Aprovar Vendas', component: AprovarVendaForm },
+  { path: '/detalhar-venda', name: 'Detalhar Vendas', component: DetalharVendaForm },
+  { path: '/relatorios-personalizados', name: 'Relatórios Personalizados', component: Custom },
+  {
+    path: '/relatorios-power-bi',
+    name: 'Relatoriosdo Microsoft Power BI',
+    component: RelatoriosPowerBi,
+  },
   { path: 'login', name: 'Login', component: Login },
 ];
 

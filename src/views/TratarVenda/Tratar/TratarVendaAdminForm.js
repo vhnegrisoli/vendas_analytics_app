@@ -170,7 +170,7 @@ class TratarVendaFormAdmin extends Component {
                 <Form id="venda" className="form-horizontal" onSubmit={e => this.onSubmit(e)}>
                   <FormGroup row>
                     <Col md="3">
-                      <Label htmlFor="select">Cliente*</Label>
+                      <Label htmlFor="select">Vendedor*</Label>
                     </Col>
                     <Col xs="12" md="9">
                       <Input

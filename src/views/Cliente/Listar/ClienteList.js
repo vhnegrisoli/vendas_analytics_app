@@ -73,7 +73,7 @@ class ClienteList extends Component {
             ) : (
               <Card>
                 <CardHeader>
-                  <i className="fa fa-align-justify" /> Clientes
+                  <i className="fa fa-align-justify" /> Vendedores
                 </CardHeader>
                 <CardBody>
                   <Table responsive hover id="myTable">

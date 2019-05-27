@@ -69,18 +69,18 @@ export default {
       },
     },
     {
-      name: 'Clientes',
-      url: '/clientes',
+      name: 'Vendedores',
+      url: '/vendedores',
       icon: 'icon-people',
       children: [
         {
           name: 'Cadastrar',
-          url: '/cliente/cadastrar',
+          url: '/vendedores/cadastrar',
           icon: 'icon-user-follow',
         },
         {
           name: 'Listar',
-          url: '/cliente/listar',
+          url: '/vendedores/listar',
           icon: 'icon-list',
         },
       ],

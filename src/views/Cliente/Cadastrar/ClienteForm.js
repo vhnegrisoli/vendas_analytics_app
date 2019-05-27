@@ -172,7 +172,7 @@ class ClienteForm extends Component {
         <Col xs="12" md="12">
           <Card>
             <CardHeader>
-              <strong>Clientes </strong> - Cadastrar
+              <strong>Vendedores </strong> - Cadastrar
             </CardHeader>
             <CardBody>
               <Form id="cliente-form" className="form-horizontal" onSubmit={e => this.onSubmit(e)}>
