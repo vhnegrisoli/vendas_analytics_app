@@ -1,5 +1,19 @@
 import React, { Component } from 'react';
-import { Button, Card, CardBody, CardHeader, Col, Form, FormGroup, Input, Label } from 'reactstrap';
+import {
+  Alert,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Form,
+  FormGroup,
+  Input,
+  Label,
+} from 'reactstrap';
+import axios from 'axios';
+import ReactLoading from 'react-loading';
+import { saveAs } from 'file-saver';
 
 const urlDownload = 'http://localhost:8080/api/vendas/relatorio-csv?dataInicial=';
 class ExportarCsv extends Component {
@@ -15,6 +29,10 @@ class ExportarCsv extends Component {
       downloadUrl: '',
       dataInicial: '',
       dataFinal: '',
+      isLoading: false,
+      gerouCsv: false,
+      gerouErro: false,
+      exportLoadingColor: 'warning',
     };
   }
 
@@ -33,6 +51,47 @@ class ExportarCsv extends Component {
       [e.target.name]: e.target.value,
     });
   };
+
+  onSubmit(e) {
+    e.preventDefault();
+    this.setState({
+      isLoading: true,
+      exportLoadingColor: 'warning',
+      gerouCsv: false,
+      gerouErro: false,
+    });
+    this.getRelatorio();
+  }
+
+  async getRelatorio() {
+    await axios
+      .get(urlDownload + this.state.dataInicial + '?dataFinal=' + this.state.dataFinal)
+      .then(res => {
+        if (res.status === 200) {
+          this.setState({
+            isLoading: false,
+            gerouCsv: true,
+            exportLoadingColor: 'success',
+          });
+          var blob = new Blob([res.data], { type: 'application/csv' });
+          var fileName =
+            this.state.dataInicial !== '' && this.state.dataFinal !== ''
+              ? 'Relatorio_Vendas_' +
+                this.state.dataInicial.replace('-', '_') +
+                '_' +
+                this.state.dataFinal.replace('-', '_') +
+                '.csv'
+              : 'Relatorio_Vendas_Geral.csv';
+          saveAs(blob, fileName);
+        } else {
+          this.setState({
+            isLoading: false,
+            gerouErro: true,
+            exportLoadingColor: 'danger',
+          });
+        }
+      });
+  }
 
   render() {
     return (
@@ -72,16 +131,29 @@ class ExportarCsv extends Component {
                     />
                   </Col>
                 </FormGroup>
-                <Button
-                  type="submit"
-                  size="sm"
-                  color="success"
-                  href={urlDownload + this.state.dataInicial + '&dataFinal=' + this.state.dataFinal}
-                >
+                <Button onClick={e => this.onSubmit(e)} size="sm" color="success">
                   <i className="fa fa-dot-circle-o" /> Gerar relatório
                 </Button>
                 <br />
                 <br />
+                {this.state.isLoading && (
+                  <Alert color={this.state.exportLoadingColor}>
+                    <div>
+                      <ReactLoading type={'spin'} />
+                      <Label>Seu relatório está sendo gerado...</Label>
+                    </div>
+                  </Alert>
+                )}
+                {!this.state.isLoading && this.state.gerouCsv && (
+                  <Alert color={this.state.exportLoadingColor}>
+                    <Label>Seu arquivo foi gerado com sucesso.</Label>
+                  </Alert>
+                )}
+                {!this.state.isLoading && this.state.gerouErro && (
+                  <Alert color={this.state.exportLoadingColor}>
+                    <Label>Houve um erro ao gerar seu arquivo.</Label>
+                  </Alert>
+                )}
                 <Label>
                   * Se os campos de data inicial e final estiverem vazios, todos os dados serão
                   recuperados.

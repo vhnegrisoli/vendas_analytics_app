@@ -23,6 +23,7 @@
     "core-js": "^2.6.5",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.9.1",
+    "file-saver": "^2.0.2",
     "flag-icon-css": "^3.2.1",
     "font-awesome": "^4.7.0",
     "node-sass": "^4.11.0",
