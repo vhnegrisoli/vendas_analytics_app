@@ -17,11 +17,10 @@ import {
 import axios from 'axios';
 import ReactLoading from 'react-loading';
 
-const urlValidarLogin = 'http://localhost:8080/login';
+const getTokenUrl = 'http://localhost:8080/oauth/token';
 const urlCriarConta = 'http://localhost:3000/#/clientes/cadastrar';
 
 class Login extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -30,50 +29,59 @@ class Login extends Component {
       senha: '',
       isSucess: false,
       successData: '',
-      errors: []
-    }
+      errors: [],
+    };
   }
 
   onChange(e) {
     this.setState({
       [e.target.name]: e.target.value,
     });
-  };
+  }
 
   async login() {
-    await axios.post(urlValidarLogin, {
-      email: this.state.email,
-      senha: this.state.senha
-    })
+    const form = new FormData();
+    form.append('username', this.state.email);
+    form.append('password', this.state.password);
+    form.append('grant_type', 'password');
+    console.log(this.state);
+    await axios
+      .post(getTokenUrl, form, {
+        headers: {
+          Authorization: 'Basic dmVuZGFzX2FuYWx5dGljcy1jbGllbnQ6dmVuZGFzX2FuYWx5dGljcy1zZWNyZXQ=',
+          Content_Type: 'application/x-www-form-urlencode',
+        },
+      })
       .then(res => {
+        console.log(res);
         this.setState = {
           isLoading: false,
-        }
+        };
+        console.log(res.data);
         if (res.status === 200) {
           this.setState = {
             successData: res.data,
-            isSucess: true
-          }
+            isSucess: true,
+            isLoading: false,
+          };
         } else {
           this.setState = {
             errors: res.response.data,
-            isSucess: false
-          }
+            isSucess: false,
+            isLoading: false,
+          };
         }
-      }
-      );
+      });
   }
 
-  onsubmit(e) {
+  onSubmit(e) {
     e.preventDefault();
     this.setState = {
-      isLoading: true
-    }
-    this.forceUpdate()
-    //this.login();
+      isLoading: true,
+    };
+    this.forceUpdate();
+    this.login();
   }
-
-
 
   render() {
     return (
@@ -99,7 +107,8 @@ class Login extends Component {
                           placeholder="Digite seu email"
                           value={this.state.email}
                           required
-                          onChange={e => this.onChange(e)} />
+                          onChange={e => this.onChange(e)}
+                        />
                       </InputGroup>
                       <InputGroup className="mb-4">
                         <InputGroupAddon addonType="prepend">
@@ -118,7 +127,7 @@ class Login extends Component {
                       </InputGroup>
                       <Row>
                         <Col xs="6">
-                          <Button color="primary">
+                          <Button onClick={e => this.onSubmit(e)} color="primary">
                             Login
                           </Button>
                         </Col>
@@ -150,12 +159,12 @@ class Login extends Component {
                     <div>
                       <h2>Crie sua conta!</h2>
                       <p>
-                        Crie uma conta e começe agora a utilizar essa ferramenta de Business Intelligence e Analytics
-                       para o tratamento de suas vendas!
+                        Crie uma conta e começe agora a utilizar essa ferramenta de Business
+                        Intelligence e Analytics para o tratamento de suas vendas!
                       </p>
                       <Button color="primary" className="mt-3" href={urlCriarConta}>
                         Cadastre-se!
-                        </Button>
+                      </Button>
                     </div>
                   </CardBody>
                 </Card>
@@ -163,7 +172,7 @@ class Login extends Component {
             </Col>
           </Row>
         </Container>
-      </div >
+      </div>
     );
   }
 }

@@ -14,7 +14,7 @@ const DefaultLayout = Loadable({
 
 // Pages
 const Login = Loadable({
-  loader: () => import('./views/Pages/Login'),
+  loader: () => import('./views/Login'),
   loading
 });
 
