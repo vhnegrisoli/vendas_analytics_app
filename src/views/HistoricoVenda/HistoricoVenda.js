@@ -40,6 +40,7 @@ class HistoricoVenda extends Component {
                           <th scope="col">Código da Venda</th>
                           <th scope="col">Situação da Venda</th>
                           <th scope="col">Aprovação da Venda</th>
+                          <th scope="col">Mês da Venda</th>
                           <th scope="col">Quantidade de Itens</th>
                           <th scope="col">Vendedor</th>
                           <th scope="col">Email do Vendedor</th>
@@ -71,6 +72,7 @@ class HistoricoVenda extends Component {
                                   : registro.aprovacaoVenda}
                               </Button>
                             </td>
+                            <td>{registro.mesVenda}</td>
                             <td>{registro.quantidade}</td>
                             <td>{registro.nomeVendedor}</td>
                             <td>{registro.emailVendedor}</td>
