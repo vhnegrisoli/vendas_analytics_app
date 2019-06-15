@@ -20,6 +20,8 @@ import ReactLoading from 'react-loading';
 const getTokenUrl = 'http://localhost:8080/oauth/token';
 const urlCriarConta = 'http://localhost:3000/#/clientes/cadastrar';
 
+let token = ''
+
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -30,6 +32,7 @@ class Login extends Component {
       isSucess: false,
       successData: '',
       errors: [],
+      token: ''
     };
   }
 
@@ -41,37 +44,40 @@ class Login extends Component {
 
   async login() {
     const form = new FormData();
+    form.append('client_id', 'vendas_analytics-client');
+    form.append('client_secret', 'vendas_analytics-secret');
     form.append('username', this.state.email);
-    form.append('password', this.state.password);
+    form.append('password', this.state.senha);
     form.append('grant_type', 'password');
-    console.log(this.state);
+    const Authorization = `Basic dmVuZGFzX2FuYWx5dGljcy1jbGllbnQ6dmVuZGFzX2FuYWx5dGljcy1zZWNyZXQ=`
+    const Content_Type = `application/x-www-form-urlencoded`
+    const urlHome = 'http://localhost:3000/#/dashboard'
+    let token = ''
     await axios
       .post(getTokenUrl, form, {
-        headers: {
-          Authorization: 'Basic dmVuZGFzX2FuYWx5dGljcy1jbGllbnQ6dmVuZGFzX2FuYWx5dGljcy1zZWNyZXQ=',
-          Content_Type: 'application/x-www-form-urlencode',
+        Headers: {
+          Authorization, Content_Type
         },
       })
       .then(res => {
-        console.log(res);
         this.setState = {
           isLoading: false,
         };
-        console.log(res.data);
         if (res.status === 200) {
           this.setState = {
-            successData: res.data,
-            isSucess: true,
-            isLoading: false,
-          };
+            token: res.data.access_token
+          }
+          token = res.data.access_token
+          window.location.href = urlHome
         } else {
-          this.setState = {
+          this.setState({
             errors: res.response.data,
             isSucess: false,
             isLoading: false,
-          };
+          });
         }
       });
+    this.props.token(token)
   }
 
   onSubmit(e) {

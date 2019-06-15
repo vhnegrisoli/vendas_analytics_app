@@ -23,14 +23,15 @@ const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
 
 class DefaultLayout extends Component {
+
   loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>;
 
   signOut(e) {
     e.preventDefault();
     this.props.history.push('/login');
   }
-
   render() {
+    console.log(this.props)
     return (
       <div className="app">
         <AppHeader fixed>

@@ -4,11 +4,12 @@ import { HashRouter, Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import './App.scss';
 
-const loading = () => <div className="animated fadeIn pt-3 text-center">Loading...</div>;
+const loading = () => <div className="animated fadeIn pt-3 text-center">Iniciando...</div>;
 
 // Containers
 const DefaultLayout = Loadable({
   loader: () => import('./containers/DefaultLayout'),
+  token,
   loading
 });
 
@@ -33,18 +34,34 @@ const Page500 = Loadable({
   loading
 });
 
+let token = ''
+
 class App extends Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      token: ''
+    }
+  }
+
+  getToken(value) {
+    this.setState({
+      token: value
+    });
+    this.token = value
+  }
 
   render() {
     return (
       <HashRouter>
-          <Switch>
-            <Route exact path="/login" name="Login Page" component={Login} />
-            <Route exact path="/register" name="Register Page" component={Register} />
-            <Route exact path="/404" name="Page 404" component={Page404} />
-            <Route exact path="/500" name="Page 500" component={Page500} />
-            <Route path="/" name="Home" component={DefaultLayout} />
-          </Switch>
+        <Switch>
+          <Route exact path="/login" name="Login Page" component={() => <Login token={this.getToken.bind(this)} />} />
+          <Route exact path="/register" name="Register Page" component={Register} />
+          <Route exact path="/404" name="Page 404" component={Page404} />
+          <Route exact path="/500" name="Page 500" component={Page500} />
+          <Route path="/" name="Home" component={DefaultLayout} />
+        </Switch>
       </HashRouter>
     );
   }

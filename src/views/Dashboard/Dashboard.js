@@ -396,48 +396,52 @@ class Dashboard extends Component {
   }
 
   async initialize() {
+    const Authorization = `Bearer `;
     //VIEWS DO BANCO DE DADOS
-    await axios.get('http://localhost:8080/api/dashboard/vendas-analise-dashboard').then(res => {
-      for (var i = 0; i < res.data.length; i++) {
-        mesesGrafico[i] = res.data[i].meses;
-        lucrosGrafico[i] = res.data[i].lucro;
-        mediasGrafico[i] = res.data[i].media;
-        quantidadesGrafico[i] = res.data[i].quantidade;
-        clientes[i] = res.data[i].vendedores;
-        produtos[i] = res.data[i].produtos;
-      }
-    });
+    await axios.get('http://localhost:8080/api/dashboard/vendas-analise-dashboard',
+      { headers: { Authorization } }).then(res => {
+        for (var i = 0; i < res.data.length; i++) {
+          mesesGrafico[i] = res.data[i].meses;
+          lucrosGrafico[i] = res.data[i].lucro;
+          mediasGrafico[i] = res.data[i].media;
+          quantidadesGrafico[i] = res.data[i].quantidade;
+          clientes[i] = res.data[i].vendedores;
+          produtos[i] = res.data[i].produtos;
+        }
+      });
 
-    await axios.get('http://localhost:8080/api/dashboard/card3/vendas-feitas').then(res => {
-      for (var i = 0; i < res.data.length; i++) {
-        vendasFeitas[i] = res.data[i].vendasConcluidas;
-        vendasFeitasMeses[i] = res.data[i].meses;
-      }
-    });
+    await axios.get('http://localhost:8080/api/dashboard/card3/vendas-feitas',
+      { headers: { Authorization } }).then(res => {
+        for (var i = 0; i < res.data.length; i++) {
+          vendasFeitas[i] = res.data[i].qtdSituacao;
+          vendasFeitasMeses[i] = res.data[i].meses;
+        }
+      });
 
-    await axios.get('http://localhost:8080/api/dashboard/card4/vendas-rejeitadas').then(res => {
-      for (var i = 0; i < res.data.length; i++) {
-        vendasRejeitadas[i] = res.data[i].vendasNaoConcluidas;
-        vendasRejeitadasMeses[i] = res.data[i].meses;
-      }
-    });
+    await axios.get('http://localhost:8080/api/dashboard/card4/vendas-rejeitadas',
+      { headers: { Authorization } }).then(res => {
+        for (var i = 0; i < res.data.length; i++) {
+          vendasRejeitadas[i] = res.data[i].qtdSituacao;
+          vendasRejeitadasMeses[i] = res.data[i].meses;
+        }
+      });
 
     //VALORES SOMATÓRIOS NOS CARDS
-    await axios.get('http://localhost:8080/api/dashboard/cards-totais').then(res => {
-      console.log(res.data);
-      this.setState = {
-        qtdClientes: res.data.qtdClientes,
-        qtdProdutos: res.data.qtdProdutos,
-        qtdVendasConcretizadas: res.data.qtdVendasRealizadas,
-        qtdVendasNaoRealizadas: res.data.qtdVendasNaoRealizadas,
-        isLoading: false,
-      };
-      this.state.qtdClientes = res.data.qtdClientes;
-      this.state.qtdProdutos = res.data.qtdProdutos;
-      this.state.qtdVendasConcretizadas = res.data.qtdVendasRealizadas;
-      this.state.qtdVendasNaoRealizadas = res.data.qtdVendasNaoRealizadas;
-      this.state.isLoading = false;
-    });
+    await axios.get('http://localhost:8080/api/dashboard/cards-totais',
+      { headers: { Authorization } }).then(res => {
+        this.setState = {
+          qtdClientes: res.data.qtdClientes,
+          qtdProdutos: res.data.qtdProdutos,
+          qtdVendasConcretizadas: res.data.qtdVendasRealizadas,
+          qtdVendasNaoRealizadas: res.data.qtdVendasNaoRealizadas,
+          isLoading: false,
+        };
+        this.state.qtdClientes = res.data.qtdClientes;
+        this.state.qtdProdutos = res.data.qtdProdutos;
+        this.state.qtdVendasConcretizadas = res.data.qtdVendasRealizadas;
+        this.state.qtdVendasNaoRealizadas = res.data.qtdVendasNaoRealizadas;
+        this.state.isLoading = false;
+      });
     this.forceUpdate();
   }
 
