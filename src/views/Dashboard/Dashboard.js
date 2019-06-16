@@ -14,6 +14,7 @@ import {
 } from 'reactstrap';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities';
+import { withGlobalState } from 'react-globally'
 
 const brandPrimary = getStyle('--primary');
 const brandSuccess = getStyle('--success');
@@ -381,6 +382,9 @@ const mainChartOpts2 = {
 class Dashboard extends Component {
   constructor(props) {
     super(props);
+    if (!this.props.globalState.token) {
+      window.location.href = 'http://localhost:3000/#/login'
+    }
     this.initialize();
     this.toggle = this.toggle.bind(this);
     this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
@@ -396,7 +400,7 @@ class Dashboard extends Component {
   }
 
   async initialize() {
-    const Authorization = `Bearer `;
+    const Authorization = `Bearer ${this.props.globalState.token}`;
     //VIEWS DO BANCO DE DADOS
     await axios.get('http://localhost:8080/api/dashboard/vendas-analise-dashboard',
       { headers: { Authorization } }).then(res => {
@@ -458,6 +462,7 @@ class Dashboard extends Component {
   }
 
   render() {
+    console.log(this.props)
     return (
       <div className="animated fadeIn">
         <Row>
@@ -620,4 +625,4 @@ class Dashboard extends Component {
   }
 }
 
-export default Dashboard;
+export default withGlobalState(Dashboard);

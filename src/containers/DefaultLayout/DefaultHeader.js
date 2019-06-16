@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Nav, NavItem } from 'reactstrap';
+import { Nav, NavItem, Label } from 'reactstrap';
 import PropTypes from 'prop-types';
 
 import { AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 import logo from '../../assets/img/brand/logo.svg';
 import sygnet from '../../assets/img/brand/sygnet.svg';
+import { withGlobalState } from 'react-globally'
 
 const propTypes = {
   children: PropTypes.node,
@@ -30,7 +31,7 @@ class DefaultHeader extends Component {
         <Nav className="d-md-down-none" navbar>
           <NavItem className="px-3">
             <Link to="/" className="nav-link">
-              Dashboard
+              Dashboard |  Usuário: {this.props.globalState.user.nome}
             </Link>
           </NavItem>
         </Nav>
@@ -44,4 +45,4 @@ class DefaultHeader extends Component {
 DefaultHeader.propTypes = propTypes;
 DefaultHeader.defaultProps = defaultProps;
 
-export default DefaultHeader;
+export default withGlobalState(DefaultHeader);

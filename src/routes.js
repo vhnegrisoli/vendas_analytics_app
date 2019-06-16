@@ -25,6 +25,7 @@ const DetalharVendaForm = React.lazy(() =>
 const Custom = React.lazy(() => import('./views/Personalizados/Custom'));
 const RelatoriosPowerBi = React.lazy(() => import('./views/RelatoriosPowerBi/RelatoriosPowerBi'));
 const Login = React.lazy(() => import('./views/Login/Login'));
+
 const routes = [
   { path: '/', exact: true, name: 'Home', component: DefaultLayout },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },

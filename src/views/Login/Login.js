@@ -16,8 +16,10 @@ import {
 } from 'reactstrap';
 import axios from 'axios';
 import ReactLoading from 'react-loading';
+import { withGlobalState } from 'react-globally'
 
 const getTokenUrl = 'http://localhost:8080/oauth/token';
+const getAuthenticatedUser = 'http://localhost:8080/api/autenticacao/usuario-logado';
 const urlCriarConta = 'http://localhost:3000/#/clientes/cadastrar';
 
 let token = ''
@@ -52,7 +54,7 @@ class Login extends Component {
     const Authorization = `Basic dmVuZGFzX2FuYWx5dGljcy1jbGllbnQ6dmVuZGFzX2FuYWx5dGljcy1zZWNyZXQ=`
     const Content_Type = `application/x-www-form-urlencoded`
     const urlHome = 'http://localhost:3000/#/dashboard'
-    let token = ''
+    var token = ''
     await axios
       .post(getTokenUrl, form, {
         Headers: {
@@ -64,20 +66,32 @@ class Login extends Component {
           isLoading: false,
         };
         if (res.status === 200) {
-          this.setState = {
-            token: res.data.access_token
-          }
+          //this.setState = {
+          //  token: res.data.access_token
+          // }
           token = res.data.access_token
           window.location.href = urlHome
         } else {
-          this.setState({
-            errors: res.response.data,
-            isSucess: false,
-            isLoading: false,
-          });
+          // this.setState({
+          // errors: res.response.data,
+          //isSucess: false,
+          //isLoading: false,
+          // });
         }
       });
-    this.props.token(token)
+
+    await axios.get(getAuthenticatedUser, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => {
+        this.props.setGlobalState({
+          token: token,
+          user: {
+            nome: res.data.nome,
+            permissao: res.data.permissao.permissao
+          }
+        })
+      })
   }
 
   onSubmit(e) {
@@ -183,4 +197,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default withGlobalState(Login);

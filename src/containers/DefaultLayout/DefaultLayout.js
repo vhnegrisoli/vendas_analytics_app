@@ -18,6 +18,7 @@ import {
 import navigation from '../../_nav';
 // routes config
 import routes from '../../routes';
+import { withGlobalState } from 'react-globally'
 
 const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
@@ -31,7 +32,6 @@ class DefaultLayout extends Component {
     this.props.history.push('/login');
   }
   render() {
-    console.log(this.props)
     return (
       <div className="app">
         <AppHeader fixed>
@@ -84,4 +84,4 @@ class DefaultLayout extends Component {
   }
 }
 
-export default DefaultLayout;
+export default withGlobalState(DefaultLayout);
