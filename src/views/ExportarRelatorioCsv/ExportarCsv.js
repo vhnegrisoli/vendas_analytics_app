@@ -15,11 +15,22 @@ import axios from 'axios';
 import ReactLoading from 'react-loading';
 import { saveAs } from 'file-saver';
 
+let token = '';
 const urlDownload = 'http://localhost:8080/api/vendas/relatorio-csv?dataInicial=';
 class ExportarCsv extends Component {
   constructor(props) {
     super(props);
-
+    let tokenCookie = document.cookie.includes('token')
+      ? document.cookie
+          .split('token=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
+      : '';
+    token = tokenCookie;
+    if (tokenCookie === '') {
+      window.location.href = 'http://localhost:3000/#/login';
+    }
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
     this.state = {
@@ -64,8 +75,11 @@ class ExportarCsv extends Component {
   }
 
   async getRelatorio() {
+    const Authorization = `Bearer ${token}`;
     await axios
-      .get(urlDownload + this.state.dataInicial + '?dataFinal=' + this.state.dataFinal)
+      .get(urlDownload + this.state.dataInicial + '?dataFinal=' + this.state.dataFinal, {
+        headers: { Authorization },
+      })
       .then(res => {
         if (res.status === 200) {
           this.setState({

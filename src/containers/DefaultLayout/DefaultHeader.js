@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 import logo from '../../assets/img/brand/logo.svg';
 import sygnet from '../../assets/img/brand/sygnet.svg';
-import { withGlobalState } from 'react-globally'
+import { withGlobalState } from 'react-globally';
 
 const propTypes = {
   children: PropTypes.node,
@@ -18,7 +18,13 @@ class DefaultHeader extends Component {
   render() {
     // eslint-disable-next-line
     const { children, ...attributes } = this.props;
-
+    let user = document.cookie.includes('user')
+      ? document.cookie
+          .split('user=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
+      : '';
     return (
       <React.Fragment>
         <AppSidebarToggler className="d-lg-none" display="md" mobile />
@@ -31,7 +37,7 @@ class DefaultHeader extends Component {
         <Nav className="d-md-down-none" navbar>
           <NavItem className="px-3">
             <Link to="/" className="nav-link">
-              Dashboard |  Usuário: {this.props.globalState.user.nome}
+              Dashboard | Usuário: {user}
             </Link>
           </NavItem>
         </Nav>

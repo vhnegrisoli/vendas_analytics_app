@@ -24,6 +24,7 @@ const getAuthenticatedUser = 'http://localhost:8080/api/autenticacao/usuario-log
 
 const cookie_key = 'token';
 const cookie_key_role = 'permissao';
+const cookie_key_user = 'user';
 
 class Login extends Component {
   constructor(props) {
@@ -39,6 +40,7 @@ class Login extends Component {
     };
     delete_cookie(cookie_key);
     delete_cookie(cookie_key_role);
+    delete_cookie(cookie_key_user);
   }
 
   onChange = e => {
@@ -60,6 +62,7 @@ class Login extends Component {
     var token = '';
     var status = 0;
     var permissao = '';
+    var user = '';
     await axios
       .post(getTokenUrl, form, {
         Headers: {
@@ -90,9 +93,10 @@ class Login extends Component {
           },
         });
         permissao = res.data.permissao.permissao;
+        user = res.data.nome;
       });
     if (status === 200) {
-      this.setCookie(token, permissao);
+      this.setCookie(token, permissao, user);
       window.location.href = urlHome;
     }
   }
@@ -106,9 +110,10 @@ class Login extends Component {
     this.login();
   }
 
-  setCookie(token, permissao) {
+  setCookie(token, permissao, user) {
     bake_cookie(cookie_key, token);
     bake_cookie(cookie_key_role, permissao);
+    bake_cookie(cookie_key_user, user);
   }
 
   render() {

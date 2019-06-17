@@ -380,27 +380,19 @@ const mainChartOpts2 = {
     },
   },
 };
-
-const token = document.cookie.includes('token')
-  ? document.cookie
-      .split('token=')[1]
-      .replace('"', '')
-      .replace('"', '')
-      .split(';')[0]
-  : '';
-
-const permissao = document.cookie.includes('permissao')
-  ? document.cookie
-      .split('permissao=')[1]
-      .replace('"', '')
-      .replace('"', '')
-      .split(';')[0]
-  : '';
-
+let token = '';
 class Dashboard extends Component {
   constructor(props) {
     super(props);
-    if (token === '') {
+    let tokenCookie = document.cookie.includes('token')
+      ? document.cookie
+          .split('token=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
+      : '';
+    token = tokenCookie;
+    if (tokenCookie === '') {
       window.location.href = 'http://localhost:3000/#/login';
     }
     this.initialize();
@@ -418,8 +410,6 @@ class Dashboard extends Component {
   }
 
   async initialize() {
-    console.log(token);
-    console.log(permissao);
     const Authorization = `Bearer ${token}`;
     //VIEWS DO BANCO DE DADOS
     await axios

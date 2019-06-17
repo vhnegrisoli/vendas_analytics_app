@@ -14,12 +14,23 @@ import {
 } from 'reactstrap';
 import axios from 'axios';
 import ReactLoading from 'react-loading';
-
+let token = '';
 const urlEditar = 'http://localhost:3000/#/vendedores/cadastrar/';
 const urlRemover = 'http://localhost:8080/api/vendedores/remover/';
 class VendedorList extends Component {
   constructor(props) {
     super(props);
+    let tokenCookie = document.cookie.includes('token')
+      ? document.cookie
+          .split('token=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
+      : '';
+    token = tokenCookie;
+    if (tokenCookie === '') {
+      window.location.href = 'http://localhost:3000/#/login';
+    }
     this.state = {
       modal: false,
       clientes: [],
@@ -33,12 +44,17 @@ class VendedorList extends Component {
   }
 
   async initialize() {
-    await axios.get('http://localhost:8080/api/vendedores/todos').then(res => {
-      this.setState({
-        clientes: res.data,
-        isLoading: false,
+    const Authorization = `Bearer ${token}`;
+    await axios
+      .get('http://localhost:8080/api/vendedores/todos', {
+        headers: { Authorization },
+      })
+      .then(res => {
+        this.setState({
+          clientes: res.data,
+          isLoading: false,
+        });
       });
-    });
   }
 
   openModal(id, nome) {

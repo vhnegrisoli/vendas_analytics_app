@@ -311,10 +311,22 @@ const options = {
   },
   maintainAspectRatio: false,
 };
+let token = '';
 
 class Charts extends Component {
   constructor(props) {
     super(props);
+    let tokenCookie = document.cookie.includes('token')
+      ? document.cookie
+          .split('token=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
+      : '';
+    token = tokenCookie;
+    if (tokenCookie === '') {
+      window.location.href = 'http://localhost:3000/#/login';
+    }
     this.state = {
       relatorios: [],
       categorias: [],
@@ -325,58 +337,79 @@ class Charts extends Component {
   }
 
   async initialize() {
-    await axios.get('http://localhost:8080/api/dashboard/vendas-por-periodo').then(res => {
-      this.setState({
-        relatorios: res.data,
+    const Authorization = `Bearer ${token}`;
+    await axios
+      .get('http://localhost:8080/api/dashboard/vendas-por-periodo', {
+        headers: { Authorization },
+      })
+      .then(res => {
+        this.setState({
+          relatorios: res.data,
+        });
+
+        for (var i = 0; i < res.data.length; i++) {
+          mesesGrafico1[i] = res.data[i].meses;
+          lucrosGrafico1[i] = res.data[i].lucro;
+          quantidadesGrafico2[i] = res.data[i].quantidade;
+          mediaGrafico2[i] = res.data[i].media;
+        }
       });
 
-      for (var i = 0; i < res.data.length; i++) {
-        mesesGrafico1[i] = res.data[i].meses;
-        lucrosGrafico1[i] = res.data[i].lucro;
-        quantidadesGrafico2[i] = res.data[i].quantidade;
-        mediaGrafico2[i] = res.data[i].media;
-      }
-    });
-
-    await axios.get('http://localhost:8080/api/analytics/vendas-por-categoria').then(res => {
-      for (var i = 0; i < res.data.length; i++) {
-        categorias[i] = res.data[i].categoria;
-        lucrosCategorias[i] = res.data[i].lucro;
-        quantidadesCategorias[i] = res.data[i].quantidade;
-      }
-    });
-
-    await axios.get('http://localhost:8080/api/analytics/geral-produtos').then(res => {
-      for (var i = 0; i < res.data.length; i++) {
-        produtos[i] = res.data[i].produto;
-        lucrosProdutos[i] = res.data[i].quantidade;
-        mediaProdutos[i] = res.data[i].media;
-      }
-    });
-
-    await axios.get('http://localhost:8080/api/analytics/geral-regioes').then(res => {
-      for (var i = 0; i < res.data.length; i++) {
-        qtdClientesRegiao[i] = res.data[i].qtdVendedores;
-        qtdVendasRegiao[i] = res.data[i].qtdVendas;
-        qtdProdutosRegiao[i] = res.data[i].qtdProdutos;
-        lucroRegiao[i] = res.data[i].lucro;
-        mediaRegiao[i] = res.data[i].media;
-        regiao[i] = res.data[i].regiao;
-        estado[i] = res.data[i].estado;
-      }
-    });
-
-    await axios.get('http://localhost:8080/api/analytics/geral-fornecedores').then(res => {
-      this.setState({
-        isLoading: false,
+    await axios
+      .get('http://localhost:8080/api/analytics/vendas-por-categoria', {
+        headers: { Authorization },
+      })
+      .then(res => {
+        for (var i = 0; i < res.data.length; i++) {
+          categorias[i] = res.data[i].categoria;
+          lucrosCategorias[i] = res.data[i].lucro;
+          quantidadesCategorias[i] = res.data[i].quantidade;
+        }
       });
-      for (var i = 0; i < res.data.length; i++) {
-        mediaFornecedor[i] = res.data[i].media;
-        lucroFornecedor[i] = res.data[i].lucro;
-        vendaFornecedor[i] = res.data[i].qtdVendas;
-        fornecedores[i] = res.data[i].fornecedor;
-      }
-    });
+
+    await axios
+      .get('http://localhost:8080/api/analytics/geral-produtos', {
+        headers: { Authorization },
+      })
+      .then(res => {
+        for (var i = 0; i < res.data.length; i++) {
+          produtos[i] = res.data[i].produto;
+          lucrosProdutos[i] = res.data[i].quantidade;
+          mediaProdutos[i] = res.data[i].media;
+        }
+      });
+
+    await axios
+      .get('http://localhost:8080/api/analytics/geral-regioes', {
+        headers: { Authorization },
+      })
+      .then(res => {
+        for (var i = 0; i < res.data.length; i++) {
+          qtdClientesRegiao[i] = res.data[i].qtdVendedores;
+          qtdVendasRegiao[i] = res.data[i].qtdVendas;
+          qtdProdutosRegiao[i] = res.data[i].qtdProdutos;
+          lucroRegiao[i] = res.data[i].lucro;
+          mediaRegiao[i] = res.data[i].media;
+          regiao[i] = res.data[i].regiao;
+          estado[i] = res.data[i].estado;
+        }
+      });
+
+    await axios
+      .get('http://localhost:8080/api/analytics/geral-fornecedores', {
+        headers: { Authorization },
+      })
+      .then(res => {
+        this.setState({
+          isLoading: false,
+        });
+        for (var i = 0; i < res.data.length; i++) {
+          mediaFornecedor[i] = res.data[i].media;
+          lucroFornecedor[i] = res.data[i].lucro;
+          vendaFornecedor[i] = res.data[i].qtdVendas;
+          fornecedores[i] = res.data[i].fornecedor;
+        }
+      });
 
     this.forceUpdate();
   }
@@ -388,99 +421,99 @@ class Charts extends Component {
         <label>Aguarde, estamos processando sua análise</label>
       </div>
     ) : (
-        <div className="animated fadeIn">
-          <CardColumns className="cols-2">
-            <Card>
-              <CardHeader>
-                Lucro total e Média de Lucro por Região
+      <div className="animated fadeIn">
+        <CardColumns className="cols-2">
+          <Card>
+            <CardHeader>
+              Lucro total e Média de Lucro por Região
               <div className="card-header-actions" />
-              </CardHeader>
-              <CardBody>
-                <div className="chart-wrapper">
-                  <Line data={line} options={options} />
-                </div>
-              </CardBody>
-            </Card>
-            <Card>
-              <CardHeader>
-                Quantidade de Vendas, Produtos e Vendedores por Estado
+            </CardHeader>
+            <CardBody>
+              <div className="chart-wrapper">
+                <Line data={line} options={options} />
+              </div>
+            </CardBody>
+          </Card>
+          <Card>
+            <CardHeader>
+              Quantidade de Vendas, Produtos e Vendedores por Estado
               <div className="card-header-actions" />
-              </CardHeader>
-              <CardBody>
-                <div className="chart-wrapper">
-                  <Bar data={bar} options={options} />
-                </div>
-              </CardBody>
-            </Card>
-            <Card>
-              <CardHeader>
-                Quantidade de Vendas por Região
+            </CardHeader>
+            <CardBody>
+              <div className="chart-wrapper">
+                <Bar data={bar} options={options} />
+              </div>
+            </CardBody>
+          </Card>
+          <Card>
+            <CardHeader>
+              Quantidade de Vendas por Região
               <div className="card-header-actions" />
-              </CardHeader>
-              <CardBody>
-                <div className="chart-wrapper">
-                  <Doughnut data={doughnut} />
-                </div>
-              </CardBody>
-            </Card>
-            <Card>
-              <CardHeader>
-                Faturamento e Média de Lucro por Produtos
+            </CardHeader>
+            <CardBody>
+              <div className="chart-wrapper">
+                <Doughnut data={doughnut} />
+              </div>
+            </CardBody>
+          </Card>
+          <Card>
+            <CardHeader>
+              Faturamento e Média de Lucro por Produtos
               <div className="card-header-actions" />
-              </CardHeader>
-              <CardBody>
-                <div className="chart-wrapper">
-                  <HorizontalBar data={radar} />
-                </div>
-              </CardBody>
-            </Card>
-            <Card>
-              <CardHeader>
-                Lucro Total por Categoria
+            </CardHeader>
+            <CardBody>
+              <div className="chart-wrapper">
+                <HorizontalBar data={radar} />
+              </div>
+            </CardBody>
+          </Card>
+          <Card>
+            <CardHeader>
+              Lucro Total por Categoria
               <div className="card-header-actions" />
-              </CardHeader>
-              <CardBody>
-                <div className="chart-wrapper">
-                  <Pie data={pie} />
-                </div>
-              </CardBody>
-            </Card>
-            <Card>
-              <CardHeader>
-                Quantidade de Produtos Vendidos por Região
+            </CardHeader>
+            <CardBody>
+              <div className="chart-wrapper">
+                <Pie data={pie} />
+              </div>
+            </CardBody>
+          </Card>
+          <Card>
+            <CardHeader>
+              Quantidade de Produtos Vendidos por Região
               <div className="card-header-actions" />
-              </CardHeader>
-              <CardBody>
-                <div className="chart-wrapper">
-                  <Polar data={polar} options={options} />
-                </div>
-              </CardBody>
-            </Card>
-            <Card>
-              <CardHeader>
-                Média e Faturamento por Estados
+            </CardHeader>
+            <CardBody>
+              <div className="chart-wrapper">
+                <Polar data={polar} options={options} />
+              </div>
+            </CardBody>
+          </Card>
+          <Card>
+            <CardHeader>
+              Média e Faturamento por Estados
               <div className="card-header-actions" />
-              </CardHeader>
-              <CardBody>
-                <div className="chart-wrapper">
-                  <Bar data={bar2} options={options} />
-                </div>
-              </CardBody>
-            </Card>
-            <Card>
-              <CardHeader>
-                Média e Lucro por Fornecedores
+            </CardHeader>
+            <CardBody>
+              <div className="chart-wrapper">
+                <Bar data={bar2} options={options} />
+              </div>
+            </CardBody>
+          </Card>
+          <Card>
+            <CardHeader>
+              Média e Lucro por Fornecedores
               <div className="card-header-actions" />
-              </CardHeader>
-              <CardBody>
-                <div className="chart-wrapper">
-                  <HorizontalBar data={radar2} options={options} />
-                </div>
-              </CardBody>
-            </Card>
-          </CardColumns>
-        </div>
-      );
+            </CardHeader>
+            <CardBody>
+              <div className="chart-wrapper">
+                <HorizontalBar data={radar2} options={options} />
+              </div>
+            </CardBody>
+          </Card>
+        </CardColumns>
+      </div>
+    );
   }
 }
 
