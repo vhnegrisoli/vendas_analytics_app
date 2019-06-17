@@ -118,7 +118,6 @@ class FornecedorForm extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    console.log(this.state);
     if (this.getUrlParameter()) {
       this.editar();
     } else {

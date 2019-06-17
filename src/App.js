@@ -10,56 +10,60 @@ const loading = () => <div className="animated fadeIn pt-3 text-center">Iniciand
 const DefaultLayout = Loadable({
   loader: () => import('./containers/DefaultLayout'),
   token,
-  loading
+  loading,
 });
 
 // Pages
 const Login = Loadable({
   loader: () => import('./views/Login'),
-  loading
+  loading,
 });
 
 const Register = Loadable({
   loader: () => import('./views/Pages/Register'),
-  loading
+  loading,
 });
 
-const Page404 = Loadable({
-  loader: () => import('./views/Pages/Page404'),
-  loading
+const Page403 = Loadable({
+  loader: () => import('./views/Pages/Page403'),
+  loading,
 });
 
 const Page500 = Loadable({
   loader: () => import('./views/Pages/Page500'),
-  loading
+  loading,
 });
 
-let token = ''
+let token = '';
 
 class App extends Component {
-
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      token: ''
-    }
+      token: '',
+    };
   }
 
   getToken(value) {
     this.setState({
-      token: value
+      token: value,
     });
-    this.token = this.state.token
-    token = this.state.token
+    this.token = this.state.token;
+    token = this.state.token;
   }
 
   render() {
     return (
       <HashRouter>
         <Switch>
-          <Route exact path="/login" name="Login Page" component={() => <Login token={this.getToken.bind(this)} />} />
+          <Route
+            exact
+            path="/login"
+            name="Login Page"
+            component={() => <Login token={this.getToken.bind(this)} />}
+          />
           <Route exact path="/register" name="Register Page" component={Register} />
-          <Route exact path="/404" name="Page 404" component={Page404} />
+          <Route exact path="/403" name="Page 403" component={Page403} />
           <Route exact path="/500" name="Page 500" component={Page500} />
           <Route path="/" name="Página Inicial" component={DefaultLayout} />
         </Switch>

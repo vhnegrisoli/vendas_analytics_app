@@ -15,6 +15,7 @@ import {
 } from 'reactstrap';
 
 let token = '';
+let Authorization = '';
 const urlAprovar = 'http://localhost:8080/api/vendas/aprovar-venda/';
 const urlReprovar = 'http://localhost:8080/api/vendas/rejeitar-venda/';
 class AprovarVendaForm extends Component {
@@ -40,10 +41,10 @@ class AprovarVendaForm extends Component {
       idVenda: '',
     };
     this.initialize();
+    Authorization = `Bearer ${token}`;
   }
 
   async initialize() {
-    const Authorization = `Bearer ${token}`;
     await axios
       .get('http://localhost:8080/api/vendas/todas', {
         headers: { Authorization },
@@ -53,7 +54,6 @@ class AprovarVendaForm extends Component {
           vendas: res.data,
           isLoading: false,
         });
-        console.log(res.data);
       });
     this.forceUpdate();
   }
@@ -72,13 +72,17 @@ class AprovarVendaForm extends Component {
   }
 
   async aprovarVenda(id) {
-    await axios.get(urlAprovar + id);
+    await axios.get(urlAprovar + id, {
+      headers: { Authorization },
+    });
     this.closeModal();
     this.initialize();
   }
 
   async reprovarVenda(id) {
-    await axios.get(urlReprovar + id);
+    await axios.get(urlReprovar + id, {
+      headers: { Authorization },
+    });
     this.closeModal();
     this.initialize();
   }

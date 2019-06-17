@@ -7,10 +7,32 @@ let usuarioId = null;
 let relatorioId = null;
 let relatorios = [];
 let titulo = '';
+let token = '';
+let Authorization = '';
 class RelatoriosPowerBi extends Component {
   constructor(props) {
     super(props);
-
+    let tokenCookie = document.cookie.includes('token')
+      ? document.cookie
+          .split('token=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
+      : '';
+    let permissao = document.cookie.includes('permissao')
+      ? document.cookie
+          .split('permissao=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
+      : '';
+    token = tokenCookie;
+    if (permissao === 'USER') {
+      window.location.href = 'http://localhost:3000/#/403';
+    }
+    if (tokenCookie === '') {
+      window.location.href = 'http://localhost:3000/#/login';
+    }
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
     this.state = {
@@ -19,16 +41,21 @@ class RelatoriosPowerBi extends Component {
       timeout: 300,
       usuarios: [],
     };
+    Authorization = `Bearer ${token}`;
     this.initialize();
     this.forceUpdate();
   }
 
   async initialize() {
-    await axios.get('http://localhost:8080/api/usuarios/todos').then(res => {
-      this.setState({
-        usuarios: res.data,
+    await axios
+      .get('http://localhost:8080/api/usuarios/todos', {
+        headers: { Authorization },
+      })
+      .then(res => {
+        this.setState({
+          usuarios: res.data,
+        });
       });
-    });
   }
 
   toggle() {
@@ -43,7 +70,9 @@ class RelatoriosPowerBi extends Component {
 
   async getRelatorios() {
     await axios
-      .get('http://localhost:8080/api/relatorios-power-bi/buscar/' + usuarioId)
+      .get('http://localhost:8080/api/relatorios-power-bi/buscar/' + usuarioId, {
+        headers: { Authorization },
+      })
       .then(res => {
         relatorios = res.data;
       });
@@ -60,7 +89,6 @@ class RelatoriosPowerBi extends Component {
 
   setIndice = e => {
     relatorioId = e.target.value;
-    console.log('Id: ' + relatorioId);
     var index = 0;
     for (var i = 0; i < relatorios.length; i++) {
       if (relatorioId === relatorios[i].id) {
@@ -71,7 +99,6 @@ class RelatoriosPowerBi extends Component {
     link = relatorios[index].linkRelatorio;
     titulo = relatorios[index].titulo;
     this.forceUpdate();
-    console.log('Link: ' + link + ' | Título: ' + titulo);
     index = 0;
     relatorioId = null;
   };

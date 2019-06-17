@@ -63,11 +63,22 @@ const grafico = {
     },
   ],
 };
-
+let token = '';
+let Authorization = '';
 class Custom extends Component {
   constructor(props) {
     super(props);
-
+    let tokenCookie = document.cookie.includes('token')
+      ? document.cookie
+          .split('token=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
+      : '';
+    token = tokenCookie;
+    if (tokenCookie === '') {
+      window.location.href = 'http://localhost:3000/#/login';
+    }
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
     this.state = {
@@ -82,6 +93,8 @@ class Custom extends Component {
       dadosDimensao: [],
       dadosMetrica: [],
     };
+    const auth = `Bearer ${token}`;
+    Authorization = auth;
   }
 
   toggle() {
@@ -111,7 +124,6 @@ class Custom extends Component {
         break;
     }
     this.metrica = tipo;
-    console.log(this.metrica);
     return tipo;
   }
 
@@ -156,49 +168,59 @@ class Custom extends Component {
 
   async getChamadasVendedor() {
     this.zerarDadosDosGraficos();
-    await axios.get('http://localhost:8080/api/analytics/geral-vendedores').then(res => {
-      for (var i = 0; i < res.data.length; i++) {
-        dadosDimensao[i] = res.data[i].cliente;
-        if (this.state.metrica === 'COUNT') {
-          dadosMetrica[i] = res.data[i].quantidade;
+    await axios
+      .get('http://localhost:8080/api/analytics/geral-vendedores', {
+        headers: { Authorization },
+      })
+      .then(res => {
+        for (var i = 0; i < res.data.length; i++) {
+          dadosDimensao[i] = res.data[i].cliente;
+          if (this.state.metrica === 'COUNT') {
+            dadosMetrica[i] = res.data[i].quantidade;
+          }
+          if (this.state.metrica === 'SUM') {
+            dadosMetrica[i] = res.data[i].lucro;
+          }
+          if (this.state.metrica === 'AVG') {
+            dadosMetrica[i] = res.data[i].media;
+          }
         }
-        if (this.state.metrica === 'SUM') {
-          dadosMetrica[i] = res.data[i].lucro;
-        }
-        if (this.state.metrica === 'AVG') {
-          dadosMetrica[i] = res.data[i].media;
-        }
-      }
-    });
+      });
     this.forceUpdate();
   }
 
   async getChamadasProduto() {
     this.zerarDadosDosGraficos();
-    await axios.get('http://localhost:8080/api/analytics/geral-produtos').then(res => {
-      for (var i = 0; i < res.data.length; i++) {
-        dadosDimensao[i] = res.data[i].produto;
-        if (this.state.metrica === 'COUNT') {
-          dadosMetrica[i] = res.data[i].quantidade;
-          this.state.dadosMetrica[i] = res.data[i].quantidade;
+    await axios
+      .get('http://localhost:8080/api/analytics/geral-produtos', {
+        headers: { Authorization },
+      })
+      .then(res => {
+        for (var i = 0; i < res.data.length; i++) {
+          dadosDimensao[i] = res.data[i].produto;
+          if (this.state.metrica === 'COUNT') {
+            dadosMetrica[i] = res.data[i].quantidade;
+            this.state.dadosMetrica[i] = res.data[i].quantidade;
+          }
+          if (this.state.metrica === 'SUM') {
+            dadosMetrica[i] = res.data[i].lucro;
+            this.state.dadosMetrica[i] = res.data[i].lucro;
+          }
+          if (this.state.metrica === 'AVG') {
+            dadosMetrica[i] = res.data[i].media;
+            this.state.dadosMetrica[i] = res.data[i].media;
+          }
         }
-        if (this.state.metrica === 'SUM') {
-          dadosMetrica[i] = res.data[i].lucro;
-          this.state.dadosMetrica[i] = res.data[i].lucro;
-        }
-        if (this.state.metrica === 'AVG') {
-          dadosMetrica[i] = res.data[i].media;
-          this.state.dadosMetrica[i] = res.data[i].media;
-        }
-      }
-    });
+      });
     this.forceUpdate();
   }
 
   async getChamadasRegiao() {
     this.zerarDadosDosGraficos();
     await axios
-      .get('http://localhost:8080/api/analytics/geral-regioes-personalizados')
+      .get('http://localhost:8080/api/analytics/geral-regioes-personalizados', {
+        headers: { Authorization },
+      })
       .then(res => {
         for (var i = 0; i < res.data.length; i++) {
           dadosDimensao[i] = res.data[i].regiao;
@@ -221,89 +243,105 @@ class Custom extends Component {
 
   async getChamadasEstados() {
     this.zerarDadosDosGraficos();
-    await axios.get('http://localhost:8080/api/analytics/geral-estados').then(res => {
-      for (var i = 0; i < res.data.length; i++) {
-        dadosDimensao[i] = res.data[i].estado;
-        if (this.state.metrica === 'COUNT') {
-          dadosMetrica[i] = res.data[i].quantidade;
-          this.state.dadosMetrica[i] = res.data[i].quantidade;
+    await axios
+      .get('http://localhost:8080/api/analytics/geral-estados', {
+        headers: { Authorization },
+      })
+      .then(res => {
+        for (var i = 0; i < res.data.length; i++) {
+          dadosDimensao[i] = res.data[i].estado;
+          if (this.state.metrica === 'COUNT') {
+            dadosMetrica[i] = res.data[i].quantidade;
+            this.state.dadosMetrica[i] = res.data[i].quantidade;
+          }
+          if (this.state.metrica === 'SUM') {
+            dadosMetrica[i] = res.data[i].lucro;
+            this.state.dadosMetrica[i] = res.data[i].lucro;
+          }
+          if (this.state.metrica === 'AVG') {
+            dadosMetrica[i] = res.data[i].media;
+            this.state.dadosMetrica[i] = res.data[i].media;
+          }
         }
-        if (this.state.metrica === 'SUM') {
-          dadosMetrica[i] = res.data[i].lucro;
-          this.state.dadosMetrica[i] = res.data[i].lucro;
-        }
-        if (this.state.metrica === 'AVG') {
-          dadosMetrica[i] = res.data[i].media;
-          this.state.dadosMetrica[i] = res.data[i].media;
-        }
-      }
-    });
+      });
     this.forceUpdate();
   }
 
   async getChamadasVendas() {
     this.zerarDadosDosGraficos();
-    await axios.get('http://localhost:8080/api/dashboard/vendas-por-periodo').then(res => {
-      for (var i = 0; i < res.data.length; i++) {
-        dadosDimensao[i] = res.data[i].meses;
-        if (this.state.metrica === 'COUNT') {
-          dadosMetrica[i] = res.data[i].quantidade;
-          this.state.dadosMetrica[i] = res.data[i].quantidade;
+    await axios
+      .get('http://localhost:8080/api/dashboard/vendas-por-periodo', {
+        headers: { Authorization },
+      })
+      .then(res => {
+        for (var i = 0; i < res.data.length; i++) {
+          dadosDimensao[i] = res.data[i].meses;
+          if (this.state.metrica === 'COUNT') {
+            dadosMetrica[i] = res.data[i].quantidade;
+            this.state.dadosMetrica[i] = res.data[i].quantidade;
+          }
+          if (this.state.metrica === 'SUM') {
+            dadosMetrica[i] = res.data[i].lucro;
+            this.state.dadosMetrica[i] = res.data[i].lucro;
+          }
+          if (this.state.metrica === 'AVG') {
+            dadosMetrica[i] = res.data[i].media;
+            this.state.dadosMetrica[i] = res.data[i].media;
+          }
         }
-        if (this.state.metrica === 'SUM') {
-          dadosMetrica[i] = res.data[i].lucro;
-          this.state.dadosMetrica[i] = res.data[i].lucro;
-        }
-        if (this.state.metrica === 'AVG') {
-          dadosMetrica[i] = res.data[i].media;
-          this.state.dadosMetrica[i] = res.data[i].media;
-        }
-      }
-    });
+      });
     this.forceUpdate();
   }
 
   async getChamadasFornecedor() {
     this.zerarDadosDosGraficos();
-    await axios.get('http://localhost:8080/api/analytics/geral-fornecedores').then(res => {
-      for (var i = 0; i < res.data.length; i++) {
-        dadosDimensao[i] = res.data[i].fornecedor;
-        if (this.state.metrica === 'COUNT') {
-          dadosMetrica[i] = res.data[i].qtdVendas;
-          this.state.dadosMetrica[i] = res.data[i].qtdVendas;
+    await axios
+      .get('http://localhost:8080/api/analytics/geral-fornecedores', {
+        headers: { Authorization },
+      })
+      .then(res => {
+        for (var i = 0; i < res.data.length; i++) {
+          dadosDimensao[i] = res.data[i].fornecedor;
+          if (this.state.metrica === 'COUNT') {
+            dadosMetrica[i] = res.data[i].qtdVendas;
+            this.state.dadosMetrica[i] = res.data[i].qtdVendas;
+          }
+          if (this.state.metrica === 'SUM') {
+            dadosMetrica[i] = res.data[i].lucro;
+            this.state.dadosMetrica[i] = res.data[i].lucro;
+          }
+          if (this.state.metrica === 'AVG') {
+            dadosMetrica[i] = res.data[i].media;
+            this.state.dadosMetrica[i] = res.data[i].media;
+          }
         }
-        if (this.state.metrica === 'SUM') {
-          dadosMetrica[i] = res.data[i].lucro;
-          this.state.dadosMetrica[i] = res.data[i].lucro;
-        }
-        if (this.state.metrica === 'AVG') {
-          dadosMetrica[i] = res.data[i].media;
-          this.state.dadosMetrica[i] = res.data[i].media;
-        }
-      }
-    });
+      });
     this.forceUpdate();
   }
 
   async getChamadasCategoria() {
     this.zerarDadosDosGraficos();
-    await axios.get('http://localhost:8080/api/analytics/vendas-por-categoria').then(res => {
-      for (var i = 0; i < res.data.length; i++) {
-        dadosDimensao[i] = res.data[i].categoria;
-        if (this.state.metrica === 'COUNT') {
-          dadosMetrica[i] = res.data[i].quantidade;
-          this.state.dadosMetrica[i] = res.data[i].quantidade;
+    await axios
+      .get('http://localhost:8080/api/analytics/vendas-por-categoria', {
+        headers: { Authorization },
+      })
+      .then(res => {
+        for (var i = 0; i < res.data.length; i++) {
+          dadosDimensao[i] = res.data[i].categoria;
+          if (this.state.metrica === 'COUNT') {
+            dadosMetrica[i] = res.data[i].quantidade;
+            this.state.dadosMetrica[i] = res.data[i].quantidade;
+          }
+          if (this.state.metrica === 'SUM') {
+            dadosMetrica[i] = res.data[i].lucro;
+            this.state.dadosMetrica[i] = res.data[i].lucro;
+          }
+          if (this.state.metrica === 'AVG') {
+            dadosMetrica[i] = res.data[i].media;
+            this.state.dadosMetrica[i] = res.data[i].media;
+          }
         }
-        if (this.state.metrica === 'SUM') {
-          dadosMetrica[i] = res.data[i].lucro;
-          this.state.dadosMetrica[i] = res.data[i].lucro;
-        }
-        if (this.state.metrica === 'AVG') {
-          dadosMetrica[i] = res.data[i].media;
-          this.state.dadosMetrica[i] = res.data[i].media;
-        }
-      }
-    });
+      });
     this.forceUpdate();
   }
 
@@ -548,15 +586,15 @@ class Custom extends Component {
                   ) : this.state.tipoGrafico === 'Line' ? (
                     <Line data={grafico} />
                   ) : (
-                              ''
-                            )}
+                    ''
+                  )}
                 </div>
               </CardBody>
             </Card>
           </Col>
         ) : (
-            ''
-          )}
+          ''
+        )}
       </div>
     );
   }

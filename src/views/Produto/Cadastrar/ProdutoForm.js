@@ -34,7 +34,6 @@ class ProdutoForm extends Component {
       fornecedor: '',
     };
     this.initialize();
-    console.log(this.getUrlParameter());
   }
 
   async initialize() {
@@ -94,7 +93,6 @@ class ProdutoForm extends Component {
       fornecedor: { id: this.state.fornecedor },
       categoria: { id: this.state.categoria },
     };
-    console.log(editar);
     axios
       .post('http://localhost:8080/api/produtos/salvar', editar)
       .then(res => {
@@ -138,11 +136,9 @@ class ProdutoForm extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    console.log(this.state);
     if (this.getUrlParameter()) {
       this.editar();
     } else {
-      console.log('Vou salvar!' + this.getUrlParameter());
       //this.salvar();
     }
   }
