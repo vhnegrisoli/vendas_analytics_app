@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-  Alert,
   Button,
   Card,
   CardBody,
@@ -16,13 +15,15 @@ import {
 } from 'reactstrap';
 import axios from 'axios';
 import ReactLoading from 'react-loading';
-import { withGlobalState } from 'react-globally'
+import { withGlobalState } from 'react-globally';
+import logo from '../../assets/img/brand/logo1.svg';
+import { bake_cookie, read_cookie, delete_cookie } from 'sfcookies';
 
 const getTokenUrl = 'http://localhost:8080/oauth/token';
 const getAuthenticatedUser = 'http://localhost:8080/api/autenticacao/usuario-logado';
-const urlCriarConta = 'http://localhost:3000/#/clientes/cadastrar';
 
-let token = ''
+const cookie_key = 'token';
+const cookie_key_role = 'permissao';
 
 class Login extends Component {
   constructor(props) {
@@ -34,15 +35,17 @@ class Login extends Component {
       isSucess: false,
       successData: '',
       errors: [],
-      token: ''
+      token: '',
     };
+    delete_cookie(cookie_key);
+    delete_cookie(cookie_key_role);
   }
 
-  onChange(e) {
+  onChange = e => {
     this.setState({
       [e.target.name]: e.target.value,
     });
-  }
+  };
 
   async login() {
     const form = new FormData();
@@ -51,47 +54,47 @@ class Login extends Component {
     form.append('username', this.state.email);
     form.append('password', this.state.senha);
     form.append('grant_type', 'password');
-    const Authorization = `Basic dmVuZGFzX2FuYWx5dGljcy1jbGllbnQ6dmVuZGFzX2FuYWx5dGljcy1zZWNyZXQ=`
-    const Content_Type = `application/x-www-form-urlencoded`
-    const urlHome = 'http://localhost:3000/#/dashboard'
-    var token = ''
+    const Authorization = `Basic dmVuZGFzX2FuYWx5dGljcy1jbGllbnQ6dmVuZGFzX2FuYWx5dGljcy1zZWNyZXQ=`;
+    const Content_Type = `application/x-www-form-urlencoded`;
+    const urlHome = 'http://localhost:3000/#/dashboard';
+    var token = '';
+    var status = 0;
+    var permissao = '';
     await axios
       .post(getTokenUrl, form, {
         Headers: {
-          Authorization, Content_Type
+          Authorization,
+          Content_Type,
         },
       })
       .then(res => {
         this.setState = {
           isLoading: false,
         };
+        status = res.status;
         if (res.status === 200) {
-          //this.setState = {
-          //  token: res.data.access_token
-          // }
-          token = res.data.access_token
-          window.location.href = urlHome
-        } else {
-          // this.setState({
-          // errors: res.response.data,
-          //isSucess: false,
-          //isLoading: false,
-          // });
+          token = res.data.access_token;
         }
       });
 
-    await axios.get(getAuthenticatedUser, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
+    await axios
+      .get(getAuthenticatedUser, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then(res => {
         this.props.setGlobalState({
           token: token,
           user: {
             nome: res.data.nome,
-            permissao: res.data.permissao.permissao
-          }
-        })
-      })
+            permissao: res.data.permissao.permissao,
+          },
+        });
+        permissao = res.data.permissao.permissao;
+      });
+    if (status === 200) {
+      this.setCookie(token, permissao);
+      window.location.href = urlHome;
+    }
   }
 
   onSubmit(e) {
@@ -101,6 +104,11 @@ class Login extends Component {
     };
     this.forceUpdate();
     this.login();
+  }
+
+  setCookie(token, permissao) {
+    bake_cookie(cookie_key, token);
+    bake_cookie(cookie_key_role, permissao);
   }
 
   render() {
@@ -125,7 +133,6 @@ class Login extends Component {
                           type="email"
                           name="email"
                           placeholder="Digite seu email"
-                          value={this.state.email}
                           required
                           onChange={e => this.onChange(e)}
                         />
@@ -141,51 +148,20 @@ class Login extends Component {
                           name="senha"
                           placeholder="Digite sua senha"
                           required
-                          value={this.state.senha}
                           onChange={e => this.onChange(e)}
                         />
                       </InputGroup>
                       <Row>
                         <Col xs="6">
-                          <Button onClick={e => this.onSubmit(e)} color="primary">
-                            Login
-                          </Button>
+                          <Button color="primary">Login</Button>
                         </Col>
-                        <Col xs="6" className="text-right">
-                          <a color="link" className="px-0">
-                            Esqueceu sua senha?
-                          </a>
-                        </Col>
-                        {this.state.isLoading && <ReactLoading type={'spin'} />}
-                        {this.state.isSucess && (
-                          <Alert color="success">
-                            <strong>{this.state.successData}</strong>
-                          </Alert>
-                        )}
-                        {!this.state.isSucess && this.state.errors.details && (
-                          <Alert color="danger">
-                            <strong>{this.state.errors.details}</strong>
-                          </Alert>
-                        )}
                       </Row>
                     </Form>
                   </CardBody>
                 </Card>
-                <Card
-                  className="text-white bg-primary py-5 d-md-down-none"
-                  style={{ width: '44%' }}
-                >
+                <Card className="text-white bg py-5 d-md-down-none" style={{ width: '44%' }}>
                   <CardBody className="text-center">
-                    <div>
-                      <h2>Crie sua conta!</h2>
-                      <p>
-                        Crie uma conta e começe agora a utilizar essa ferramenta de Business
-                        Intelligence e Analytics para o tratamento de suas vendas!
-                      </p>
-                      <Button color="primary" className="mt-3" href={urlCriarConta}>
-                        Cadastre-se!
-                      </Button>
-                    </div>
+                    <img src={logo} width="90%" height="90%" />
                   </CardBody>
                 </Card>
               </CardGroup>

@@ -14,7 +14,8 @@ import {
 } from 'reactstrap';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities';
-import { withGlobalState } from 'react-globally'
+import { withGlobalState } from 'react-globally';
+import read_cookie from 'sfcookies';
 
 const brandPrimary = getStyle('--primary');
 const brandSuccess = getStyle('--success');
@@ -296,7 +297,7 @@ const mainChartOpts = {
     mode: 'index',
     position: 'nearest',
     callbacks: {
-      labelColor: function (tooltipItem, chart) {
+      labelColor: function(tooltipItem, chart) {
         return { backgroundColor: chart.data.datasets[tooltipItem.datasetIndex].borderColor };
       },
     },
@@ -342,7 +343,7 @@ const mainChartOpts2 = {
     mode: 'index',
     position: 'nearest',
     callbacks: {
-      labelColor: function (tooltipItem, chart) {
+      labelColor: function(tooltipItem, chart) {
         return { backgroundColor: chart.data.datasets[tooltipItem.datasetIndex].borderColor };
       },
     },
@@ -379,11 +380,28 @@ const mainChartOpts2 = {
     },
   },
 };
+
+const token = document.cookie.includes('token')
+  ? document.cookie
+      .split('token=')[1]
+      .replace('"', '')
+      .replace('"', '')
+      .split(';')[0]
+  : '';
+
+const permissao = document.cookie.includes('permissao')
+  ? document.cookie
+      .split('permissao=')[1]
+      .replace('"', '')
+      .replace('"', '')
+      .split(';')[0]
+  : '';
+
 class Dashboard extends Component {
   constructor(props) {
     super(props);
-    if (!this.props.globalState.token) {
-      window.location.href = 'http://localhost:3000/#/login'
+    if (token === '') {
+      window.location.href = 'http://localhost:3000/#/login';
     }
     this.initialize();
     this.toggle = this.toggle.bind(this);
@@ -400,10 +418,15 @@ class Dashboard extends Component {
   }
 
   async initialize() {
-    const Authorization = `Bearer ${this.props.globalState.token}`;
+    console.log(token);
+    console.log(permissao);
+    const Authorization = `Bearer ${token}`;
     //VIEWS DO BANCO DE DADOS
-    await axios.get('http://localhost:8080/api/dashboard/vendas-analise-dashboard',
-      { headers: { Authorization } }).then(res => {
+    await axios
+      .get('http://localhost:8080/api/dashboard/vendas-analise-dashboard', {
+        headers: { Authorization },
+      })
+      .then(res => {
         for (var i = 0; i < res.data.length; i++) {
           mesesGrafico[i] = res.data[i].meses;
           lucrosGrafico[i] = res.data[i].lucro;
@@ -414,16 +437,22 @@ class Dashboard extends Component {
         }
       });
 
-    await axios.get('http://localhost:8080/api/dashboard/card3/vendas-feitas',
-      { headers: { Authorization } }).then(res => {
+    await axios
+      .get('http://localhost:8080/api/dashboard/card3/vendas-feitas', {
+        headers: { Authorization },
+      })
+      .then(res => {
         for (var i = 0; i < res.data.length; i++) {
           vendasFeitas[i] = res.data[i].qtdSituacao;
           vendasFeitasMeses[i] = res.data[i].meses;
         }
       });
 
-    await axios.get('http://localhost:8080/api/dashboard/card4/vendas-rejeitadas',
-      { headers: { Authorization } }).then(res => {
+    await axios
+      .get('http://localhost:8080/api/dashboard/card4/vendas-rejeitadas', {
+        headers: { Authorization },
+      })
+      .then(res => {
         for (var i = 0; i < res.data.length; i++) {
           vendasRejeitadas[i] = res.data[i].qtdSituacao;
           vendasRejeitadasMeses[i] = res.data[i].meses;
@@ -431,8 +460,9 @@ class Dashboard extends Component {
       });
 
     //VALORES SOMATÓRIOS NOS CARDS
-    await axios.get('http://localhost:8080/api/dashboard/cards-totais',
-      { headers: { Authorization } }).then(res => {
+    await axios
+      .get('http://localhost:8080/api/dashboard/cards-totais', { headers: { Authorization } })
+      .then(res => {
         this.setState = {
           qtdClientes: res.data.qtdClientes,
           qtdProdutos: res.data.qtdProdutos,
@@ -462,7 +492,7 @@ class Dashboard extends Component {
   }
 
   render() {
-    console.log(this.props)
+    console.log(this.props);
     return (
       <div className="animated fadeIn">
         <Row>
@@ -557,69 +587,69 @@ class Dashboard extends Component {
         {this.state.isLoading ? (
           <ReactLoading type={'bars'} />
         ) : (
-            <Row>
-              <Col>
-                <Card>
-                  <CardBody>
-                    <Row>
-                      <Col sm="5">
-                        <CardTitle className="mb-0">Vendas totais por período</CardTitle>
-                      </Col>
-                      <Col sm="7" className="d-none d-sm-inline-block" />
-                    </Row>
-                    <div
-                      className="chart-wrapper"
-                      style={{ height: 300 + 'px', marginTop: 40 + 'px' }}
-                    >
-                      <Line data={mainChart} options={mainChartOpts} height={300} />
-                    </div>
-                  </CardBody>
-                </Card>
-              </Col>
-            </Row>
-          )}
+          <Row>
+            <Col>
+              <Card>
+                <CardBody>
+                  <Row>
+                    <Col sm="5">
+                      <CardTitle className="mb-0">Vendas totais por período</CardTitle>
+                    </Col>
+                    <Col sm="7" className="d-none d-sm-inline-block" />
+                  </Row>
+                  <div
+                    className="chart-wrapper"
+                    style={{ height: 300 + 'px', marginTop: 40 + 'px' }}
+                  >
+                    <Line data={mainChart} options={mainChartOpts} height={300} />
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+        )}
         {this.state.isLoading ? (
           <label>Aguarde, estamos processando sua análise</label>
         ) : (
-            <Row>
-              <Col>
-                <Card>
-                  <CardBody>
-                    <Row>
-                      <Col sm="5">
-                        <CardTitle className="mb-0">Média de vendas por meses</CardTitle>
-                      </Col>
-                      <Col sm="7" className="d-none d-sm-inline-block" />
-                    </Row>
-                    <div
-                      className="chart-wrapper"
-                      style={{ height: 300 + 'px', marginTop: 40 + 'px' }}
-                    >
-                      <Bar data={mainChart2} options={mainChartOpts2} height={300} />
-                    </div>
-                  </CardBody>
-                </Card>
-              </Col>
-              <Col>
-                <Card>
-                  <CardBody>
-                    <Row>
-                      <Col sm="5">
-                        <CardTitle className="mb-0">Lucro total por meses</CardTitle>
-                      </Col>
-                      <Col sm="7" className="d-none d-sm-inline-block" />
-                    </Row>
-                    <div
-                      className="chart-wrapper"
-                      style={{ height: 300 + 'px', marginTop: 40 + 'px' }}
-                    >
-                      <Pie data={mainChart3} options={mainChartOpts2} height={300} />
-                    </div>
-                  </CardBody>
-                </Card>
-              </Col>
-            </Row>
-          )}
+          <Row>
+            <Col>
+              <Card>
+                <CardBody>
+                  <Row>
+                    <Col sm="5">
+                      <CardTitle className="mb-0">Média de vendas por meses</CardTitle>
+                    </Col>
+                    <Col sm="7" className="d-none d-sm-inline-block" />
+                  </Row>
+                  <div
+                    className="chart-wrapper"
+                    style={{ height: 300 + 'px', marginTop: 40 + 'px' }}
+                  >
+                    <Bar data={mainChart2} options={mainChartOpts2} height={300} />
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
+            <Col>
+              <Card>
+                <CardBody>
+                  <Row>
+                    <Col sm="5">
+                      <CardTitle className="mb-0">Lucro total por meses</CardTitle>
+                    </Col>
+                    <Col sm="7" className="d-none d-sm-inline-block" />
+                  </Row>
+                  <div
+                    className="chart-wrapper"
+                    style={{ height: 300 + 'px', marginTop: 40 + 'px' }}
+                  >
+                    <Pie data={mainChart3} options={mainChartOpts2} height={300} />
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+        )}
       </div>
     );
   }
