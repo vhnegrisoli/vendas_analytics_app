@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  Alert,
   Button,
   Card,
   CardBody,
@@ -11,13 +12,14 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupText,
+  Label,
   Row,
 } from 'reactstrap';
 import axios from 'axios';
 import ReactLoading from 'react-loading';
 import { withGlobalState } from 'react-globally';
 import logo from '../../assets/img/brand/logo1.svg';
-import { bake_cookie, read_cookie, delete_cookie } from 'sfcookies';
+import { bake_cookie, delete_cookie } from 'sfcookies';
 
 const getTokenUrl = 'http://localhost:8080/oauth/token';
 const getAuthenticatedUser = 'http://localhost:8080/api/autenticacao/usuario-logado';
@@ -33,10 +35,11 @@ class Login extends Component {
       isLoading: false,
       email: '',
       senha: '',
-      isSucess: false,
+      isSucess: true,
       successData: '',
       errors: [],
       token: '',
+      successMessage: false,
     };
     delete_cookie(cookie_key);
     delete_cookie(cookie_key_role);
@@ -71,13 +74,22 @@ class Login extends Component {
         },
       })
       .then(res => {
-        this.setState = {
+        this.setState({
+          isSucess: true,
           isLoading: false,
-        };
+          successMessage: true,
+        });
         status = res.status;
         if (res.status === 200) {
           token = res.data.access_token;
         }
+      })
+      .catch(error => {
+        this.setState({
+          isSucess: false,
+          isLoading: false,
+        });
+        this.forceUpdate();
       });
 
     await axios
@@ -103,9 +115,9 @@ class Login extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    this.setState = {
+    this.setState({
       isLoading: true,
-    };
+    });
     this.forceUpdate();
     this.login();
   }
@@ -163,6 +175,28 @@ class Login extends Component {
                       </Row>
                     </Form>
                   </CardBody>
+                  {this.state.isLoading && this.state.isSucess && (
+                    <Alert color="warning">
+                      <div>
+                        <ReactLoading type={'spin'} />
+                        <Label>Verificando seu usuário e senha...</Label>
+                      </div>
+                    </Alert>
+                  )}
+                  {!this.state.isLoading && !this.state.isSucess && (
+                    <Alert color="danger">
+                      <div>
+                        <Label>Usuário ou senha inválidos.</Label>
+                      </div>
+                    </Alert>
+                  )}
+                  {!this.state.isLoading && !this.state.isSucess && this.state.successMessage && (
+                    <Alert color="success">
+                      <div>
+                        <Label>Autenticação concluída, aguarde...</Label>
+                      </div>
+                    </Alert>
+                  )}
                 </Card>
                 <Card className="text-white bg py-5 d-md-down-none" style={{ width: '44%' }}>
                   <CardBody className="text-center">

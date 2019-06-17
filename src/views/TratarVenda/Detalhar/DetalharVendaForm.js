@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import ReactLoading from 'react-loading';
-import { Card, CardBody, CardHeader, CardFooter, Col, Table, Button, Row } from 'reactstrap';
+import { Card, CardBody, CardHeader, Col, Table, Button, Row } from 'reactstrap';
 
 let token = '';
 let Authorization = '';

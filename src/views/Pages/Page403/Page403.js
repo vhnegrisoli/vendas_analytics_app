@@ -5,9 +5,6 @@ import {
   Col,
   Container,
   Label,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
   Row,
 } from 'reactstrap';
 
