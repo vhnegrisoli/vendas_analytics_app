@@ -17,9 +17,22 @@ import ReactLoading from 'react-loading';
 
 const urlEditar = 'http://localhost:3000/#/categorias/cadastrar/';
 const urlRemover = 'http://localhost:8080/api/categorias/remover/';
+let token = '';
+let Authorization = '';
 class CategoriaList extends Component {
   constructor(props) {
     super(props);
+    let tokenCookie = document.cookie.includes('token')
+      ? document.cookie
+          .split('token=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
+      : '';
+    token = tokenCookie;
+    if (tokenCookie === '') {
+      window.location.href = 'http://localhost:3000/#/login';
+    }
     this.state = {
       modal: false,
       idModal: '',
@@ -28,17 +41,22 @@ class CategoriaList extends Component {
       isLoading: true,
       errors: [],
     };
+    Authorization = `Bearer ${token}`;
     this.initialize();
     this.forceUpdate();
   }
 
   async initialize() {
-    await axios.get('http://localhost:8080/api/categorias/todas').then(res => {
-      this.setState({
-        categorias: res.data,
-        isLoading: false,
+    await axios
+      .get('http://localhost:8080/api/categorias/todas', {
+        headers: { Authorization },
+      })
+      .then(res => {
+        this.setState({
+          categorias: res.data,
+          isLoading: false,
+        });
       });
-    });
     this.forceUpdate();
   }
 
@@ -57,9 +75,13 @@ class CategoriaList extends Component {
   }
 
   async remover(id) {
-    await axios.get(urlRemover + id).catch(res => {
-      this.state.errors = res.response.data;
-    });
+    await axios
+      .get(urlRemover + id, {
+        headers: { Authorization },
+      })
+      .catch(res => {
+        this.state.errors = res.response.data;
+      });
     this.initialize();
     this.closeModal();
   }

@@ -17,10 +17,22 @@ import ReactLoading from 'react-loading';
 
 const urlEditar = 'http://localhost:3000/#/fornecedores/cadastrar/';
 const urlRemover = 'http://localhost:8080/api/fornecedores/remover/';
-
+let token = '';
+let Authorization = '';
 class FornecedorList extends Component {
   constructor(props) {
     super(props);
+    let tokenCookie = document.cookie.includes('token')
+      ? document.cookie
+          .split('token=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
+      : '';
+    token = tokenCookie;
+    if (tokenCookie === '') {
+      window.location.href = 'http://localhost:3000/#/login';
+    }
     this.state = {
       isLoading: true,
       fornecedores: [],
@@ -29,16 +41,21 @@ class FornecedorList extends Component {
       modal: false,
       errors: [],
     };
+    Authorization = `Bearer ${token}`;
     this.initialize();
   }
 
   async initialize() {
-    await axios.get('http://localhost:8080/api/fornecedores/todos').then(res => {
-      this.setState({
-        fornecedores: res.data,
-        isLoading: false,
+    await axios
+      .get('http://localhost:8080/api/fornecedores/todos', {
+        headers: { Authorization },
+      })
+      .then(res => {
+        this.setState({
+          fornecedores: res.data,
+          isLoading: false,
+        });
       });
-    });
   }
 
   openModal(id, nomeFantasia) {
@@ -56,9 +73,13 @@ class FornecedorList extends Component {
   }
 
   async remover(id) {
-    await axios.get(urlRemover + id).catch(res => {
-      this.state.errors = res.response.data;
-    });
+    await axios
+      .get(urlRemover + id, {
+        headers: { Authorization },
+      })
+      .catch(res => {
+        this.state.errors = res.response.data;
+      });
     this.initialize();
     this.closeModal();
   }

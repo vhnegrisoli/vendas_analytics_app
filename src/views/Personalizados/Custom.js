@@ -122,6 +122,7 @@ class Custom extends Component {
       case 'AVG':
         tipo = 'média de vendas';
         break;
+      default: break
     }
     this.metrica = tipo;
     return tipo;
@@ -161,6 +162,7 @@ class Custom extends Component {
         case 'CATEGORIA':
           this.getChamadasCategoria();
           break;
+        default : break
       }
     }
     this.forceUpdate();

@@ -14,10 +14,32 @@ import {
 } from 'reactstrap';
 
 const urlListarFornecedores = 'http://localhost:3000/#/fornecedores/listar';
+let token = '';
+let Authorization = '';
 class FornecedorForm extends Component {
   constructor(props) {
     super(props);
-
+    let tokenCookie = document.cookie.includes('token')
+      ? document.cookie
+          .split('token=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
+      : '';
+    let permissao = document.cookie.includes('permissao')
+      ? document.cookie
+          .split('permissao=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
+      : '';
+    token = tokenCookie;
+    if (permissao === 'USER') {
+      window.location.href = 'http://localhost:3000/#/403';
+    }
+    if (tokenCookie === '') {
+      window.location.href = 'http://localhost:3000/#/login';
+    }
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
     this.state = {
@@ -31,13 +53,16 @@ class FornecedorForm extends Component {
       cnpj: '',
       endereco: '',
     };
+    Authorization = `Bearer ${token}`;
     this.initilize();
   }
 
   async initilize() {
     if (this.getUrlParameter()) {
       await axios
-        .get('http://localhost:8080/api/fornecedores/buscar/' + this.getUrlParameter())
+        .get('http://localhost:8080/api/fornecedores/buscar/' + this.getUrlParameter(), {
+          headers: { Authorization },
+        })
         .then(res => {
           this.setState({
             razaoSocial: res.data.razaoSocial,
@@ -77,13 +102,19 @@ class FornecedorForm extends Component {
 
   editar() {
     axios
-      .post('http://localhost:8080/api/fornecedores/salvar', {
-        id: this.getUrlParameter(),
-        nomeFantasia: this.state.nomeFantasia,
-        razaoSocial: this.state.razaoSocial,
-        cnpj: this.state.cnpj,
-        endereco: this.state.endereco,
-      })
+      .post(
+        'http://localhost:8080/api/fornecedores/salvar',
+        {
+          id: this.getUrlParameter(),
+          nomeFantasia: this.state.nomeFantasia,
+          razaoSocial: this.state.razaoSocial,
+          cnpj: this.state.cnpj,
+          endereco: this.state.endereco,
+        },
+        {
+          headers: { Authorization },
+        },
+      )
       .then(res => {
         if (res.status === 200) {
           window.location.href = urlListarFornecedores;
@@ -98,12 +129,18 @@ class FornecedorForm extends Component {
 
   salvar() {
     axios
-      .post('http://localhost:8080/api/fornecedores/salvar', {
-        nomeFantasia: this.state.nomeFantasia,
-        razaoSocial: this.state.razaoSocial,
-        cnpj: this.state.cnpj,
-        endereco: this.state.endereco,
-      })
+      .post(
+        'http://localhost:8080/api/fornecedores/salvar',
+        {
+          nomeFantasia: this.state.nomeFantasia,
+          razaoSocial: this.state.razaoSocial,
+          cnpj: this.state.cnpj,
+          endereco: this.state.endereco,
+        },
+        {
+          headers: { Authorization },
+        },
+      )
       .then(res => {
         if (res.status === 200) {
           window.location.href = urlListarFornecedores;

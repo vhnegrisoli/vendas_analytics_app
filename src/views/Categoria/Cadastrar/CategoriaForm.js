@@ -14,11 +14,32 @@ import {
 } from 'reactstrap';
 
 const urlListarCategorias = 'http://localhost:3000/#/categorias/listar';
-
+let token = '';
+let Authorization = '';
 class CategoriaForm extends Component {
   constructor(props) {
     super(props);
-
+    let tokenCookie = document.cookie.includes('token')
+      ? document.cookie
+          .split('token=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
+      : '';
+    let permissao = document.cookie.includes('permissao')
+      ? document.cookie
+          .split('permissao=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
+      : '';
+    token = tokenCookie;
+    if (permissao === 'USER') {
+      window.location.href = 'http://localhost:3000/#/403';
+    }
+    if (tokenCookie === '') {
+      window.location.href = 'http://localhost:3000/#/login';
+    }
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
     this.state = {
@@ -29,6 +50,7 @@ class CategoriaForm extends Component {
       success: false,
       descricao: '',
     };
+    Authorization = `Bearer ${token}`;
     this.getUrlParameter();
     this.initilize();
   }
@@ -36,7 +58,9 @@ class CategoriaForm extends Component {
   async initilize() {
     if (this.getUrlParameter()) {
       await axios
-        .get('http://localhost:8080/api/categorias/buscar/' + this.getUrlParameter())
+        .get('http://localhost:8080/api/categorias/buscar/' + this.getUrlParameter(), {
+          headers: { Authorization },
+        })
         .then(res => {
           this.setState({
             descricao: res.data.descricao,
@@ -73,10 +97,16 @@ class CategoriaForm extends Component {
 
   editar() {
     axios
-      .post('http://localhost:8080/api/categorias/salvar', {
-        id: this.getUrlParameter(),
-        descricao: this.state.descricao,
-      })
+      .post(
+        'http://localhost:8080/api/categorias/salvar',
+        {
+          id: this.getUrlParameter(),
+          descricao: this.state.descricao,
+        },
+        {
+          headers: { Authorization },
+        },
+      )
       .then(res => {
         if (res.status === 200) {
           window.location.href = urlListarCategorias;
@@ -91,9 +121,15 @@ class CategoriaForm extends Component {
 
   salvar() {
     axios
-      .post('http://localhost:8080/api/categorias/salvar', {
-        descricao: this.state.descricao,
-      })
+      .post(
+        'http://localhost:8080/api/categorias/salvar',
+        {
+          descricao: this.state.descricao,
+        },
+        {
+          headers: { Authorization },
+        },
+      )
       .then(res => {
         if (res.status === 200) {
           window.location.href = urlListarCategorias;

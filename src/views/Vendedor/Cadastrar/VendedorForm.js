@@ -14,11 +14,32 @@ import {
 } from 'reactstrap';
 
 const urlListarClientes = 'http://localhost:3000/#/vendedores/listar';
-
+let token = '';
+let Authorization = '';
 class VendedorForm extends Component {
   constructor(props) {
     super(props);
-
+    let tokenCookie = document.cookie.includes('token')
+      ? document.cookie
+          .split('token=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
+      : '';
+    let permissao = document.cookie.includes('permissao')
+      ? document.cookie
+          .split('permissao=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
+      : '';
+    token = tokenCookie;
+    if (permissao === 'USER') {
+      window.location.href = 'http://localhost:3000/#/403';
+    }
+    if (tokenCookie === '') {
+      window.location.href = 'http://localhost:3000/#/login';
+    }
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
     this.state = {
@@ -39,19 +60,26 @@ class VendedorForm extends Component {
       cidade: '',
       estado: '',
     };
+    Authorization = `Bearer ${token}`;
     this.getUrlParameter();
     this.initilize();
   }
 
   async initilize() {
-    await axios.get('http://localhost:8080/api/estados/listar').then(res => {
-      this.setState({
-        estados: res.data,
+    await axios
+      .get('http://localhost:8080/api/estados/listar', {
+        headers: { Authorization },
+      })
+      .then(res => {
+        this.setState({
+          estados: res.data,
+        });
       });
-    });
     if (this.getUrlParameter()) {
       await axios
-        .get('http://localhost:8080/api/vendedores/buscar/' + this.getUrlParameter())
+        .get('http://localhost:8080/api/vendedores/buscar/' + this.getUrlParameter(), {
+          headers: { Authorization },
+        })
         .then(res => {
           this.setState({
             nome: res.data.nome,
@@ -101,21 +129,27 @@ class VendedorForm extends Component {
 
   editar() {
     axios
-      .post('http://localhost:8080/api/vendedores/salvar', {
-        id: this.getUrlParameter(),
-        nome: this.state.nome,
-        email: this.state.email,
-        cpf: this.state.cpf,
-        rg: this.state.rg,
-        telefone: this.state.telefone,
-        dataNascimento: this.state.dataNascimento,
-        rua: this.state.rua,
-        cep: this.state.cep,
-        complemento: this.state.complemento,
-        cidade: this.state.cidade,
-        numero: this.state.numero,
-        estado: { id: this.state.estado },
-      })
+      .post(
+        'http://localhost:8080/api/vendedores/salvar',
+        {
+          id: this.getUrlParameter(),
+          nome: this.state.nome,
+          email: this.state.email,
+          cpf: this.state.cpf,
+          rg: this.state.rg,
+          telefone: this.state.telefone,
+          dataNascimento: this.state.dataNascimento,
+          rua: this.state.rua,
+          cep: this.state.cep,
+          complemento: this.state.complemento,
+          cidade: this.state.cidade,
+          numero: this.state.numero,
+          estado: { id: this.state.estado },
+        },
+        {
+          headers: { Authorization },
+        },
+      )
       .then(res => {
         if (res.status === 200) {
           window.location.href = urlListarClientes;
@@ -130,20 +164,26 @@ class VendedorForm extends Component {
 
   salvar() {
     axios
-      .post('http://localhost:8080/api/vendedores/salvar', {
-        nome: this.state.nome,
-        email: this.state.email,
-        cpf: this.state.cpf,
-        rg: this.state.rg,
-        telefone: this.state.telefone,
-        dataNascimento: this.state.dataNascimento,
-        rua: this.state.rua,
-        cep: this.state.cep,
-        complemento: this.state.complemento,
-        cidade: this.state.cidade,
-        numero: this.state.numero,
-        estado: { id: this.state.estado },
-      })
+      .post(
+        'http://localhost:8080/api/vendedores/salvar',
+        {
+          nome: this.state.nome,
+          email: this.state.email,
+          cpf: this.state.cpf,
+          rg: this.state.rg,
+          telefone: this.state.telefone,
+          dataNascimento: this.state.dataNascimento,
+          rua: this.state.rua,
+          cep: this.state.cep,
+          complemento: this.state.complemento,
+          cidade: this.state.cidade,
+          numero: this.state.numero,
+          estado: { id: this.state.estado },
+        },
+        {
+          headers: { Authorization },
+        },
+      )
       .then(res => {
         if (res.status === 200) {
           window.location.href = urlListarClientes;

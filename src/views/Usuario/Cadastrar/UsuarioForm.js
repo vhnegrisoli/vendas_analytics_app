@@ -13,12 +13,34 @@ import {
   Input,
   Label,
 } from 'reactstrap';
-
+let token = '';
+let Authorization = '';
+let permissao;
 const urlListarUsuarios = 'http://localhost:3000/#/usuarios/listar';
 class UsuarioForm extends Component {
   constructor(props) {
     super(props);
-
+    let tokenCookie = document.cookie.includes('token')
+      ? document.cookie
+          .split('token=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
+      : '';
+    permissao = document.cookie.includes('permissao')
+      ? document.cookie
+          .split('permissao=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
+      : '';
+    token = tokenCookie;
+    if (permissao === 'USER') {
+      window.location.href = 'http://localhost:3000/#/403';
+    }
+    if (tokenCookie === '') {
+      window.location.href = 'http://localhost:3000/#/login';
+    }
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
 
@@ -39,13 +61,16 @@ class UsuarioForm extends Component {
       usuarioProprietario: '',
       admins: [],
     };
+    Authorization = `Bearer ${token}`;
     this.initialize();
   }
 
   async initialize() {
     if (this.getUrlParameter()) {
       await axios
-        .get('http://localhost:8080/api/usuarios/buscar/' + this.getUrlParameter())
+        .get('http://localhost:8080/api/usuarios/buscar/' + this.getUrlParameter(), {
+          headers: { Authorization },
+        })
         .then(res => {
           this.setState({
             nome: res.data.nome,
@@ -59,23 +84,41 @@ class UsuarioForm extends Component {
         });
     }
 
-    await axios.get('http://localhost:8080/api/usuarios/buscar-administradores').then(res => {
-      this.setState({
-        admins: res.data,
+    await axios
+      .get('http://localhost:8080/api/usuarios/buscar-administradores', {
+        headers: { Authorization },
+      })
+      .then(res => {
+        this.setState({
+          admins: res.data,
+        });
       });
-    });
 
-    await axios.get('http://localhost:8080/api/vendedores/todos').then(res => {
-      this.setState({
-        clientes: res.data,
+    await axios
+      .get('http://localhost:8080/api/vendedores/todos', {
+        headers: { Authorization },
+      })
+      .then(res => {
+        this.setState({
+          clientes: res.data,
+        });
       });
-    });
 
-    await axios.get('http://localhost:8080/api/usuarios/permissoes').then(res => {
-      this.setState({
-        permissoes: res.data,
+    await axios
+      .get('http://localhost:8080/api/usuarios/permissoes', {
+        headers: { Authorization },
+      })
+      .then(res => {
+        if (permissao === 'ADMIN') {
+          this.setState({
+            permissoes: [res.data[0], res.data[1]],
+          });
+        } else {
+          this.setState({
+            permissoes: res.data,
+          });
+        }
       });
-    });
   }
 
   toggle() {

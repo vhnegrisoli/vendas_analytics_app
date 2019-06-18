@@ -14,11 +14,32 @@ import {
 } from 'reactstrap';
 
 const urlListarprodutos = 'http://localhost:3000/#/produtos/listar';
-
+let token = '';
+let Authorization = '';
 class ProdutoForm extends Component {
   constructor(props) {
     super(props);
-
+    let tokenCookie = document.cookie.includes('token')
+      ? document.cookie
+          .split('token=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
+      : '';
+    let permissao = document.cookie.includes('permissao')
+      ? document.cookie
+          .split('permissao=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
+      : '';
+    token = tokenCookie;
+    if (permissao === 'USER') {
+      window.location.href = 'http://localhost:3000/#/403';
+    }
+    if (tokenCookie === '') {
+      window.location.href = 'http://localhost:3000/#/login';
+    }
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
     this.state = {
@@ -33,13 +54,16 @@ class ProdutoForm extends Component {
       categoria: '',
       fornecedor: '',
     };
+    Authorization = `Bearer ${token}`;
     this.initialize();
   }
 
   async initialize() {
     if (this.getUrlParameter()) {
       await axios
-        .get('http://localhost:8080/api/produtos/buscar/' + this.getUrlParameter())
+        .get('http://localhost:8080/api/produtos/buscar/' + this.getUrlParameter(), {
+          headers: { Authorization },
+        })
         .then(res => {
           this.setState({
             nomeProduto: res.data.nomeProduto,
@@ -51,17 +75,25 @@ class ProdutoForm extends Component {
         });
     }
 
-    await axios.get('http://localhost:8080/api/categorias/todas').then(res => {
-      this.setState({
-        categorias: res.data,
+    await axios
+      .get('http://localhost:8080/api/categorias/todas', {
+        headers: { Authorization },
+      })
+      .then(res => {
+        this.setState({
+          categorias: res.data,
+        });
       });
-    });
 
-    await axios.get('http://localhost:8080/api/fornecedores/todos').then(res => {
-      this.setState({
-        fornecedores: res.data,
+    await axios
+      .get('http://localhost:8080/api/fornecedores/todos', {
+        headers: { Authorization },
+      })
+      .then(res => {
+        this.setState({
+          fornecedores: res.data,
+        });
       });
-    });
   }
 
   getUrlParameter() {
@@ -94,7 +126,9 @@ class ProdutoForm extends Component {
       categoria: { id: this.state.categoria },
     };
     axios
-      .post('http://localhost:8080/api/produtos/salvar', editar)
+      .post('http://localhost:8080/api/produtos/salvar', editar, {
+        headers: { Authorization },
+      })
       .then(res => {
         if (res.status === 200) {
           window.location.href = urlListarprodutos;
@@ -109,13 +143,19 @@ class ProdutoForm extends Component {
 
   salvar() {
     axios
-      .post('http://localhost:8080/api/produtos/salvar', {
-        nomeProduto: this.state.nomeProduto,
-        descricao: this.state.descricao,
-        preco: this.state.preco,
-        fornecedor: { id: this.state.fornecedor },
-        categoria: { id: this.state.categoria },
-      })
+      .post(
+        'http://localhost:8080/api/produtos/salvar',
+        {
+          nomeProduto: this.state.nomeProduto,
+          descricao: this.state.descricao,
+          preco: this.state.preco,
+          fornecedor: { id: this.state.fornecedor },
+          categoria: { id: this.state.categoria },
+        },
+        {
+          headers: { Authorization },
+        },
+      )
       .then(res => {
         if (res.status === 200) {
           window.location.href = urlListarprodutos;
@@ -139,7 +179,7 @@ class ProdutoForm extends Component {
     if (this.getUrlParameter()) {
       this.editar();
     } else {
-      //this.salvar();
+      this.salvar();
     }
   }
 

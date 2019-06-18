@@ -15,8 +15,10 @@ import {
 import axios from 'axios';
 import ReactLoading from 'react-loading';
 let token = '';
+let Authorization = '';
 const urlEditar = 'http://localhost:3000/#/vendedores/cadastrar/';
 const urlRemover = 'http://localhost:8080/api/vendedores/remover/';
+
 class VendedorList extends Component {
   constructor(props) {
     super(props);
@@ -39,12 +41,12 @@ class VendedorList extends Component {
       isLoading: true,
       errors: [],
     };
+    Authorization = `Bearer ${token}`;
     this.initialize();
     this.forceUpdate();
   }
 
   async initialize() {
-    const Authorization = `Bearer ${token}`;
     await axios
       .get('http://localhost:8080/api/vendedores/todos', {
         headers: { Authorization },
@@ -72,9 +74,13 @@ class VendedorList extends Component {
   }
 
   async remover(id) {
-    await axios.get(urlRemover + id).catch(res => {
-      this.state.errors = res.response.data;
-    });
+    await axios
+      .get(urlRemover + id, {
+        headers: { Authorization },
+      })
+      .catch(res => {
+        this.state.errors = res.response.data;
+      });
     this.forceUpdate();
     this.initialize();
     this.closeModal();
