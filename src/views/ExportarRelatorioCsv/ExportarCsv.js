@@ -14,6 +14,8 @@ import {
 import axios from 'axios';
 import ReactLoading from 'react-loading';
 import { saveAs } from 'file-saver';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 let token = '';
 const urlDownload = 'http://localhost:8080/api/vendas/relatorio-csv?dataInicial=';
@@ -38,17 +40,31 @@ class ExportarCsv extends Component {
       fadeIn: true,
       timeout: 300,
       downloadUrl: '',
-      dataInicial: '',
-      dataFinal: '',
       isLoading: false,
       gerouCsv: false,
       gerouErro: false,
       exportLoadingColor: 'warning',
+      startDate: new Date(),
+      endDate: new Date(),
     };
+    this.handleChangeStart = this.handleChangeStart.bind(this);
+    this.handleChangeEnd = this.handleChangeEnd.bind(this);
   }
 
   toggle() {
     this.setState({ collapse: !this.state.collapse });
+  }
+
+  handleChangeStart(date) {
+    this.setState({
+      startDate: date,
+    });
+  }
+
+  handleChangeEnd(date) {
+    this.setState({
+      endDate: date,
+    });
   }
 
   toggleFade() {
@@ -56,12 +72,6 @@ class ExportarCsv extends Component {
       return { fadeIn: !prevState };
     });
   }
-
-  onChange = e => {
-    this.setState({
-      [e.target.name]: e.target.value,
-    });
-  };
 
   onSubmit(e) {
     e.preventDefault();
@@ -71,13 +81,23 @@ class ExportarCsv extends Component {
       gerouCsv: false,
       gerouErro: false,
     });
+    console.log(this.state);
     this.getRelatorio();
+  }
+
+  formatData(data) {
+    var dadosData = data.split('/');
+    return dadosData[1] + '/' + dadosData[0] + '/' + dadosData[2];
   }
 
   async getRelatorio() {
     const Authorization = `Bearer ${token}`;
+    let dateFilter =
+      this.formatData(this.state.startDate.toLocaleDateString()) +
+      '&dataFinal=' +
+      this.formatData(this.state.endDate.toLocaleDateString());
     await axios
-      .get(urlDownload + this.state.dataInicial + '?dataFinal=' + this.state.dataFinal, {
+      .get(urlDownload + dateFilter, {
         headers: { Authorization },
       })
       .then(res => {
@@ -89,21 +109,27 @@ class ExportarCsv extends Component {
           });
           var blob = new Blob([res.data], { type: 'application/csv' });
           var fileName =
-            this.state.dataInicial !== '' && this.state.dataFinal !== ''
+            this.formatData(this.state.startDate.toLocaleDateString()) !== '' &&
+            this.formatData(this.state.endDate.toLocaleDateString()) !== ''
               ? 'Relatorio_Vendas_' +
-                this.state.dataInicial.replace('-', '_') +
+                this.formatData(this.state.startDate.toLocaleDateString())
+                  .replace('-', '_')
+                  .replace('-', '_') +
                 '_' +
-                this.state.dataFinal.replace('-', '_') +
+                this.formatData(this.state.endDate.toLocaleDateString())
+                  .replace('-', '_')
+                  .replace('-', '_') +
                 '.csv'
               : 'Relatorio_Vendas_Geral.csv';
           saveAs(blob, fileName);
-        } else {
-          this.setState({
-            isLoading: false,
-            gerouErro: true,
-            exportLoadingColor: 'danger',
-          });
         }
+      })
+      .catch(error => {
+        this.setState({
+          isLoading: false,
+          gerouErro: true,
+          exportLoadingColor: 'danger',
+        });
       });
   }
 
@@ -122,12 +148,13 @@ class ExportarCsv extends Component {
                     <Label htmlFor="date-input">Data Inicial*</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <Input
-                      type="date"
-                      id="dataInicial"
-                      name="dataInicial"
-                      placeholder="date"
-                      onChange={e => this.onChange(e)}
+                    <DatePicker
+                      selected={this.state.startDate}
+                      selectsStart
+                      startDate={this.state.startDate}
+                      endDate={this.state.endDate}
+                      maxDate={new Date()}
+                      onChange={this.handleChangeStart}
                     />
                   </Col>
                 </FormGroup>
@@ -136,12 +163,14 @@ class ExportarCsv extends Component {
                     <Label htmlFor="date-input">Data Final*</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <Input
-                      type="date"
-                      id="dataFinal"
-                      name="dataFinal"
-                      placeholder="date"
-                      onChange={e => this.onChange(e)}
+                    <DatePicker
+                      selected={this.state.endDate}
+                      selectsEnd
+                      startDate={this.state.startDate}
+                      endDate={this.state.endDate}
+                      minDate={this.state.startDate}
+                      maxDate={new Date()}
+                      onChange={this.handleChangeEnd}
                     />
                   </Col>
                 </FormGroup>

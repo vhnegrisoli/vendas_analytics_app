@@ -15,7 +15,7 @@ class DefaultFooter extends Component {
     return (
       <React.Fragment>
         <span>
-          Vendas Analytics - Victor Hugo Negrisoli - Créditos da Template: <a href="https://coreui.io">CoreUI</a> &copy; 2018 creativeLabs.
+          Vendas Analytics - Victor Hugo Negrisoli - Créditos da Template: <a href="https://coreui.io">CoreUI</a> &copy; 2019 creativeLabs.
         </span>
         <span className="ml-auto">
           Powered by <a href="https://coreui.io/react">Core UI</a>

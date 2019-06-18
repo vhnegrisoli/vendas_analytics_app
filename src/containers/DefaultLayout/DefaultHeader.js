@@ -25,6 +25,13 @@ class DefaultHeader extends Component {
           .replace('"', '')
           .split(';')[0]
       : '';
+    let permissao = document.cookie.includes('permissao')
+      ? document.cookie
+          .split('permissao=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
+      : '';
     return (
       <React.Fragment>
         <AppSidebarToggler className="d-lg-none" display="md" mobile />
@@ -37,7 +44,7 @@ class DefaultHeader extends Component {
         <Nav className="d-md-down-none" navbar>
           <NavItem className="px-3">
             <Link to="/" className="nav-link">
-              Dashboard | Usuário: {user}
+              Usuário: {user} | {permissao !== 'USER' ? 'Administrador' : 'Vendedor'}
             </Link>
           </NavItem>
         </Nav>
