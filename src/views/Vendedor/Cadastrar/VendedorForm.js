@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import {
+  Alert,
   Button,
   Card,
   CardBody,
@@ -12,6 +13,9 @@ import {
   Input,
   Label,
 } from 'reactstrap';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import InputMask from 'react-input-mask';
 
 const urlListarClientes = 'http://localhost:3000/#/vendedores/listar';
 let token = '';
@@ -51,7 +55,7 @@ class VendedorForm extends Component {
       email: '',
       cpf: '',
       rg: '',
-      dataNascimento: '',
+      dataNascimento: new Date(),
       telefone: '',
       rua: '',
       numero: '',
@@ -61,6 +65,7 @@ class VendedorForm extends Component {
       estado: '',
     };
     Authorization = `Bearer ${token}`;
+    this.handleDataNascimento = this.handleDataNascimento.bind(this);
     this.getUrlParameter();
     this.initilize();
   }
@@ -117,6 +122,12 @@ class VendedorForm extends Component {
     });
   };
 
+  handleDataNascimento(date) {
+    this.setState({
+      startDate: date,
+    });
+  }
+
   getUrlParameter() {
     var url = window.location.toString().split('/');
     var id = url[url.length - 1];
@@ -138,7 +149,7 @@ class VendedorForm extends Component {
           cpf: this.state.cpf,
           rg: this.state.rg,
           telefone: this.state.telefone,
-          dataNascimento: this.state.dataNascimento,
+          dataNascimento: this.state.dataNascimento.toLocaleString(),
           rua: this.state.rua,
           cep: this.state.cep,
           complemento: this.state.complemento,
@@ -172,7 +183,7 @@ class VendedorForm extends Component {
           cpf: this.state.cpf,
           rg: this.state.rg,
           telefone: this.state.telefone,
-          dataNascimento: this.state.dataNascimento,
+          dataNascimento: this.state.dataNascimento.toLocaleString(),
           rua: this.state.rua,
           cep: this.state.cep,
           complemento: this.state.complemento,
@@ -258,6 +269,8 @@ class VendedorForm extends Component {
                     <Input
                       type="text"
                       id="cpf"
+                      mask="999.999.999-99"
+                      tag={InputMask}
                       name="cpf"
                       placeholder="CPF"
                       autoComplete="cpf"
@@ -290,6 +303,20 @@ class VendedorForm extends Component {
                     <Label htmlFor="date-input">Data de Nascimento*</Label>
                   </Col>
                   <Col xs="12" md="9">
+                    <DatePicker
+                      dateFormat="dd/MM/yyyy"
+                      selected={this.state.startDate}
+                      selectsStart
+                      maxDate={
+                        new Date(
+                          new Date().getFullYear() - 18,
+                          new Date().getMonth(),
+                          new Date().getDay(),
+                        )
+                      }
+                      onChange={this.handleDataNascimento}
+                    />
+                    {/**
                     <Input
                       type="date"
                       id="dataNascimento"
@@ -298,6 +325,7 @@ class VendedorForm extends Component {
                       value={this.state.dataNascimento}
                       onChange={e => this.onChange(e)}
                     />
+                     */}
                   </Col>
                 </FormGroup>
                 <FormGroup row>
@@ -306,6 +334,8 @@ class VendedorForm extends Component {
                   </Col>
                   <Col xs="12" md="9">
                     <Input
+                      mask="(99) 9 9999-9999"
+                      tag={InputMask}
                       type="telefone"
                       id="telefone"
                       name="telefone"
@@ -363,6 +393,8 @@ class VendedorForm extends Component {
                     <Input
                       type="text"
                       id="cep"
+                      mask="99.999-999"
+                      tag={InputMask}
                       required
                       name="cep"
                       placeholder="CEP"

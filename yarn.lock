@@ -8652,6 +8652,14 @@ react-globally@^1.1.0:
   dependencies:
     prop-types "^15.6.0"
 
+react-input-mask@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/react-input-mask/-/react-input-mask-2.0.4.tgz#9ade5cf8196f4a856dbf010820fe75a795f3eb14"
+  integrity sha512-1hwzMr/aO9tXfiroiVCx5EtKohKwLk/NT8QlJXHQ4N+yJJFyUuMT+zfTpLBwX/lK3PkuMlievIffncpMZ3HGRQ==
+  dependencies:
+    invariant "^2.2.4"
+    warning "^4.0.2"
+
 react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.3:
   version "16.8.3"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.3.tgz#4ad8b029c2a718fc0cfc746c8d4e1b7221e5387d"

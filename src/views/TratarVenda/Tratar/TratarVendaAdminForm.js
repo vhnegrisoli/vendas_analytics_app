@@ -19,6 +19,7 @@ import {
   Input,
   Label,
 } from 'reactstrap';
+import InputMask from 'react-input-mask';
 
 let token = '';
 let Authorization = '';
@@ -404,6 +405,8 @@ class TratarVendaFormAdmin extends Component {
                           <Col xs="12" md="9">
                             <Input
                               type="text"
+                              mask="999.999.999-99"
+                              tag={InputMask}
                               id="cpf"
                               name="cpf"
                               placeholder="CPF"

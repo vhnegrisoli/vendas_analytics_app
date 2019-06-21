@@ -93,9 +93,9 @@ class ExportarCsv extends Component {
   async getRelatorio() {
     const Authorization = `Bearer ${token}`;
     let dateFilter =
-      this.formatData(this.state.startDate.toLocaleDateString()) +
+      this.state.startDate.toLocaleDateString() +
       '&dataFinal=' +
-      this.formatData(this.state.endDate.toLocaleDateString());
+      this.state.endDate.toLocaleDateString();
     await axios
       .get(urlDownload + dateFilter, {
         headers: { Authorization },
@@ -149,6 +149,7 @@ class ExportarCsv extends Component {
                   </Col>
                   <Col xs="12" md="9">
                     <DatePicker
+                      dateFormat="dd/MM/yyyy"
                       selected={this.state.startDate}
                       selectsStart
                       startDate={this.state.startDate}
@@ -164,6 +165,7 @@ class ExportarCsv extends Component {
                   </Col>
                   <Col xs="12" md="9">
                     <DatePicker
+                      dateFormat="dd/MM/yyyy"
                       selected={this.state.endDate}
                       selectsEnd
                       startDate={this.state.startDate}
