@@ -66,7 +66,6 @@ class VendedorForm extends Component {
       estado: '',
       cpfInvalidoMessage: false,
       cepError: false,
-      desabilita: '',
     };
     Authorization = `Bearer ${token}`;
     this.handleDataNascimento = this.handleDataNascimento.bind(this);
@@ -254,19 +253,19 @@ class VendedorForm extends Component {
         .get(`https://viacep.com.br/ws/${cepFormatado}/json`)
         .then(res => {
           if (res.status === 200) {
-            this.setState({
-              rua: res.data.logradouro,
-              cidade: res.data.localidade,
-              complemento: res.data.complemento,
-              cepError: false,
-              desabilita: 'desabled',
-            });
-            this.setEstado(res.data.uf);
-            console.log(this.state);
-          } else {
-            this.setState({
-              cepError: true,
-            });
+            if (res.data.erro) {
+              this.setState({
+                cepError: true,
+              });
+            } else {
+              this.setState({
+                rua: res.data.logradouro,
+                cidade: res.data.localidade,
+                complemento: res.data.complemento,
+                cepError: false,
+              });
+              this.setEstado(res.data.uf);
+            }
           }
         })
         .catch(error => {
