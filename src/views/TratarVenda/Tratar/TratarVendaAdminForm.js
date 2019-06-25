@@ -20,6 +20,7 @@ import {
   Label,
 } from 'reactstrap';
 import InputMask from 'react-input-mask';
+import { validate } from 'cpf-check';
 
 let token = '';
 let Authorization = '';
@@ -76,6 +77,7 @@ class TratarVendaFormAdmin extends Component {
       cpf: '',
       isLoading: true,
       detalheErro: [],
+      cpfInvalidoMessage: false,
     };
     Authorization = `Bearer ${token}`;
     this.initialize();
@@ -127,32 +129,46 @@ class TratarVendaFormAdmin extends Component {
     }));
   }
 
+  cpfCompleto(cpf) {
+    return (
+      cpf.substring(cpf.length - 1) !== '_' &&
+      cpf.substring(cpf.length - 1) !== undefined &&
+      cpf !== ''
+    );
+  }
+
   async onSubmit() {
-    this.toggle();
-    await axios
-      .post(
-        'http://localhost:8080/api/vendas/salvar',
-        {
-          vendedor: { id: this.state.cliente },
-          produtos: this.state.produtoVenda,
-          clienteNome: this.state.nome,
-          clienteEmail: this.state.email,
-          clienteCpf: this.state.cpf,
-        },
-        {
-          headers: { Authorization },
-        },
-      )
-      .then(res => {
-        if (res.status === 200) {
-          window.location.href = urlAprovacaoVendas;
-        }
-      })
-      .catch(res => {
-        this.state.detalheErro = res.response.data;
+    if (!validate(this.state.cpf)) {
+      this.setState({
+        cpfInvalidoMessage: true,
       });
-    console.log(this.state.detalheErro);
-    this.forceUpdate();
+    } else {
+      this.toggle();
+      await axios
+        .post(
+          'http://localhost:8080/api/vendas/salvar',
+          {
+            vendedor: { id: this.state.cliente },
+            produtos: this.state.produtoVenda,
+            clienteNome: this.state.nome,
+            clienteEmail: this.state.email,
+            clienteCpf: this.state.cpf,
+          },
+          {
+            headers: { Authorization },
+          },
+        )
+        .then(res => {
+          if (res.status === 200) {
+            window.location.href = urlAprovacaoVendas;
+          }
+        })
+        .catch(res => {
+          this.state.detalheErro = res.response.data;
+        });
+      console.log(this.state.detalheErro);
+      this.forceUpdate();
+    }
   }
 
   onChange = e => {
@@ -417,6 +433,13 @@ class TratarVendaFormAdmin extends Component {
                             <FormText className="help-block">Digite o CPF.</FormText>
                           </Col>
                         </FormGroup>
+                        <FormGroup row>
+                          <Col xs="12" md="12">
+                            {this.cpfCompleto(this.state.cpf) && !validate(this.state.cpf) && (
+                              <Alert color="danger">CPF INVÁLIDO!</Alert>
+                            )}
+                          </Col>
+                        </FormGroup>
                       </CardBody>
                     </Card>
                   </FormGroup>
@@ -457,6 +480,11 @@ class TratarVendaFormAdmin extends Component {
                 </Form>
               </CardBody>
             </Card>
+            {this.state.cpfInvalidoMessage && (
+              <Alert color="danger">
+                Não é possível salvar o vendedor pois o CPF está inválido!
+              </Alert>
+            )}
             {this.state.detalheErro.details && (
               <Alert color="danger">
                 <strong>* Erro ao salvar venda: {this.state.detalheErro.details}</strong>

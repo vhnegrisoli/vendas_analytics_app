@@ -21,6 +21,7 @@
     "chart.js": "^2.7.3",
     "classnames": "^2.2.6",
     "core-js": "^2.6.5",
+    "cpf-check": "^3.0.0",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.9.1",
     "file-saver": "^2.0.2",

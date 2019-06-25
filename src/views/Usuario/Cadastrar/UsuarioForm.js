@@ -159,7 +159,7 @@ class UsuarioForm extends Component {
         permissoesUsuario: { id: this.state.permissoesUsuario },
         situacao: this.state.situacao,
         usuarioProprietario: this.state.usuarioProprietario,
-      })
+      }, { headers: { Authorization }})
       .then(res => {
         if (res.status === 200) {
           window.location.href = urlListarUsuarios;
@@ -181,7 +181,7 @@ class UsuarioForm extends Component {
         vendedor: { id: this.state.cliente },
         permissoesUsuario: { id: this.state.permissoesUsuario },
         usuarioProprietario: this.state.usuarioProprietario,
-      })
+      }, { headers: { Authorization } })
       .then(res => {
         if (res.status === 200) {
           window.location.href = urlListarUsuarios;

@@ -16,6 +16,7 @@ import {
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import InputMask from 'react-input-mask';
+import CPF, { validate } from 'cpf-check';
 
 const urlListarClientes = 'http://localhost:3000/#/vendedores/listar';
 let token = '';
@@ -63,6 +64,7 @@ class VendedorForm extends Component {
       complemento: '',
       cidade: '',
       estado: '',
+      cpfInvalidoMessage: false,
     };
     Authorization = `Bearer ${token}`;
     this.handleDataNascimento = this.handleDataNascimento.bind(this);
@@ -149,7 +151,7 @@ class VendedorForm extends Component {
           cpf: this.state.cpf,
           rg: this.state.rg,
           telefone: this.state.telefone,
-          dataNascimento: this.state.dataNascimento.toLocaleString(),
+          dataNascimento: this.formatDate(this.state.dataNascimento.toLocaleDateString()),
           rua: this.state.rua,
           cep: this.state.cep,
           complemento: this.state.complemento,
@@ -171,6 +173,11 @@ class VendedorForm extends Component {
           error: true,
         };
       });
+  }
+
+  formatDate(date) {
+    var dateArr = date.split('/');
+    return dateArr[2] + '-' + dateArr[0] + '-' + dateArr[1];
   }
 
   salvar() {
@@ -183,7 +190,7 @@ class VendedorForm extends Component {
           cpf: this.state.cpf,
           rg: this.state.rg,
           telefone: this.state.telefone,
-          dataNascimento: this.state.dataNascimento.toLocaleString(),
+          dataNascimento: this.formatDate(this.state.dataNascimento.toLocaleDateString()),
           rua: this.state.rua,
           cep: this.state.cep,
           complemento: this.state.complemento,
@@ -207,13 +214,23 @@ class VendedorForm extends Component {
       });
   }
 
+  cpfCompleto(cpf) {
+    console.log(cpf);
+    return cpf.substring(cpf.length - 1) !== '_' && cpf.substring(cpf.length - 1) !== undefined && cpf !== '';
+  }
+
   onSubmit(e) {
     e.preventDefault();
-    console.log(this.state);
-    if (this.getUrlParameter()) {
-      this.editar();
+    if (!validate(this.state.cpf)) {
+      this.setState({
+        cpfInvalidoMessage: true,
+      });
     } else {
-      this.salvar();
+      if (this.getUrlParameter()) {
+        this.editar();
+      } else {
+        this.salvar();
+      }
     }
   }
 
@@ -281,6 +298,13 @@ class VendedorForm extends Component {
                   </Col>
                 </FormGroup>
                 <FormGroup row>
+                  <Col xs="12" md="12">
+                    {this.cpfCompleto(this.state.cpf) && !validate(this.state.cpf) && (
+                      <Alert color="danger">CPF INVÁLIDO!</Alert>
+                    )}
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
                   <Col md="3">
                     <Label htmlFor="rg-input">RG*</Label>
                   </Col>
@@ -316,16 +340,6 @@ class VendedorForm extends Component {
                       }
                       onChange={this.handleDataNascimento}
                     />
-                    {/**
-                    <Input
-                      type="date"
-                      id="dataNascimento"
-                      name="dataNascimento"
-                      placeholder="date"
-                      value={this.state.dataNascimento}
-                      onChange={e => this.onChange(e)}
-                    />
-                     */}
                   </Col>
                 </FormGroup>
                 <FormGroup row>
@@ -412,7 +426,6 @@ class VendedorForm extends Component {
                     <Input
                       type="text"
                       id="complemento"
-                      required
                       name="complemento"
                       placeholder="Complemento"
                       value={this.state.complemento}
@@ -468,6 +481,11 @@ class VendedorForm extends Component {
                 </Button>
               </Form>
             </CardBody>
+            {this.state.cpfInvalidoMessage && (
+              <Alert color="danger">
+                Não é possível salvar o vendedor pois o CPF está inválido!
+              </Alert>
+            )}
           </Card>
         </Col>
       </div>
