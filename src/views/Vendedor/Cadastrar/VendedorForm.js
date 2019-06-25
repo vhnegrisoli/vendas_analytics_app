@@ -16,7 +16,7 @@ import {
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import InputMask from 'react-input-mask';
-import CPF, { validate } from 'cpf-check';
+import { validate } from 'cpf-check';
 
 const urlListarClientes = 'http://localhost:3000/#/vendedores/listar';
 let token = '';
@@ -65,6 +65,8 @@ class VendedorForm extends Component {
       cidade: '',
       estado: '',
       cpfInvalidoMessage: false,
+      cepError: false,
+      desabilita: '',
     };
     Authorization = `Bearer ${token}`;
     this.handleDataNascimento = this.handleDataNascimento.bind(this);
@@ -122,6 +124,9 @@ class VendedorForm extends Component {
     this.setState({
       [e.target.name]: e.target.value,
     });
+    if (e.target.name === 'cep') {
+      this.getDadosEndereco();
+    }
   };
 
   handleDataNascimento(date) {
@@ -215,21 +220,77 @@ class VendedorForm extends Component {
   }
 
   cpfCompleto(cpf) {
-    console.log(cpf);
-    return cpf.substring(cpf.length - 1) !== '_' && cpf.substring(cpf.length - 1) !== undefined && cpf !== '';
+    return (
+      cpf.substring(cpf.length - 1) !== '_' &&
+      cpf.substring(cpf.length - 1) !== undefined &&
+      cpf !== ''
+    );
+  }
+
+  cepCompleto(cep) {
+    return (
+      cep.substring(cep.length - 1) !== '_' &&
+      cep.substring(cep.length - 1) !== undefined &&
+      cep !== ''
+    );
+  }
+
+  setEstado(uf) {
+    var estados = this.state.estados;
+    for (var i = 0; i < estados.length; i++) {
+      if (estados[i].sigla === uf) {
+        this.setState({
+          estado: estados[i].id,
+        });
+        break;
+      }
+    }
+  }
+
+  async getDadosEndereco() {
+    if (this.cepCompleto(this.state.cep)) {
+      var cepFormatado = this.state.cep.replace('.', '').replace('-', '');
+      await axios
+        .get(`https://viacep.com.br/ws/${cepFormatado}/json`)
+        .then(res => {
+          if (res.status === 200) {
+            this.setState({
+              rua: res.data.logradouro,
+              cidade: res.data.localidade,
+              complemento: res.data.complemento,
+              cepError: false,
+              desabilita: 'desabled',
+            });
+            this.setEstado(res.data.uf);
+            console.log(this.state);
+          } else {
+            this.setState({
+              cepError: true,
+            });
+          }
+        })
+        .catch(error => {
+          this.setState({
+            cepError: true,
+          });
+        });
+      this.forceUpdate();
+    }
   }
 
   onSubmit(e) {
     e.preventDefault();
-    if (!validate(this.state.cpf)) {
-      this.setState({
-        cpfInvalidoMessage: true,
-      });
-    } else {
-      if (this.getUrlParameter()) {
-        this.editar();
+    if (!this.state.cepError) {
+      if (!validate(this.state.cpf)) {
+        this.setState({
+          cpfInvalidoMessage: true,
+        });
       } else {
-        this.salvar();
+        if (this.getUrlParameter()) {
+          this.editar();
+        } else {
+          this.salvar();
+        }
       }
     }
   }
@@ -364,7 +425,30 @@ class VendedorForm extends Component {
                 <label>
                   <strong>Endereço </strong>
                 </label>
-
+                <FormGroup row>
+                  <Col md="3">
+                    <Label htmlFor="text-input">CEP*</Label>
+                  </Col>
+                  <Col xs="12" md="9">
+                    <Input
+                      type="text"
+                      id="cep"
+                      mask="99.999-999"
+                      tag={InputMask}
+                      required
+                      name="cep"
+                      placeholder="CEP"
+                      value={this.state.cep}
+                      onChange={e => this.onChange(e)}
+                    />
+                    <FormText color="muted">Digite o CEP da rua.</FormText>
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Col xs="12" md="12">
+                    {this.state.cepError && <Alert color="danger">Erro: CEP não encontrado.</Alert>}
+                  </Col>
+                </FormGroup>
                 <FormGroup row>
                   <Col md="3">
                     <Label htmlFor="text-input">Rua*</Label>
@@ -399,25 +483,7 @@ class VendedorForm extends Component {
                     <FormText color="muted">Digite o número da rua.</FormText>
                   </Col>
                 </FormGroup>
-                <FormGroup row>
-                  <Col md="3">
-                    <Label htmlFor="text-input">CEP*</Label>
-                  </Col>
-                  <Col xs="12" md="9">
-                    <Input
-                      type="text"
-                      id="cep"
-                      mask="99.999-999"
-                      tag={InputMask}
-                      required
-                      name="cep"
-                      placeholder="CEP"
-                      value={this.state.cep}
-                      onChange={e => this.onChange(e)}
-                    />
-                    <FormText color="muted">Digite o CEP da rua.</FormText>
-                  </Col>
-                </FormGroup>
+
                 <FormGroup row>
                   <Col md="3">
                     <Label htmlFor="text-input">Complemento</Label>
