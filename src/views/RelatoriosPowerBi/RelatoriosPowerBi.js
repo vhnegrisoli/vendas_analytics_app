@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Button, Card, CardBody, CardHeader, CardFooter, Col, Form, FormGroup, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label } from 'reactstrap';
+import powerBiLogo from './Power-BI-Logo.png'
 
 let usuarioId = null;
 let relatorioId = null;
@@ -39,7 +40,8 @@ class RelatoriosPowerBi extends Component {
       timeout: 300,
       usuarios: [],
       relatorios: [],
-      relatorioAberto: null
+      relatorioAberto: null,
+      exibirCards: false
     };
     Authorization = `Bearer ${token}`;
     this.initialize();
@@ -86,7 +88,10 @@ class RelatoriosPowerBi extends Component {
         headers: { Authorization },
       })
       .then(res => {
-        relatorios = res.data;
+        this.setState({
+          relatorios: res.data,
+          exibirCards: true
+        })
       });
     this.forceUpdate();
   }
@@ -150,7 +155,7 @@ class RelatoriosPowerBi extends Component {
                     </Input>
                   </Col>
                 </FormGroup>
-                {relatorios[0] ? (
+                {this.state.exibirCards ? (
                   <FormGroup row>
                     <Col md="3">
                       <Label htmlFor="select">Selecione o Relatório: </Label>
@@ -163,9 +168,7 @@ class RelatoriosPowerBi extends Component {
                               {relatorio.titulo}
                             </CardHeader>
                             <CardBody>
-                              Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut
-                              laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation
-                              ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
+                              <img src={powerBiLogo} width="90%" height="90%" />
                             </CardBody>
                             <CardFooter>
                               <Button color="success" onClick={() => this.onSubmit(relatorio)}>Visualizar Relatório</Button>
