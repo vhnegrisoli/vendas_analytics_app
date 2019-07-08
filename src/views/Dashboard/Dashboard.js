@@ -384,6 +384,7 @@ let token = '';
 class Dashboard extends Component {
   constructor(props) {
     super(props);
+    this.resetArrays()
     let tokenCookie = document.cookie.includes('token')
       ? document.cookie
           .split('token=')[1]
@@ -407,6 +408,19 @@ class Dashboard extends Component {
       qtdVendasNaoRealizadas: 0,
       qtdVendasConcretizadas: 0,
     };
+  }
+
+  async resetArrays() {
+    clientes.length = 0;
+    produtos.length = 0;
+    vendasFeitas.length = 0;
+    vendasRejeitadas.length = 0;
+    vendasFeitasMeses.length = 0;
+    vendasRejeitadasMeses.length = 0;
+    mesesGrafico.length = 0;
+    lucrosGrafico.length = 0;
+    quantidadesGrafico.length = 0;
+    mediasGrafico.length = 0;
   }
 
   async initialize() {

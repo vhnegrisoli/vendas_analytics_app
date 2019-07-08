@@ -316,6 +316,7 @@ let token = '';
 class Charts extends Component {
   constructor(props) {
     super(props);
+    this.resetArrays()
     let tokenCookie = document.cookie.includes('token')
       ? document.cookie
           .split('token=')[1]
@@ -334,6 +335,33 @@ class Charts extends Component {
     };
     this.initialize();
     this.forceUpdate();
+  }
+
+  async resetArrays() {
+    mesesGrafico1.length = 0;
+    lucrosGrafico1.length = 0;
+    quantidadesGrafico2.length = 0;
+    mediaGrafico2.length = 0;
+    categorias.length = 0;
+
+    lucrosCategorias.length = 0;
+    quantidadesCategorias.length = 0;
+    produtos.length = 0;
+    lucrosProdutos.length = 0;
+    mediaProdutos.length = 0;
+
+    qtdClientesRegiao.length = 0;
+    qtdProdutosRegiao.length = 0;
+    qtdVendasRegiao.length = 0;
+    lucroRegiao.length = 0;
+    mediaRegiao.length = 0;
+    regiao.length = 0;
+    estado.length = 0;
+
+    mediaFornecedor.length = 0;
+    lucroFornecedor.length = 0;
+    vendaFornecedor.length = 0;
+    fornecedores.length = 0;
   }
 
   async initialize() {
@@ -400,15 +428,15 @@ class Charts extends Component {
         headers: { Authorization },
       })
       .then(res => {
-        this.setState({
-          isLoading: false,
-        });
         for (var i = 0; i < res.data.length; i++) {
           mediaFornecedor[i] = res.data[i].media;
           lucroFornecedor[i] = res.data[i].lucro;
           vendaFornecedor[i] = res.data[i].qtdVendas;
           fornecedores[i] = res.data[i].fornecedor;
         }
+        this.setState({
+          isLoading: false,
+        });
       });
 
     this.forceUpdate();
