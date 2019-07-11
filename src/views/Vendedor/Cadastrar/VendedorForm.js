@@ -156,7 +156,7 @@ class VendedorForm extends Component {
           cpf: this.state.cpf,
           rg: this.state.rg,
           telefone: this.state.telefone,
-          dataNascimento: this.state.startDateremote.toISOString().split('T')[0],
+          dataNascimento: this.state.startDate.toISOString().split('T')[0],
           rua: this.state.rua,
           cep: this.state.cep,
           complemento: this.state.complemento,
