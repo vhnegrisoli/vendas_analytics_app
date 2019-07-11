@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import {
+  Alert,
   Button,
   Card,
   CardBody,
@@ -12,10 +13,13 @@ import {
   Input,
   Label,
 } from 'reactstrap';
+import { cnpj } from 'cpf-cnpj-validator';
+import InputMask from 'react-input-mask';
 
-const urlListarFornecedores = 'http://localhost:3000/#/fornecedores/listar';
 let token = '';
 let Authorization = '';
+const urlListarFornecedores = 'http://localhost:3000/#/fornecedores/listar';
+
 class FornecedorForm extends Component {
   constructor(props) {
     super(props);
@@ -52,6 +56,7 @@ class FornecedorForm extends Component {
       nomeFantasia: '',
       cnpj: '',
       endereco: '',
+      cnpjInvalidoMessage: false,
     };
     Authorization = `Bearer ${token}`;
     this.initilize();
@@ -99,6 +104,14 @@ class FornecedorForm extends Component {
       [e.target.name]: e.target.value,
     });
   };
+
+  cnpjCompleto(cnpj) {
+    return (
+      cnpj.substring(cnpj.length - 1) !== '_' &&
+      cnpj.substring(cnpj.length - 1) !== undefined &&
+      cnpj !== ''
+    );
+  }
 
   editar() {
     axios
@@ -155,10 +168,24 @@ class FornecedorForm extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    if (this.getUrlParameter()) {
-      this.editar();
+    if (
+      !cnpj.isValid(
+        this.state.cnpj
+          .replace('.', '')
+          .replace('.', '')
+          .replace('/', '')
+          .replace('-', ''),
+      )
+    ) {
+      this.setState({
+        cnpjInvalidoMessage: true,
+      });
     } else {
-      this.salvar();
+      if (this.getUrlParameter()) {
+        this.editar();
+      } else {
+        this.salvar();
+      }
     }
   }
 
@@ -218,13 +245,28 @@ class FornecedorForm extends Component {
                       name="cnpj"
                       placeholder="CNPJ"
                       autoComplete="descricao"
+                      mask="99.999.999/9999-99"
+                      tag={InputMask}
                       value={this.state.cnpj}
                       onChange={e => this.onChange(e)}
                     />
                     <FormText className="help-block">Digite o CNPJ.</FormText>
                   </Col>
                 </FormGroup>
-
+                <FormGroup row>
+                  <Col xs="12" md="12">
+                    {this.cnpjCompleto(this.state.cnpj) &&
+                      !cnpj.isValid(
+                        parseInt(
+                          this.state.cnpj
+                            .replace('.', '')
+                            .replace('.', '')
+                            .replace('/', '')
+                            .replace('-', ''),
+                        ),
+                      ) && <Alert color="danger">CPF INVÁLIDO!</Alert>}
+                  </Col>
+                </FormGroup>
                 <FormGroup row>
                   <Col md="3">
                     <Label htmlFor="cpf-input">Endereço do Fornecedor*</Label>
@@ -249,6 +291,11 @@ class FornecedorForm extends Component {
                 </Button>
               </Form>
             </CardBody>
+            {this.state.cnpjInvalidoMessage && (
+              <Alert color="danger">
+                Não é possível salvar o vendedor pois o CPF está inválido!
+              </Alert>
+            )}
           </Card>
         </Col>
       </div>
