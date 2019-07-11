@@ -93,9 +93,9 @@ class ExportarCsv extends Component {
   async getRelatorio() {
     const Authorization = `Bearer ${token}`;
     let dateFilter =
-      this.state.startDate.toLocaleDateString() +
+      this.state.startDate.toISOString().split('T')[0] +
       '&dataFinal=' +
-      this.state.endDate.toLocaleDateString();
+      this.state.endDate.toISOString().split('T')[0];
     await axios
       .get(urlDownload + dateFilter, {
         headers: { Authorization },

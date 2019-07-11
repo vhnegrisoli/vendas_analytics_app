@@ -156,7 +156,7 @@ class VendedorForm extends Component {
           cpf: this.state.cpf,
           rg: this.state.rg,
           telefone: this.state.telefone,
-          dataNascimento: this.formatDate(this.state.dataNascimento.toLocaleDateString()),
+          dataNascimento: this.state.startDate.toISOString().split('T')[0],
           rua: this.state.rua,
           cep: this.state.cep,
           complemento: this.state.complemento,
@@ -195,7 +195,7 @@ class VendedorForm extends Component {
           cpf: this.state.cpf,
           rg: this.state.rg,
           telefone: this.state.telefone,
-          dataNascimento: this.formatDate(this.state.dataNascimento.toLocaleDateString()),
+          dataNascimento: this.state.startDate.toISOString().split('T')[0],
           rua: this.state.rua,
           cep: this.state.cep,
           complemento: this.state.complemento,
@@ -280,6 +280,7 @@ class VendedorForm extends Component {
 
   onSubmit(e) {
     e.preventDefault();
+    console.log(this.state)
     if (!this.state.cepError) {
       if (!validate(this.state.cpf)) {
         this.setState({
