@@ -19,6 +19,7 @@ const urlEditar = 'http://localhost:3000/#/categorias/cadastrar/';
 const urlRemover = 'http://localhost:8080/api/categorias/remover/';
 let token = '';
 let Authorization = '';
+let permissao = '';
 class CategoriaList extends Component {
   constructor(props) {
     super(props);
@@ -30,6 +31,13 @@ class CategoriaList extends Component {
           .split(';')[0]
       : '';
     token = tokenCookie;
+    permissao = document.cookie.includes('permissao')
+      ? document.cookie
+          .split('permissao=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
+      : '';
     if (tokenCookie === '') {
       window.location.href = 'http://localhost:3000/#/login';
     }
@@ -104,8 +112,8 @@ class CategoriaList extends Component {
                       <tr>
                         <th scope="col">Código</th>
                         <th scope="col">Descrição da Categoria</th>
-                        <th scope="col">Editar itens</th>
-                        <th scope="col">Remover itens</th>
+                        {permissao !== 'USER' && <th scope="col">Editar itens</th>}
+                        {permissao !== 'USER' && <th scope="col">Remover itens</th>}
                       </tr>
                     </thead>
                     <tbody>
@@ -113,36 +121,40 @@ class CategoriaList extends Component {
                         <tr>
                           <td>{categoria.id}</td>
                           <td>{categoria.descricao}</td>
-                          <td>
-                            <Button size="sm" color="primary" href={urlEditar + categoria.id}>
-                              Editar
-                            </Button>
-                          </td>
-                          <td>
-                            <Button
-                              size="sm"
-                              color="danger"
-                              onClick={() => this.openModal(categoria.id, categoria.descricao)}
-                            >
-                              Remover
-                            </Button>
-                            <Modal isOpen={this.state.modal} className={this.props.className}>
-                              <ModalHeader>
-                                Deseja remover a categoria {this.state.descricaoModal}?
-                              </ModalHeader>
-                              <ModalFooter>
-                                <Button
-                                  color="danger"
-                                  onClick={() => this.remover(this.state.idModal)}
-                                >
-                                  Remover
-                                </Button>{' '}
-                                <Button color="secondary" onClick={() => this.closeModal()}>
-                                  Cancelar
-                                </Button>
-                              </ModalFooter>
-                            </Modal>
-                          </td>
+                          {permissao !== 'USER' && (
+                            <td>
+                              <Button size="sm" color="primary" href={urlEditar + categoria.id}>
+                                Editar
+                              </Button>
+                            </td>
+                          )}
+                          {permissao !== 'USER' && (
+                            <td>
+                              <Button
+                                size="sm"
+                                color="danger"
+                                onClick={() => this.openModal(categoria.id, categoria.descricao)}
+                              >
+                                Remover
+                              </Button>
+                              <Modal isOpen={this.state.modal} className={this.props.className}>
+                                <ModalHeader>
+                                  Deseja remover a categoria {this.state.descricaoModal}?
+                                </ModalHeader>
+                                <ModalFooter>
+                                  <Button
+                                    color="danger"
+                                    onClick={() => this.remover(this.state.idModal)}
+                                  >
+                                    Remover
+                                  </Button>{' '}
+                                  <Button color="secondary" onClick={() => this.closeModal()}>
+                                    Cancelar
+                                  </Button>
+                                </ModalFooter>
+                              </Modal>
+                            </td>
+                          )}
                         </tr>
                       ))}
                     </tbody>

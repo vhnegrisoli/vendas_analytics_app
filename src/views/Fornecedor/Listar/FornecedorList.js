@@ -19,12 +19,20 @@ const urlEditar = 'http://localhost:3000/#/fornecedores/cadastrar/';
 const urlRemover = 'http://localhost:8080/api/fornecedores/remover/';
 let token = '';
 let Authorization = '';
+let permissao = '';
 class FornecedorList extends Component {
   constructor(props) {
     super(props);
     let tokenCookie = document.cookie.includes('token')
       ? document.cookie
           .split('token=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
+      : '';
+    permissao = document.cookie.includes('permissao')
+      ? document.cookie
+          .split('permissao=')[1]
           .replace('"', '')
           .replace('"', '')
           .split(';')[0]
@@ -105,8 +113,8 @@ class FornecedorList extends Component {
                         <th scope="col">Nome Fantasia</th>
                         <th scope="col">CNPJ</th>
                         <th scope="col">Endereço</th>
-                        <th scope="col">Editar</th>
-                        <th scope="col">Remover</th>
+                        {permissao !== 'USER' && <th scope="col">Editar</th>}
+                        {permissao !== 'USER' && <th scope="col">Remover</th>}
                       </tr>
                     </thead>
                     <tbody>
@@ -117,36 +125,42 @@ class FornecedorList extends Component {
                           <td>{fornecedor.nomeFantasia}</td>
                           <td>{fornecedor.cnpj}</td>
                           <td>{fornecedor.endereco}</td>
-                          <td>
-                            <Button size="sm" color="primary" href={urlEditar + fornecedor.id}>
-                              Editar
-                            </Button>
-                          </td>
-                          <td>
-                            <Button
-                              size="sm"
-                              color="danger"
-                              onClick={() => this.openModal(fornecedor.id, fornecedor.nomeFantasia)}
-                            >
-                              Remover
-                            </Button>
-                            <Modal isOpen={this.state.modal} className={this.props.className}>
-                              <ModalHeader>
-                                Deseja remover o fornecedor {this.state.nomeFantasia}?
-                              </ModalHeader>
-                              <ModalFooter>
-                                <Button
-                                  color="danger"
-                                  onClick={() => this.remover(this.state.idFornecedor)}
-                                >
-                                  Remover
-                                </Button>{' '}
-                                <Button color="secondary" onClick={() => this.closeModal()}>
-                                  Cancelar
-                                </Button>
-                              </ModalFooter>
-                            </Modal>
-                          </td>
+                          {permissao !== 'USER' && (
+                            <td>
+                              <Button size="sm" color="primary" href={urlEditar + fornecedor.id}>
+                                Editar
+                              </Button>
+                            </td>
+                          )}
+                          {permissao !== 'USER' && (
+                            <td>
+                              <Button
+                                size="sm"
+                                color="danger"
+                                onClick={() =>
+                                  this.openModal(fornecedor.id, fornecedor.nomeFantasia)
+                                }
+                              >
+                                Remover
+                              </Button>
+                              <Modal isOpen={this.state.modal} className={this.props.className}>
+                                <ModalHeader>
+                                  Deseja remover o fornecedor {this.state.nomeFantasia}?
+                                </ModalHeader>
+                                <ModalFooter>
+                                  <Button
+                                    color="danger"
+                                    onClick={() => this.remover(this.state.idFornecedor)}
+                                  >
+                                    Remover
+                                  </Button>{' '}
+                                  <Button color="secondary" onClick={() => this.closeModal()}>
+                                    Cancelar
+                                  </Button>
+                                </ModalFooter>
+                              </Modal>
+                            </td>
+                          )}
                         </tr>
                       ))}
                     </tbody>

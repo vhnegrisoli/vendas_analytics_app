@@ -16,6 +16,7 @@ import axios from 'axios';
 import ReactLoading from 'react-loading';
 let token = '';
 let Authorization = '';
+let permissao = '';
 const urlEditar = 'http://localhost:3000/#/vendedores/cadastrar/';
 const urlRemover = 'http://localhost:8080/api/vendedores/remover/';
 
@@ -30,6 +31,13 @@ class VendedorList extends Component {
           .split(';')[0]
       : '';
     token = tokenCookie;
+    permissao = document.cookie.includes('permissao')
+      ? document.cookie
+          .split('permissao=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
+      : '';
     if (tokenCookie === '') {
       window.location.href = 'http://localhost:3000/#/login';
     }
@@ -107,8 +115,8 @@ class VendedorList extends Component {
                         <th scope="col">RG</th>
                         <th scope="col">Email</th>
                         <th scope="col">Endereço</th>
-                        <th scope="col">Editar</th>
-                        <th scope="col">Remover</th>
+                        {permissao !== 'USER' && <th scope="col">Editar</th>}
+                        {permissao !== 'USER' && <th scope="col">Remover</th>}
                       </tr>
                     </thead>
                     <tbody>
@@ -120,36 +128,40 @@ class VendedorList extends Component {
                           <td>{cliente.rg}</td>
                           <td>{cliente.email}</td>
                           <td>{cliente.rua + ', nº ' + cliente.numero}</td>
-                          <td>
-                            <Button size="sm" color="primary" href={urlEditar + cliente.id}>
-                              Editar
-                            </Button>
-                          </td>
-                          <td>
-                            <Button
-                              size="sm"
-                              color="danger"
-                              onClick={() => this.openModal(cliente.id, cliente.nome)}
-                            >
-                              Remover
-                            </Button>
-                            <Modal isOpen={this.state.modal} className={this.props.className}>
-                              <ModalHeader>
-                                Deseja remover o cliente {this.state.nomeCliente}?
-                              </ModalHeader>
-                              <ModalFooter>
-                                <Button
-                                  color="danger"
-                                  onClick={() => this.remover(this.state.idCliente)}
-                                >
-                                  Remover
-                                </Button>
-                                <Button color="secondary" onClick={() => this.closeModal()}>
-                                  Cancelar
-                                </Button>
-                              </ModalFooter>
-                            </Modal>
-                          </td>
+                          {permissao !== 'USER' && (
+                            <td>
+                              <Button size="sm" color="primary" href={urlEditar + cliente.id}>
+                                Editar
+                              </Button>
+                            </td>
+                          )}
+                          {permissao !== 'USER' && (
+                            <td>
+                              <Button
+                                size="sm"
+                                color="danger"
+                                onClick={() => this.openModal(cliente.id, cliente.nome)}
+                              >
+                                Remover
+                              </Button>
+                              <Modal isOpen={this.state.modal} className={this.props.className}>
+                                <ModalHeader>
+                                  Deseja remover o cliente {this.state.nomeCliente}?
+                                </ModalHeader>
+                                <ModalFooter>
+                                  <Button
+                                    color="danger"
+                                    onClick={() => this.remover(this.state.idCliente)}
+                                  >
+                                    Remover
+                                  </Button>
+                                  <Button color="secondary" onClick={() => this.closeModal()}>
+                                    Cancelar
+                                  </Button>
+                                </ModalFooter>
+                              </Modal>
+                            </td>
+                          )}
                         </tr>
                       ))}
                     </tbody>

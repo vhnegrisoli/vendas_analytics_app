@@ -19,12 +19,20 @@ const urlEditar = 'http://localhost:3000/#/produtos/cadastrar/';
 const urlRemover = 'http://localhost:8080/api/produtos/remover/';
 let token = '';
 let Authorization = '';
+let permissao = '';
 class ProdutoList extends Component {
   constructor(props) {
     super(props);
     let tokenCookie = document.cookie.includes('token')
       ? document.cookie
           .split('token=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
+      : '';
+    permissao = document.cookie.includes('permissao')
+      ? document.cookie
+          .split('permissao=')[1]
           .replace('"', '')
           .replace('"', '')
           .split(';')[0]
@@ -107,8 +115,8 @@ class ProdutoList extends Component {
                         <th scope="col">Preço</th>
                         <th scope="col">Fornecedor</th>
                         <th scope="col">Categoria</th>
-                        <th scope="col">Editar</th>
-                        <th scope="col">Remover</th>
+                        {permissao !== 'USER' && <th scope="col">Editar</th>}
+                        {permissao !== 'USER' && <th scope="col">Remover</th>}
                       </tr>
                     </thead>
                     <tbody>
@@ -120,36 +128,40 @@ class ProdutoList extends Component {
                           <td>{'R$' + produto.preco.toFixed(2)}</td>
                           <td>{produto.categoria.descricao}</td>
                           <td>{produto.fornecedor.nomeFantasia}</td>
-                          <td>
-                            <Button size="sm" color="primary" href={urlEditar + produto.id}>
-                              Editar
-                            </Button>
-                          </td>
-                          <td>
-                            <Button
-                              size="sm"
-                              color="danger"
-                              onClick={() => this.openModal(produto.id, produto.nomeProduto)}
-                            >
-                              Remover
-                            </Button>
-                            <Modal isOpen={this.state.modal} className={this.props.className}>
-                              <ModalHeader>
-                                Deseja remover a categoria {this.state.nomeProduto}?
-                              </ModalHeader>
-                              <ModalFooter>
-                                <Button
-                                  color="danger"
-                                  onClick={() => this.remover(this.state.idProduto)}
-                                >
-                                  Remover
-                                </Button>{' '}
-                                <Button color="secondary" onClick={() => this.closeModal()}>
-                                  Cancelar
-                                </Button>
-                              </ModalFooter>
-                            </Modal>
-                          </td>
+                          {permissao !== 'USER' && (
+                            <td>
+                              <Button size="sm" color="primary" href={urlEditar + produto.id}>
+                                Editar
+                              </Button>
+                            </td>
+                          )}
+                          {permissao !== 'USER' && (
+                            <td>
+                              <Button
+                                size="sm"
+                                color="danger"
+                                onClick={() => this.openModal(produto.id, produto.nomeProduto)}
+                              >
+                                Remover
+                              </Button>
+                              <Modal isOpen={this.state.modal} className={this.props.className}>
+                                <ModalHeader>
+                                  Deseja remover a categoria {this.state.nomeProduto}?
+                                </ModalHeader>
+                                <ModalFooter>
+                                  <Button
+                                    color="danger"
+                                    onClick={() => this.remover(this.state.idProduto)}
+                                  >
+                                    Remover
+                                  </Button>{' '}
+                                  <Button color="secondary" onClick={() => this.closeModal()}>
+                                    Cancelar
+                                  </Button>
+                                </ModalFooter>
+                              </Modal>
+                            </td>
+                          )}
                         </tr>
                       ))}
                     </tbody>
