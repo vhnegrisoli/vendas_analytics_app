@@ -16,14 +16,25 @@ import {
 } from '@coreui/react';
 // sidebar nav config
 import navigation from '../../_nav';
+import navigationUser from '../../_navUser';
 // routes config
 import routes from '../../routes';
-import { withGlobalState } from 'react-globally'
+import { withGlobalState } from 'react-globally';
 
 const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
-
+let permissao = '';
 class DefaultLayout extends Component {
+  constructor(props) {
+    super(props);
+    permissao = document.cookie.includes('permissao')
+      ? document.cookie
+          .split('permissao=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
+      : '';
+  }
 
   loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>;
 
@@ -44,7 +55,11 @@ class DefaultLayout extends Component {
             <AppSidebarHeader />
             <AppSidebarForm />
             <Suspense>
-              <AppSidebarNav navConfig={navigation} {...this.props} />
+              {permissao === 'USER' ? (
+                <AppSidebarNav navConfig={navigationUser} {...this.props} />
+              ) : (
+                <AppSidebarNav navConfig={navigation} {...this.props} />
+              )}
             </Suspense>
             <AppSidebarFooter />
             <AppSidebarMinimizer />
