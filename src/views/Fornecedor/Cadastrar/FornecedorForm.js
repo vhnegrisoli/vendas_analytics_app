@@ -13,7 +13,7 @@ import {
   Input,
   Label,
 } from 'reactstrap';
-import { cnpj } from 'cpf-cnpj-validator';
+import {CNPJ} from 'cpf_cnpj';
 import InputMask from 'react-input-mask';
 
 let token = '';
@@ -103,6 +103,7 @@ class FornecedorForm extends Component {
     this.setState({
       [e.target.name]: e.target.value,
     });
+    console.log(this.state.cnpj);
   };
 
   cnpjCompleto(cnpj) {
@@ -168,15 +169,7 @@ class FornecedorForm extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    if (
-      !cnpj.isValid(
-        this.state.cnpj
-          .replace('.', '')
-          .replace('.', '')
-          .replace('/', '')
-          .replace('-', ''),
-      )
-    ) {
+    if (!CNPJ.isValid(this.state.cnpj)) {
       this.setState({
         cnpjInvalidoMessage: true,
       });
@@ -255,16 +248,9 @@ class FornecedorForm extends Component {
                 </FormGroup>
                 <FormGroup row>
                   <Col xs="12" md="12">
-                    {this.cnpjCompleto(this.state.cnpj) &&
-                      !cnpj.isValid(
-                        parseInt(
-                          this.state.cnpj
-                            .replace('.', '')
-                            .replace('.', '')
-                            .replace('/', '')
-                            .replace('-', ''),
-                        ),
-                      ) && <Alert color="danger">CPF INVÁLIDO!</Alert>}
+                    {this.cnpjCompleto(this.state.cnpj) && !CNPJ.isValid(this.state.cnpj) && (
+                      <Alert color="danger">CNPJ INVÁLIDO!</Alert>
+                    )}
                   </Col>
                 </FormGroup>
                 <FormGroup row>
@@ -293,7 +279,7 @@ class FornecedorForm extends Component {
             </CardBody>
             {this.state.cnpjInvalidoMessage && (
               <Alert color="danger">
-                Não é possível salvar o vendedor pois o CPF está inválido!
+                Não é possível salvar o fornecedor pois o CNPJ está inválido!
               </Alert>
             )}
           </Card>

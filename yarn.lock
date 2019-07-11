@@ -2773,6 +2773,11 @@ cpf-cnpj-validator@^0.0.6:
   resolved "https://registry.yarnpkg.com/cpf-cnpj-validator/-/cpf-cnpj-validator-0.0.6.tgz#bda3ab3aa4eec6203eabf8d2e69d54070f0649cc"
   integrity sha512-iPUeUJaqsUBwNROpQ9fD6zbARrgoyJesuKWmRJpibBGNK73sEK4ZIkb4MlxIn681hMrx0QfmxixQ9aGu+CWZkA==
 
+cpf_cnpj@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/cpf_cnpj/-/cpf_cnpj-0.2.0.tgz#a032c19242a38e8363edce4e78bb1fbe9d664aa5"
+  integrity sha1-oDLBkkKjjoNj7c5OeLsfvp1mSqU=
+
 create-ecdh@^4.0.0:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/create-ecdh/-/create-ecdh-4.0.3.tgz#c9111b6f33045c4697f144787f9254cdc77c45ff"
