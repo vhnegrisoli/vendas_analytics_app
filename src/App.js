@@ -19,6 +19,11 @@ const Login = Loadable({
   loading,
 });
 
+const AlterarSenha = Loadable({
+  loader: () => import('./views/Login/AtualizarSenha/AtualizarSenha'),
+  loading,
+});
+
 const Register = Loadable({
   loader: () => import('./views/Pages/Register'),
   loading,
@@ -61,6 +66,12 @@ class App extends Component {
             path="/login"
             name="Login Page"
             component={() => <Login token={this.getToken.bind(this)} />}
+          />
+          <Route
+            exact
+            path="/alterar-senha/:id"
+            name="Alterar Senha"
+            component={() => <AlterarSenha />}
           />
           <Route exact path="/register" name="Register Page" component={Register} />
           <Route exact path="/403" name="Page 403" component={Page403} />

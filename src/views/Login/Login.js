@@ -23,10 +23,13 @@ import { bake_cookie, delete_cookie } from 'sfcookies';
 
 const getTokenUrl = 'http://localhost:8080/oauth/token';
 const getAuthenticatedUser = 'http://localhost:8080/api/autenticacao/usuario-logado';
-
+const getUser = 'http://localhost:8080/api/usuarios/buscar/';
+const ultimoAcesso = 'http://localhost:8080/api/usuarios/atualizar-ultimo-acesso/';
 const cookie_key = 'token';
 const cookie_key_role = 'permissao';
 const cookie_key_user = 'user';
+const urlHome = 'http://localhost:3000/#/dashboard';
+const urlAlterarSenha = 'http://localhost:3000/#/alterar-senha/';
 
 class Login extends Component {
   constructor(props) {
@@ -61,11 +64,11 @@ class Login extends Component {
     form.append('grant_type', 'password');
     const Authorization = `Basic dmVuZGFzX2FuYWx5dGljcy1jbGllbnQ6dmVuZGFzX2FuYWx5dGljcy1zZWNyZXQ=`;
     const Content_Type = `application/x-www-form-urlencoded`;
-    const urlHome = 'http://localhost:3000/#/dashboard';
     var token = '';
     var status = 0;
     var permissao = '';
     var user = '';
+    var userId = '';
     await axios
       .post(getTokenUrl, form, {
         Headers: {
@@ -74,11 +77,6 @@ class Login extends Component {
         },
       })
       .then(res => {
-        this.setState({
-          isSucess: true,
-          isLoading: false,
-          successMessage: true,
-        });
         status = res.status;
         if (res.status === 200) {
           token = res.data.access_token;
@@ -106,11 +104,45 @@ class Login extends Component {
         });
         permissao = res.data.permissao.permissao;
         user = res.data.nome;
+        userId = res.data.id;
       });
     if (status === 200) {
       this.setCookie(token, permissao, user);
-      window.location.href = urlHome;
+      this.definirLoginOuAlteracaoDeSenha(userId, token);
     }
+  }
+
+  async definirLoginOuAlteracaoDeSenha(userId, token) {
+    await axios
+      .get(getUser + userId, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then(res => {
+        if (res.status === 200) {
+          if (res.data.ultimoAcesso === null && res.data.senha === 'alterar') {
+            window.location.href = urlAlterarSenha + userId;
+          } else {
+            this.atualizarUltimoAcesso(res.data.id, token);
+          }
+        }
+      });
+  }
+
+  async atualizarUltimoAcesso(id, token) {
+    await axios
+      .get(ultimoAcesso + id, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then(res => {
+        if (res.status === 200) {
+          this.setState({
+            isLoading: false,
+            successMessage: true,
+            isSucess: true,
+          });
+          window.location.href = urlHome;
+        }
+      });
   }
 
   onSubmit(e) {

@@ -114,10 +114,10 @@ class UsuarioList extends Component {
                         <th scope="col">Data de Cadastro</th>
                         <th scope="col">Email</th>
                         <th scope="col">Permissão</th>
-                        <th scope="col">Autorizado a</th>
                         <th scope="col">Situação</th>
                         <th scope="col">Vendedor Proprietário</th>
                         <th scope="col">Código Administrador</th>
+                        <th scope="col">Último Login</th>
                         <th scope="col">Editar</th>
                         <th scope="col">Remover</th>
                       </tr>
@@ -140,7 +140,6 @@ class UsuarioList extends Component {
                               ? 'Usuário'
                               : 'Administrador'}
                           </td>
-                          <td>{usuario.permissoesUsuario.descricao}</td>
                           <td>
                             <Button
                               size="sm"
@@ -152,11 +151,23 @@ class UsuarioList extends Component {
                           <td>
                             {usuario.vendedor.nome + ' (Código: ' + usuario.vendedor.id + ')'}
                           </td>
+
                           {usuario.usuarioProprietario ? (
                             <td>{usuario.usuarioProprietario}</td>
                           ) : (
                             <td>Admin</td>
                           )}
+                          <td>
+                            {usuario.ultimoAcesso ? (
+                              usuario.ultimoAcesso.substring(8, 10) +
+                              '/' +
+                              usuario.ultimoAcesso.substring(5, 7) +
+                              '/' +
+                              usuario.ultimoAcesso.substring(0, 4)
+                            ) : (
+                              <p>Nunca acessou</p>
+                            )}
+                          </td>
                           <td>
                             <Button size="sm" color="primary" href={urlEditar + usuario.id}>
                               Editar
