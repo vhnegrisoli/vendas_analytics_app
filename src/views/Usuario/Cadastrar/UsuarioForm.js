@@ -60,6 +60,8 @@ class UsuarioForm extends Component {
       errors: [],
       usuarioProprietario: '',
       admins: [],
+      exibeProprietarios: false,
+      errorSalvar: false,
     };
     Authorization = `Bearer ${token}`;
     this.initialize();
@@ -132,10 +134,16 @@ class UsuarioForm extends Component {
   }
 
   onChange = e => {
+    if (this.state.permissoesUsuario && this.state.permissoesUsuario === '1') {
+      this.setState({ exibeProprietarios: true });
+    } else {
+      this.setState({ exibeProprietarios: false, usuarioProprietario: null });
+    }
     this.setState({
       [e.target.name]: e.target.value,
     });
     this.forceUpdate();
+    console.log(this.state);
   };
 
   getUrlParameter() {
@@ -150,16 +158,20 @@ class UsuarioForm extends Component {
 
   async editar() {
     await axios
-      .post('http://localhost:8080/api/usuarios/salvar', {
-        id: this.getUrlParameter(),
-        nome: this.state.nome,
-        email: this.state.email,
-        senha: this.state.senha,
-        vendedor: { id: this.state.cliente },
-        permissoesUsuario: { id: this.state.permissoesUsuario },
-        situacao: this.state.situacao,
-        usuarioProprietario: this.state.usuarioProprietario,
-      }, { headers: { Authorization }})
+      .post(
+        'http://localhost:8080/api/usuarios/salvar',
+        {
+          id: this.getUrlParameter(),
+          nome: this.state.nome,
+          email: this.state.email,
+          senha: this.state.senha,
+          vendedor: { id: this.state.cliente },
+          permissoesUsuario: { id: this.state.permissoesUsuario },
+          situacao: this.state.situacao,
+          usuarioProprietario: this.state.usuarioProprietario,
+        },
+        { headers: { Authorization } },
+      )
       .then(res => {
         if (res.status === 200) {
           window.location.href = urlListarUsuarios;
@@ -174,14 +186,19 @@ class UsuarioForm extends Component {
   async salvar() {
     console.log(this.state);
     await axios
-      .post('http://localhost:8080/api/usuarios/salvar', {
-        nome: this.state.nome,
-        email: this.state.email,
-        senha: this.state.senha,
-        vendedor: { id: this.state.cliente },
-        permissoesUsuario: { id: this.state.permissoesUsuario },
-        usuarioProprietario: this.state.usuarioProprietario,
-      }, { headers: { Authorization } })
+      .post(
+        'http://localhost:8080/api/usuarios/salvar',
+        {
+          nome: this.state.nome,
+          email: this.state.email,
+          senha: this.state.senha,
+          vendedor: { id: this.state.cliente !== '' ? this.state.cliente : null },
+          permissoesUsuario: { id: this.state.permissoesUsuario },
+          usuarioProprietario:
+            this.state.usuarioProprietario !== '' ? this.state.usuarioProprietario : null,
+        },
+        { headers: { Authorization } },
+      )
       .then(res => {
         if (res.status === 200) {
           window.location.href = urlListarUsuarios;
@@ -195,10 +212,19 @@ class UsuarioForm extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    if (this.getUrlParameter()) {
-      this.editar();
+    if (
+      this.state.permissoesUsuario &&
+      this.state.permissoesUsuario === '1' &&
+      (this.state.usuarioProprietario === '' || this.state.usuarioProprietario === null)
+    ) {
+      this.setState({ errorSalvar: true });
     } else {
-      this.salvar();
+      this.setState({ errorSalvar: false });
+      if (this.getUrlParameter()) {
+        this.editar();
+      } else {
+        this.salvar();
+      }
     }
   }
 
@@ -208,7 +234,7 @@ class UsuarioForm extends Component {
         <Col xs="12" md="12">
           <Card>
             <CardHeader>
-              <strong>Usuários de Clientes </strong> - Cadastrar
+              <strong>Usuários de Vendedores </strong> - Cadastrar
             </CardHeader>
             <CardBody>
               <Form id="cliente-form" className="form-horizontal" onSubmit={e => this.onSubmit(e)}>
@@ -246,7 +272,6 @@ class UsuarioForm extends Component {
                     <FormText className="help-block">Digite o email.</FormText>
                   </Col>
                 </FormGroup>
-
                 <FormGroup row>
                   <Col md="3">
                     <Label htmlFor="select">Vendedor Proprietário*</Label>
@@ -255,7 +280,6 @@ class UsuarioForm extends Component {
                     <Input
                       type="select"
                       name="cliente"
-                      required
                       id="cliente"
                       value={this.state.cliente}
                       onChange={e => this.onChange(e)}
@@ -267,7 +291,6 @@ class UsuarioForm extends Component {
                     </Input>
                   </Col>
                 </FormGroup>
-
                 <FormGroup row>
                   <Col md="3">
                     <Label htmlFor="select">Permissão*</Label>
@@ -310,26 +333,27 @@ class UsuarioForm extends Component {
                     <FormText className="help-block">Crie uma senha.</FormText>
                   </Col>
                 </FormGroup>
-                <FormGroup row>
-                  <Col md="3">
-                    <Label htmlFor="select">Usuário Proprietário</Label>
-                  </Col>
-                  <Col xs="12" md="9">
-                    <Input
-                      type="select"
-                      name="usuarioProprietario"
-                      required
-                      id="usuarioProprietario"
-                      value={this.state.usuarioProprietario}
-                      onChange={e => this.onChange(e)}
-                    >
-                      <option value="">Por favor, selecione o usuário proprietário:</option>
-                      {this.state.admins.map(admin => (
-                        <option value={admin.id}>{admin.nome}</option>
-                      ))}
-                    </Input>
-                  </Col>
-                </FormGroup>
+                {this.state.exibeProprietarios && (
+                  <FormGroup row>
+                    <Col md="3">
+                      <Label htmlFor="select">Usuário Proprietário</Label>
+                    </Col>
+                    <Col xs="12" md="9">
+                      <Input
+                        type="select"
+                        name="usuarioProprietario"
+                        id="usuarioProprietario"
+                        value={this.state.usuarioProprietario}
+                        onChange={e => this.onChange(e)}
+                      >
+                        <option value="">Por favor, selecione o usuário proprietário:</option>
+                        {this.state.admins.map(admin => (
+                          <option value={admin.id}>{admin.nome}</option>
+                        ))}
+                      </Input>
+                    </Col>
+                  </FormGroup>
+                )}
                 {this.getUrlParameter() && (
                   <FormGroup row>
                     <Col md="3">
@@ -339,7 +363,6 @@ class UsuarioForm extends Component {
                       <Input
                         type="select"
                         name="situacao"
-                        required
                         id="permissoesUsuario"
                         value={this.state.situacao}
                         onChange={e => this.onChange(e)}
@@ -360,6 +383,11 @@ class UsuarioForm extends Component {
             {this.state.errors.details && (
               <Alert color="danger">
                 <strong>* Erro ao salvar usuário: {this.state.errors.details}</strong>
+              </Alert>
+            )}
+            {this.state.errorSalvar && (
+              <Alert color="danger">
+                <strong>* É necessário preencher todos os campos</strong>
               </Alert>
             )}
           </Card>
