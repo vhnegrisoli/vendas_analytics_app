@@ -25,6 +25,7 @@
     "cpf_cnpj": "^0.2.0",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.9.1",
+    "express": "^4.17.1",
     "file-saver": "^2.0.2",
     "flag-icon-css": "^3.2.1",
     "font-awesome": "^4.7.0",
@@ -56,7 +57,12 @@
     "test": "react-scripts test",
     "test:cov": "react-scripts test --coverage",
     "test:debug": "react-scripts --inspect-brk test --runInBand",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "postinstall": "react-scripts build"
+  },
+  "engines": {
+    "node": "~6.10.3",
+    "npm": "~5.6.0"
   },
   "bugs": {
     "url": "https://github.com/coreui/coreui-free-react-admin-template/issues"
