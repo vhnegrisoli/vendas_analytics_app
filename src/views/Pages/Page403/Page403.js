@@ -25,7 +25,7 @@ class Page404 extends Component {
                 </div>
               </Alert>
               <Label>Voltar ao menu inicial?</Label>{' '}
-              <Button color="primary" href="http://localhost:3000">
+              <Button color="primary" href="https://vendas-analytics-app.herokuapp.com">
                 Menu
               </Button>
             </Col>

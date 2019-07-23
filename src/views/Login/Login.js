@@ -21,15 +21,15 @@ import { withGlobalState } from 'react-globally';
 import logo from '../../assets/img/brand/logo1.svg';
 import { bake_cookie, delete_cookie } from 'sfcookies';
 
-const getTokenUrl = 'http://localhost:8080/oauth/token';
-const getAuthenticatedUser = 'http://localhost:8080/api/autenticacao/usuario-logado';
-const getUser = 'http://localhost:8080/api/usuarios/buscar/';
-const ultimoAcesso = 'http://localhost:8080/api/usuarios/atualizar-ultimo-acesso/';
+const getTokenUrl = 'https://vendas-analytics-api.herokuapp.com/oauth/token';
+const getAuthenticatedUser = 'https://vendas-analytics-api.herokuapp.com/api/autenticacao/usuario-logado';
+const getUser = 'https://vendas-analytics-api.herokuapp.com/api/usuarios/buscar/';
+const ultimoAcesso = 'https://vendas-analytics-api.herokuapp.com/api/usuarios/atualizar-ultimo-acesso/';
 const cookie_key = 'token';
 const cookie_key_role = 'permissao';
 const cookie_key_user = 'user';
-const urlHome = 'http://localhost:3000/#/dashboard';
-const urlAlterarSenha = 'http://localhost:3000/#/alterar-senha/';
+const urlHome = 'https://vendas-analytics-app.herokuapp.com/#/dashboard';
+const urlAlterarSenha = 'https://vendas-analytics-app.herokuapp.com/#/alterar-senha/';
 
 class Login extends Component {
   constructor(props) {

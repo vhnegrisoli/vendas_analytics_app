@@ -13,7 +13,7 @@ import {
   Label,
 } from 'reactstrap';
 
-const urlListarCategorias = 'http://localhost:3000/#/categorias/listar';
+const urlListarCategorias = 'https://vendas-analytics-app.herokuapp.com/#/categorias/listar';
 let token = '';
 let Authorization = '';
 class CategoriaForm extends Component {
@@ -35,10 +35,10 @@ class CategoriaForm extends Component {
       : '';
     token = tokenCookie;
     if (permissao === 'USER') {
-      window.location.href = 'http://localhost:3000/#/403';
+      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/403';
     }
     if (tokenCookie === '') {
-      window.location.href = 'http://localhost:3000/#/login';
+      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
     }
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
@@ -58,7 +58,7 @@ class CategoriaForm extends Component {
   async initilize() {
     if (this.getUrlParameter()) {
       await axios
-        .get('http://localhost:8080/api/categorias/buscar/' + this.getUrlParameter(), {
+        .get('https://vendas-analytics-api.herokuapp.com/api/categorias/buscar/' + this.getUrlParameter(), {
           headers: { Authorization },
         })
         .then(res => {
@@ -98,7 +98,7 @@ class CategoriaForm extends Component {
   editar() {
     axios
       .post(
-        'http://localhost:8080/api/categorias/salvar',
+        'https://vendas-analytics-api.herokuapp.com/api/categorias/salvar',
         {
           id: this.getUrlParameter(),
           descricao: this.state.descricao,
@@ -122,7 +122,7 @@ class CategoriaForm extends Component {
   salvar() {
     axios
       .post(
-        'http://localhost:8080/api/categorias/salvar',
+        'https://vendas-analytics-api.herokuapp.com/api/categorias/salvar',
         {
           descricao: this.state.descricao,
         },

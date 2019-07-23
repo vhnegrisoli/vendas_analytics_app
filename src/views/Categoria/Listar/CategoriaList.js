@@ -15,8 +15,8 @@ import {
 import axios from 'axios';
 import ReactLoading from 'react-loading';
 
-const urlEditar = 'http://localhost:3000/#/categorias/cadastrar/';
-const urlRemover = 'http://localhost:8080/api/categorias/remover/';
+const urlEditar = 'https://vendas-analytics-app.herokuapp.com/#/categorias/cadastrar/';
+const urlRemover = 'https://vendas-analytics-api.herokuapp.com/api/categorias/remover/';
 let token = '';
 let Authorization = '';
 let permissao = '';
@@ -39,7 +39,7 @@ class CategoriaList extends Component {
           .split(';')[0]
       : '';
     if (tokenCookie === '') {
-      window.location.href = 'http://localhost:3000/#/login';
+      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
     }
     this.state = {
       modal: false,
@@ -56,7 +56,7 @@ class CategoriaList extends Component {
 
   async initialize() {
     await axios
-      .get('http://localhost:8080/api/categorias/todas', {
+      .get('https://vendas-analytics-api.herokuapp.com/api/categorias/todas', {
         headers: { Authorization },
       })
       .then(res => {

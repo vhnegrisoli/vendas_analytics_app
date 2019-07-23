@@ -18,7 +18,7 @@ import InputMask from 'react-input-mask';
 
 let token = '';
 let Authorization = '';
-const urlListarFornecedores = 'http://localhost:3000/#/fornecedores/listar';
+const urlListarFornecedores = 'https://vendas-analytics-app.herokuapp.com/#/fornecedores/listar';
 
 class FornecedorForm extends Component {
   constructor(props) {
@@ -39,10 +39,10 @@ class FornecedorForm extends Component {
       : '';
     token = tokenCookie;
     if (permissao === 'USER') {
-      window.location.href = 'http://localhost:3000/#/403';
+      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/403';
     }
     if (tokenCookie === '') {
-      window.location.href = 'http://localhost:3000/#/login';
+      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
     }
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
@@ -65,7 +65,7 @@ class FornecedorForm extends Component {
   async initilize() {
     if (this.getUrlParameter()) {
       await axios
-        .get('http://localhost:8080/api/fornecedores/buscar/' + this.getUrlParameter(), {
+        .get('https://vendas-analytics-api.herokuapp.com/api/fornecedores/buscar/' + this.getUrlParameter(), {
           headers: { Authorization },
         })
         .then(res => {
@@ -117,7 +117,7 @@ class FornecedorForm extends Component {
   editar() {
     axios
       .post(
-        'http://localhost:8080/api/fornecedores/salvar',
+        'https://vendas-analytics-api.herokuapp.com/api/fornecedores/salvar',
         {
           id: this.getUrlParameter(),
           nomeFantasia: this.state.nomeFantasia,
@@ -144,7 +144,7 @@ class FornecedorForm extends Component {
   salvar() {
     axios
       .post(
-        'http://localhost:8080/api/fornecedores/salvar',
+        'https://vendas-analytics-api.herokuapp.com/api/fornecedores/salvar',
         {
           nomeFantasia: this.state.nomeFantasia,
           razaoSocial: this.state.razaoSocial,

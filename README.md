@@ -1,6 +1,6 @@
 [![@coreui coreui](https://img.shields.io/badge/@coreui%20-coreui-lightgrey.svg?style=flat-square)](https://github.com/coreui/coreui)
 [![npm package][npm-coreui-badge]][npm-coreui]
-[![NPM downloads][npm-coreui-download]][npm-coreui]  
+[![NPM downloads][npm-coreui-download]][npm-coreui]
 [![@coreui react](https://img.shields.io/badge/@coreui%20-react-lightgrey.svg?style=flat-square)](https://github.com/coreui/react)
 [![npm package][npm-coreui-react-badge]][npm-coreui-react]
 [![NPM downloads][npm-coreui-react-download]][npm-coreui-react]
@@ -86,11 +86,11 @@ see also:
 ### Basic usage
 
 ``` bash
-# dev server  with hot reload at http://localhost:3000
+# dev server  with hot reload at https://vendas-analytics-app.herokuapp.com
 $ npm start
 ```
 
-Navigate to [http://localhost:3000](http://localhost:3000). The app will automatically reload if you change any of the source files.
+Navigate to [https://vendas-analytics-app.herokuapp.com](https://vendas-analytics-app.herokuapp.com). The app will automatically reload if you change any of the source files.
 
 ### Build
 

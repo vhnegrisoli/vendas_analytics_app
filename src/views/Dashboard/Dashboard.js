@@ -394,7 +394,7 @@ class Dashboard extends Component {
       : '';
     token = tokenCookie;
     if (tokenCookie === '') {
-      window.location.href = 'http://localhost:3000/#/login';
+      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
     }
     this.initialize();
     this.toggle = this.toggle.bind(this);
@@ -427,7 +427,7 @@ class Dashboard extends Component {
     const Authorization = `Bearer ${token}`;
     //VIEWS DO BANCO DE DADOS
     await axios
-      .get('http://localhost:8080/api/dashboard/vendas-analise-dashboard', {
+      .get('https://vendas-analytics-api.herokuapp.com/api/dashboard/vendas-analise-dashboard', {
         headers: { Authorization },
       })
       .then(res => {
@@ -442,7 +442,7 @@ class Dashboard extends Component {
       });
 
     await axios
-      .get('http://localhost:8080/api/dashboard/card3/vendas-feitas', {
+      .get('https://vendas-analytics-api.herokuapp.com/api/dashboard/card3/vendas-feitas', {
         headers: { Authorization },
       })
       .then(res => {
@@ -453,7 +453,7 @@ class Dashboard extends Component {
       });
 
     await axios
-      .get('http://localhost:8080/api/dashboard/card4/vendas-rejeitadas', {
+      .get('https://vendas-analytics-api.herokuapp.com/api/dashboard/card4/vendas-rejeitadas', {
         headers: { Authorization },
       })
       .then(res => {
@@ -465,7 +465,7 @@ class Dashboard extends Component {
 
     //VALORES SOMATÓRIOS NOS CARDS
     await axios
-      .get('http://localhost:8080/api/dashboard/cards-totais', { headers: { Authorization } })
+      .get('https://vendas-analytics-api.herokuapp.com/api/dashboard/cards-totais', { headers: { Authorization } })
       .then(res => {
         this.setState = {
           qtdClientes: res.data.qtdClientes,

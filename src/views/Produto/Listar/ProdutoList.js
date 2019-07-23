@@ -15,8 +15,8 @@ import {
 import axios from 'axios';
 import ReactLoading from 'react-loading';
 
-const urlEditar = 'http://localhost:3000/#/produtos/cadastrar/';
-const urlRemover = 'http://localhost:8080/api/produtos/remover/';
+const urlEditar = 'https://vendas-analytics-app.herokuapp.com/#/produtos/cadastrar/';
+const urlRemover = 'https://vendas-analytics-api.herokuapp.com/api/produtos/remover/';
 let token = '';
 let Authorization = '';
 let permissao = '';
@@ -39,7 +39,7 @@ class ProdutoList extends Component {
       : '';
     token = tokenCookie;
     if (tokenCookie === '') {
-      window.location.href = 'http://localhost:3000/#/login';
+      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
     }
     this.state = {
       produtos: [],
@@ -55,7 +55,7 @@ class ProdutoList extends Component {
 
   async initialize() {
     await axios
-      .get('http://localhost:8080/api/produtos/todos', {
+      .get('https://vendas-analytics-api.herokuapp.com/api/produtos/todos', {
         headers: { Authorization },
       })
       .then(res => {

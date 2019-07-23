@@ -77,7 +77,7 @@ class Custom extends Component {
       : '';
     token = tokenCookie;
     if (tokenCookie === '') {
-      window.location.href = 'http://localhost:3000/#/login';
+      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
     }
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
@@ -171,7 +171,7 @@ class Custom extends Component {
   async getChamadasVendedor() {
     this.zerarDadosDosGraficos();
     await axios
-      .get('http://localhost:8080/api/analytics/geral-vendedores', {
+      .get('https://vendas-analytics-api.herokuapp.com/api/analytics/geral-vendedores', {
         headers: { Authorization },
       })
       .then(res => {
@@ -194,7 +194,7 @@ class Custom extends Component {
   async getChamadasProduto() {
     this.zerarDadosDosGraficos();
     await axios
-      .get('http://localhost:8080/api/analytics/geral-produtos', {
+      .get('https://vendas-analytics-api.herokuapp.com/api/analytics/geral-produtos', {
         headers: { Authorization },
       })
       .then(res => {
@@ -220,7 +220,7 @@ class Custom extends Component {
   async getChamadasRegiao() {
     this.zerarDadosDosGraficos();
     await axios
-      .get('http://localhost:8080/api/analytics/geral-regioes-personalizados', {
+      .get('https://vendas-analytics-api.herokuapp.com/api/analytics/geral-regioes-personalizados', {
         headers: { Authorization },
       })
       .then(res => {
@@ -246,7 +246,7 @@ class Custom extends Component {
   async getChamadasEstados() {
     this.zerarDadosDosGraficos();
     await axios
-      .get('http://localhost:8080/api/analytics/geral-estados', {
+      .get('https://vendas-analytics-api.herokuapp.com/api/analytics/geral-estados', {
         headers: { Authorization },
       })
       .then(res => {
@@ -272,7 +272,7 @@ class Custom extends Component {
   async getChamadasVendas() {
     this.zerarDadosDosGraficos();
     await axios
-      .get('http://localhost:8080/api/dashboard/vendas-por-periodo', {
+      .get('https://vendas-analytics-api.herokuapp.com/api/dashboard/vendas-por-periodo', {
         headers: { Authorization },
       })
       .then(res => {
@@ -298,7 +298,7 @@ class Custom extends Component {
   async getChamadasFornecedor() {
     this.zerarDadosDosGraficos();
     await axios
-      .get('http://localhost:8080/api/analytics/geral-fornecedores', {
+      .get('https://vendas-analytics-api.herokuapp.com/api/analytics/geral-fornecedores', {
         headers: { Authorization },
       })
       .then(res => {
@@ -324,7 +324,7 @@ class Custom extends Component {
   async getChamadasCategoria() {
     this.zerarDadosDosGraficos();
     await axios
-      .get('http://localhost:8080/api/analytics/vendas-por-categoria', {
+      .get('https://vendas-analytics-api.herokuapp.com/api/analytics/vendas-por-categoria', {
         headers: { Authorization },
       })
       .then(res => {

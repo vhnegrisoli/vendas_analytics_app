@@ -13,7 +13,7 @@ import {
   Label,
 } from 'reactstrap';
 
-const urlListarprodutos = 'http://localhost:3000/#/produtos/listar';
+const urlListarprodutos = 'https://vendas-analytics-app.herokuapp.com/#/produtos/listar';
 let token = '';
 let Authorization = '';
 class ProdutoForm extends Component {
@@ -35,10 +35,10 @@ class ProdutoForm extends Component {
       : '';
     token = tokenCookie;
     if (permissao === 'USER') {
-      window.location.href = 'http://localhost:3000/#/403';
+      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/403';
     }
     if (tokenCookie === '') {
-      window.location.href = 'http://localhost:3000/#/login';
+      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
     }
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
@@ -61,7 +61,7 @@ class ProdutoForm extends Component {
   async initialize() {
     if (this.getUrlParameter()) {
       await axios
-        .get('http://localhost:8080/api/produtos/buscar/' + this.getUrlParameter(), {
+        .get('https://vendas-analytics-api.herokuapp.com/api/produtos/buscar/' + this.getUrlParameter(), {
           headers: { Authorization },
         })
         .then(res => {
@@ -76,7 +76,7 @@ class ProdutoForm extends Component {
     }
 
     await axios
-      .get('http://localhost:8080/api/categorias/todas', {
+      .get('https://vendas-analytics-api.herokuapp.com/api/categorias/todas', {
         headers: { Authorization },
       })
       .then(res => {
@@ -86,7 +86,7 @@ class ProdutoForm extends Component {
       });
 
     await axios
-      .get('http://localhost:8080/api/fornecedores/todos', {
+      .get('https://vendas-analytics-api.herokuapp.com/api/fornecedores/todos', {
         headers: { Authorization },
       })
       .then(res => {
@@ -126,7 +126,7 @@ class ProdutoForm extends Component {
       categoria: { id: this.state.categoria },
     };
     axios
-      .post('http://localhost:8080/api/produtos/salvar', editar, {
+      .post('https://vendas-analytics-api.herokuapp.com/api/produtos/salvar', editar, {
         headers: { Authorization },
       })
       .then(res => {
@@ -144,7 +144,7 @@ class ProdutoForm extends Component {
   salvar() {
     axios
       .post(
-        'http://localhost:8080/api/produtos/salvar',
+        'https://vendas-analytics-api.herokuapp.com/api/produtos/salvar',
         {
           nomeProduto: this.state.nomeProduto,
           descricao: this.state.descricao,

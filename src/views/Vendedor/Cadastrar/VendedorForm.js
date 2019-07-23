@@ -18,7 +18,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import InputMask from 'react-input-mask';
 import { validate } from 'cpf-check';
 
-const urlListarClientes = 'http://localhost:3000/#/vendedores/listar';
+const urlListarClientes = 'https://vendas-analytics-app.herokuapp.com/#/vendedores/listar';
 let token = '';
 let Authorization = '';
 class VendedorForm extends Component {
@@ -40,10 +40,10 @@ class VendedorForm extends Component {
       : '';
     token = tokenCookie;
     if (permissao === 'USER') {
-      window.location.href = 'http://localhost:3000/#/403';
+      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/403';
     }
     if (tokenCookie === '') {
-      window.location.href = 'http://localhost:3000/#/login';
+      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
     }
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
@@ -75,7 +75,7 @@ class VendedorForm extends Component {
 
   async initilize() {
     await axios
-      .get('http://localhost:8080/api/estados/listar', {
+      .get('https://vendas-analytics-api.herokuapp.com/api/estados/listar', {
         headers: { Authorization },
       })
       .then(res => {
@@ -85,7 +85,7 @@ class VendedorForm extends Component {
       });
     if (this.getUrlParameter()) {
       await axios
-        .get('http://localhost:8080/api/vendedores/buscar/' + this.getUrlParameter(), {
+        .get('https://vendas-analytics-api.herokuapp.com/api/vendedores/buscar/' + this.getUrlParameter(), {
           headers: { Authorization },
         })
         .then(res => {
@@ -148,7 +148,7 @@ class VendedorForm extends Component {
   editar() {
     axios
       .post(
-        'http://localhost:8080/api/vendedores/salvar',
+        'https://vendas-analytics-api.herokuapp.com/api/vendedores/salvar',
         {
           id: this.getUrlParameter(),
           nome: this.state.nome,
@@ -188,7 +188,7 @@ class VendedorForm extends Component {
   salvar() {
     axios
       .post(
-        'http://localhost:8080/api/vendedores/salvar',
+        'https://vendas-analytics-api.herokuapp.com/api/vendedores/salvar',
         {
           nome: this.state.nome,
           email: this.state.email,

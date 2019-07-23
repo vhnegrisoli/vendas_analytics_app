@@ -18,7 +18,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 let token = '';
-const urlDownload = 'http://localhost:8080/api/vendas/relatorio-csv?dataInicial=';
+const urlDownload = 'https://vendas-analytics-api.herokuapp.com/api/vendas/relatorio-csv?dataInicial=';
 class ExportarCsv extends Component {
   constructor(props) {
     super(props);
@@ -31,7 +31,7 @@ class ExportarCsv extends Component {
       : '';
     token = tokenCookie;
     if (tokenCookie === '') {
-      window.location.href = 'http://localhost:3000/#/login';
+      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
     }
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);

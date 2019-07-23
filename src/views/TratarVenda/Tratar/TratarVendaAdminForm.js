@@ -24,7 +24,7 @@ import { validate } from 'cpf-check';
 
 let token = '';
 let Authorization = '';
-const urlAprovacaoVendas = 'http://localhost:3000/#/aprovar-venda';
+const urlAprovacaoVendas = 'https://vendas-analytics-app.herokuapp.com/#/aprovar-venda';
 let usuario = '';
 let permissao = '';
 class TratarVendaFormAdmin extends Component {
@@ -53,7 +53,7 @@ class TratarVendaFormAdmin extends Component {
       : '';
     token = tokenCookie;
     if (tokenCookie === '') {
-      window.location.href = 'http://localhost:3000/#/login';
+      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
     }
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
@@ -85,7 +85,7 @@ class TratarVendaFormAdmin extends Component {
 
   async initialize() {
     await axios
-      .get('http://localhost:8080/api/produtos/todos', {
+      .get('https://vendas-analytics-api.herokuapp.com/api/produtos/todos', {
         headers: { Authorization },
       })
       .then(res => {
@@ -95,7 +95,7 @@ class TratarVendaFormAdmin extends Component {
       });
 
     await axios
-      .get('http://localhost:8080/api/vendedores/todos', {
+      .get('https://vendas-analytics-api.herokuapp.com/api/vendedores/todos', {
         headers: { Authorization },
       })
       .then(res => {
@@ -146,7 +146,7 @@ class TratarVendaFormAdmin extends Component {
       this.toggle();
       await axios
         .post(
-          'http://localhost:8080/api/vendas/salvar',
+          'https://vendas-analytics-api.herokuapp.com/api/vendas/salvar',
           {
             vendedor: { id: this.state.cliente },
             produtos: this.state.produtoVenda,

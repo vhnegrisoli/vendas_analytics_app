@@ -17,7 +17,7 @@ class DetalharVendaForm extends Component {
       : '';
     token = tokenCookie;
     if (tokenCookie === '') {
-      window.location.href = 'http://localhost:3000/#/login';
+      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
     }
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
@@ -36,7 +36,7 @@ class DetalharVendaForm extends Component {
 
   async initialize() {
     await axios
-      .get('http://localhost:8080/api/vendas/' + this.getUrlParameter(), {
+      .get('https://vendas-analytics-api.herokuapp.com/api/vendas/' + this.getUrlParameter(), {
         headers: { Authorization },
       })
       .then(res => {
@@ -46,7 +46,7 @@ class DetalharVendaForm extends Component {
       });
 
     await axios
-      .get('http://localhost:8080/api/vendas/vendas-produtos/' + this.getUrlParameter(), {
+      .get('https://vendas-analytics-api.herokuapp.com/api/vendas/vendas-produtos/' + this.getUrlParameter(), {
         headers: { Authorization },
       })
       .then(res => {

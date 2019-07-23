@@ -17,8 +17,8 @@ import ReactLoading from 'react-loading';
 let token = '';
 let Authorization = '';
 let permissao = '';
-const urlEditar = 'http://localhost:3000/#/vendedores/cadastrar/';
-const urlRemover = 'http://localhost:8080/api/vendedores/remover/';
+const urlEditar = 'https://vendas-analytics-app.herokuapp.com/#/vendedores/cadastrar/';
+const urlRemover = 'https://vendas-analytics-api.herokuapp.com/api/vendedores/remover/';
 
 class VendedorList extends Component {
   constructor(props) {
@@ -39,7 +39,7 @@ class VendedorList extends Component {
           .split(';')[0]
       : '';
     if (tokenCookie === '') {
-      window.location.href = 'http://localhost:3000/#/login';
+      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
     }
     this.state = {
       modal: false,
@@ -56,7 +56,7 @@ class VendedorList extends Component {
 
   async initialize() {
     await axios
-      .get('http://localhost:8080/api/vendedores/todos', {
+      .get('https://vendas-analytics-api.herokuapp.com/api/vendedores/todos', {
         headers: { Authorization },
       })
       .then(res => {

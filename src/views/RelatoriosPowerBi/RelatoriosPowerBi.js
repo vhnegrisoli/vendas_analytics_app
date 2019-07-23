@@ -27,10 +27,10 @@ class RelatoriosPowerBi extends Component {
       : '';
     token = tokenCookie;
     if (permissao === 'USER') {
-      window.location.href = 'http://localhost:3000/#/403';
+      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/403';
     }
     if (tokenCookie === '') {
-      window.location.href = 'http://localhost:3000/#/login';
+      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
     }
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
@@ -50,7 +50,7 @@ class RelatoriosPowerBi extends Component {
 
   async initialize() {
     await axios
-      .get('http://localhost:8080/api/usuarios/todos', {
+      .get('https://vendas-analytics-api.herokuapp.com/api/usuarios/todos', {
         headers: { Authorization },
       })
       .then(res => {
@@ -84,7 +84,7 @@ class RelatoriosPowerBi extends Component {
 
   async getRelatorios() {
     await axios
-      .get('http://localhost:8080/api/relatorios-power-bi/buscar/' + usuarioId, {
+      .get('https://vendas-analytics-api.herokuapp.com/api/relatorios-power-bi/buscar/' + usuarioId, {
         headers: { Authorization },
       })
       .then(res => {

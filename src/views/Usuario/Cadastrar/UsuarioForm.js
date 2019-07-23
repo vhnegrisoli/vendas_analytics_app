@@ -16,7 +16,7 @@ import {
 let token = '';
 let Authorization = '';
 let permissao;
-const urlListarUsuarios = 'http://localhost:3000/#/usuarios/listar';
+const urlListarUsuarios = 'https://vendas-analytics-app.herokuapp.com/#/usuarios/listar';
 class UsuarioForm extends Component {
   constructor(props) {
     super(props);
@@ -36,10 +36,10 @@ class UsuarioForm extends Component {
       : '';
     token = tokenCookie;
     if (permissao === 'USER') {
-      window.location.href = 'http://localhost:3000/#/403';
+      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/403';
     }
     if (tokenCookie === '') {
-      window.location.href = 'http://localhost:3000/#/login';
+      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
     }
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
@@ -70,7 +70,7 @@ class UsuarioForm extends Component {
   async initialize() {
     if (this.getUrlParameter()) {
       await axios
-        .get('http://localhost:8080/api/usuarios/buscar/' + this.getUrlParameter(), {
+        .get('https://vendas-analytics-api.herokuapp.com/api/usuarios/buscar/' + this.getUrlParameter(), {
           headers: { Authorization },
         })
         .then(res => {
@@ -87,7 +87,7 @@ class UsuarioForm extends Component {
     }
 
     await axios
-      .get('http://localhost:8080/api/usuarios/buscar-administradores', {
+      .get('https://vendas-analytics-api.herokuapp.com/api/usuarios/buscar-administradores', {
         headers: { Authorization },
       })
       .then(res => {
@@ -97,7 +97,7 @@ class UsuarioForm extends Component {
       });
 
     await axios
-      .get('http://localhost:8080/api/vendedores/todos', {
+      .get('https://vendas-analytics-api.herokuapp.com/api/vendedores/todos', {
         headers: { Authorization },
       })
       .then(res => {
@@ -107,7 +107,7 @@ class UsuarioForm extends Component {
       });
 
     await axios
-      .get('http://localhost:8080/api/usuarios/permissoes', {
+      .get('https://vendas-analytics-api.herokuapp.com/api/usuarios/permissoes', {
         headers: { Authorization },
       })
       .then(res => {
@@ -159,7 +159,7 @@ class UsuarioForm extends Component {
   async editar() {
     await axios
       .post(
-        'http://localhost:8080/api/usuarios/salvar',
+        'https://vendas-analytics-api.herokuapp.com/api/usuarios/salvar',
         {
           id: this.getUrlParameter(),
           nome: this.state.nome,
@@ -187,7 +187,7 @@ class UsuarioForm extends Component {
     console.log(this.state);
     await axios
       .post(
-        'http://localhost:8080/api/usuarios/salvar',
+        'https://vendas-analytics-api.herokuapp.com/api/usuarios/salvar',
         {
           nome: this.state.nome,
           email: this.state.email,
