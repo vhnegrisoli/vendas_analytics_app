@@ -48,12 +48,14 @@ class FornecedorList extends Component {
       nomeFantasia: '',
       modal: false,
       errors: [],
+      isPostLoading: false,
     };
     Authorization = `Bearer ${token}`;
     this.initialize();
   }
 
   async initialize() {
+    this.setState({ isPostLoading: true });
     await axios
       .get('http://localhost:8080/api/fornecedores/todos', {
         headers: { Authorization },
@@ -63,7 +65,13 @@ class FornecedorList extends Component {
           fornecedores: res.data,
           isLoading: false,
         });
+      })
+      .catch(error => {
+        if (error.message.includes('401')) {
+          window.location.href = 'http://localhost:3000/#/login';
+        }
       });
+    this.setState({ isPostLoading: false });
   }
 
   openModal(id, nomeFantasia) {
@@ -81,6 +89,7 @@ class FornecedorList extends Component {
   }
 
   async remover(id) {
+    this.setState({ isPostLoading: true });
     await axios
       .get(urlRemover + id, {
         headers: { Authorization },
@@ -127,36 +136,52 @@ class FornecedorList extends Component {
                           <td>{fornecedor.endereco}</td>
                           {permissao !== 'USER' && (
                             <td>
-                              <Button size="sm" color="primary" href={urlEditar + fornecedor.id}>
-                                Editar
-                              </Button>
+                              {this.state.isPostLoading ? (
+                                <ReactLoading type={'spin'} color={'#0080FF'} />
+                              ) : (
+                                <Button size="sm" color="primary" href={urlEditar + fornecedor.id}>
+                                  Editar
+                                </Button>
+                              )}
                             </td>
                           )}
                           {permissao !== 'USER' && (
                             <td>
-                              <Button
-                                size="sm"
-                                color="danger"
-                                onClick={() =>
-                                  this.openModal(fornecedor.id, fornecedor.nomeFantasia)
-                                }
-                              >
-                                Remover
-                              </Button>
+                              {this.state.isPostLoading ? (
+                                <ReactLoading type={'spin'} color={'#FF0000'} />
+                              ) : (
+                                <Button
+                                  size="sm"
+                                  color="danger"
+                                  onClick={() =>
+                                    this.openModal(fornecedor.id, fornecedor.nomeFantasia)
+                                  }
+                                >
+                                  Remover
+                                </Button>
+                              )}
                               <Modal isOpen={this.state.modal} className={this.props.className}>
                                 <ModalHeader>
                                   Deseja remover o fornecedor {this.state.nomeFantasia}?
                                 </ModalHeader>
                                 <ModalFooter>
-                                  <Button
-                                    color="danger"
-                                    onClick={() => this.remover(this.state.idFornecedor)}
-                                  >
-                                    Remover
-                                  </Button>{' '}
-                                  <Button color="secondary" onClick={() => this.closeModal()}>
-                                    Cancelar
-                                  </Button>
+                                  {this.state.isPostLoading ? (
+                                    <ReactLoading type={'spin'} color={'#FF0000'} />
+                                  ) : (
+                                    <Button
+                                      color="danger"
+                                      onClick={() => this.remover(this.state.idFornecedor)}
+                                    >
+                                      Remover
+                                    </Button>
+                                  )}
+                                  {this.state.isPostLoading ? (
+                                    <ReactLoading type={'spin'} color={'#E5E5FF'} />
+                                  ) : (
+                                    <Button color="secondary" onClick={() => this.closeModal()}>
+                                      Cancelar
+                                    </Button>
+                                  )}
                                 </ModalFooter>
                               </Modal>
                             </td>

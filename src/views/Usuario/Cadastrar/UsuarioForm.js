@@ -13,6 +13,8 @@ import {
   Input,
   Label,
 } from 'reactstrap';
+import ReactLoading from 'react-loading';
+
 let token = '';
 let Authorization = '';
 let permissao;
@@ -62,6 +64,7 @@ class UsuarioForm extends Component {
       admins: [],
       exibeProprietarios: false,
       errorSalvar: false,
+      isPostLoading: false,
     };
     Authorization = `Bearer ${token}`;
     this.initialize();
@@ -183,9 +186,12 @@ class UsuarioForm extends Component {
       .then(res => {
         if (res.status === 200) {
           window.location.href = urlListarUsuarios;
+        } else {
+          this.setState({ isPostLoading: false });
         }
       })
       .catch(res => {
+        this.setState({ isPostLoading: false });
         this.state.errors = res.response.data;
       });
     this.forceUpdate();
@@ -210,9 +216,12 @@ class UsuarioForm extends Component {
       .then(res => {
         if (res.status === 200) {
           window.location.href = urlListarUsuarios;
+        } else {
+          this.setState({ isPostLoading: false });
         }
       })
       .catch(res => {
+        this.setState({ isPostLoading: false });
         this.state.errors = res.response.data;
       });
     this.forceUpdate();
@@ -228,6 +237,7 @@ class UsuarioForm extends Component {
       this.setState({ errorSalvar: true });
     } else {
       this.setState({ errorSalvar: false });
+      this.setState({ isPostLoading: true });
       if (this.getUrlParameter()) {
         this.editar();
       } else {
@@ -383,9 +393,13 @@ class UsuarioForm extends Component {
                     </Col>
                   </FormGroup>
                 )}
-                <Button size="sm" color="success">
-                  <i className="fa fa-dot-circle-o" /> Cadastrar
-                </Button>
+                {this.state.isPostLoading ? (
+                  <ReactLoading type={'spin'} color={'#59B459'} />
+                ) : (
+                  <Button size="sm" color="success">
+                    <i className="fa fa-dot-circle-o" /> Cadastrar
+                  </Button>
+                )}
               </Form>
             </CardBody>
             {this.state.errors.details && (

@@ -95,7 +95,6 @@ class TratarVendaFormAdmin extends Component {
         });
       })
       .catch(error => {
-        console.log(error.message);
         if (error.message.includes('401')) {
           window.location.href = 'http://localhost:3000/#/login';
         }
@@ -174,11 +173,11 @@ class TratarVendaFormAdmin extends Component {
           }
         })
         .catch(res => {
+    this.setState({ isPostLoading: false });
           this.state.detalheErro = res.response.data;
         });
       this.forceUpdate();
     }
-    this.setState({ isPostLoading: false });
   }
 
   onChange = e => {

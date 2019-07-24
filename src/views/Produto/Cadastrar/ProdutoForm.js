@@ -12,6 +12,7 @@ import {
   Input,
   Label,
 } from 'reactstrap';
+import ReactLoading from 'react-loading';
 
 const urlListarprodutos = 'http://localhost:3000/#/produtos/listar';
 let token = '';
@@ -53,6 +54,7 @@ class ProdutoForm extends Component {
       descricao: '',
       categoria: '',
       fornecedor: '',
+      isPostLoading: false,
     };
     Authorization = `Bearer ${token}`;
     this.initialize();
@@ -140,9 +142,12 @@ class ProdutoForm extends Component {
       .then(res => {
         if (res.status === 200) {
           window.location.href = urlListarprodutos;
+        } else {
+          this.setState({ isPostLoading: false });
         }
       })
       .catch(error => {
+        this.setState({ isPostLoading: false });
         this.setState = {
           error: true,
         };
@@ -167,9 +172,12 @@ class ProdutoForm extends Component {
       .then(res => {
         if (res.status === 200) {
           window.location.href = urlListarprodutos;
+        } else {
+          this.setState({ isPostLoading: false });
         }
       })
       .catch(error => {
+        this.setState({ isPostLoading: false });
         this.setState = {
           error: true,
         };
@@ -184,6 +192,7 @@ class ProdutoForm extends Component {
 
   onSubmit(e) {
     e.preventDefault();
+    this.setState({ isPostLoading: true });
     if (this.getUrlParameter()) {
       this.editar();
     } else {
@@ -297,9 +306,13 @@ class ProdutoForm extends Component {
                   </Col>
                 </FormGroup>
                 <FormGroup row />
-                <Button type="submit" size="sm" color="success">
-                  <i className="fa fa-dot-circle-o" /> Cadastrar
-                </Button>
+                {this.state.isPostLoading ? (
+                  <ReactLoading type={'spin'} color={'#59B459'} />
+                ) : (
+                  <Button type="submit" size="sm" color="success">
+                    <i className="fa fa-dot-circle-o" /> Cadastrar
+                  </Button>
+                )}
               </Form>
             </CardBody>
           </Card>
