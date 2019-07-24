@@ -17,6 +17,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import InputMask from 'react-input-mask';
 import { validate } from 'cpf-check';
+import ReactLoading from 'react-loading';
 
 const urlListarClientes = 'http://localhost:3000/#/vendedores/listar';
 let token = '';
@@ -48,6 +49,7 @@ class VendedorForm extends Component {
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
     this.state = {
+      isLoading: false,
       collapse: true,
       fadeIn: true,
       timeout: 300,
@@ -66,6 +68,7 @@ class VendedorForm extends Component {
       estado: '',
       cpfInvalidoMessage: false,
       cepError: false,
+      startDate: '',
     };
     Authorization = `Bearer ${token}`;
     this.handleDataNascimento = this.handleDataNascimento.bind(this);
@@ -108,6 +111,14 @@ class VendedorForm extends Component {
             cidade: res.data.cidade,
             estado: res.data.estado.id,
           });
+        })
+        .catch(error => {
+          if (error.message.includes('401')) {
+            window.location.href = 'http://localhost:3000/#/login';
+          }
+          if (error.message.includes('404')) {
+            window.location.href = 'http://localhost:3000/#/vendedores/listar';
+          }
         });
     }
   }
@@ -150,8 +161,8 @@ class VendedorForm extends Component {
     }
   }
 
-  editar() {
-    axios
+  async editar() {
+    await axios
       .post(
         'http://localhost:8080/api/vendedores/salvar',
         {
@@ -176,9 +187,12 @@ class VendedorForm extends Component {
       .then(res => {
         if (res.status === 200) {
           window.location.href = urlListarClientes;
+        } else {
+          this.setState({ isLoading: false });
         }
       })
       .catch(error => {
+        this.setState({ isLoading: false });
         this.setState = {
           error: true,
         };
@@ -190,8 +204,8 @@ class VendedorForm extends Component {
     return dateArr[2] + '-' + dateArr[0] + '-' + dateArr[1];
   }
 
-  salvar() {
-    axios
+  async salvar() {
+    await axios
       .post(
         'http://localhost:8080/api/vendedores/salvar',
         {
@@ -215,9 +229,12 @@ class VendedorForm extends Component {
       .then(res => {
         if (res.status === 200) {
           window.location.href = urlListarClientes;
+        } else {
+          this.setState({ isLoading: false });
         }
       })
       .catch(error => {
+        this.setState({ isLoading: false });
         this.setState = {
           error: true,
         };
@@ -285,11 +302,14 @@ class VendedorForm extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    console.log(this.state);
+    this.setState({
+      isLoading: true,
+    });
     if (!this.state.cepError) {
       if (!validate(this.state.cpf)) {
         this.setState({
           cpfInvalidoMessage: true,
+          isLoading: false,
         });
       } else {
         if (this.getUrlParameter()) {
@@ -548,9 +568,12 @@ class VendedorForm extends Component {
                     </Input>
                   </Col>
                 </FormGroup>
-                <Button size="sm" color="success">
-                  <i className="fa fa-dot-circle-o" /> Salvar
-                </Button>
+                {this.state.isLoading && <ReactLoading type={'spin'} color={'#59B459'} />}
+                {!this.state.isLoading && (
+                  <Button size="sm" color="success">
+                    <i className="fa fa-dot-circle-o" /> Salvar
+                  </Button>
+                )}
               </Form>
             </CardBody>
             {this.state.cpfInvalidoMessage && (

@@ -67,6 +67,14 @@ class CategoriaForm extends Component {
           this.setState({
             descricao: res.data.descricao,
           });
+        })
+        .catch(error => {
+          if (error.message.includes('401')) {
+            window.location.href = 'http://localhost:3000/#/login';
+          }
+          if (error.message.includes('404')) {
+            window.location.href = 'http://localhost:3000/#/categorias/listar';
+          }
         });
     }
   }
@@ -115,6 +123,9 @@ class CategoriaForm extends Component {
         }
       })
       .catch(error => {
+        if (error.message.includes('401')) {
+          window.location.href = 'http://localhost:3000/#/login';
+        }
         this.setState({ isPostLoading: false, error: true });
         this.setState = {
           error: true,

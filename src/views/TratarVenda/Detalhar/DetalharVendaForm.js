@@ -48,7 +48,11 @@ class DetalharVendaForm extends Component {
         if (error.message.includes('401')) {
           window.location.href = 'http://localhost:3000/#/login';
         }
+        if (error.message.includes('404')) {
+          window.location.href = 'http://localhost:3000/#/aprovar-venda';
+        }
       });
+
     await axios
       .get('http://localhost:8080/api/vendas/vendas-produtos/' + this.getUrlParameter(), {
         headers: { Authorization },
