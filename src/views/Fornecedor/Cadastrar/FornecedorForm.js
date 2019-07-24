@@ -13,8 +13,9 @@ import {
   Input,
   Label,
 } from 'reactstrap';
-import {CNPJ} from 'cpf_cnpj';
+import { CNPJ } from 'cpf_cnpj';
 import InputMask from 'react-input-mask';
+import ReactLoading from 'react-loading';
 
 let token = '';
 let Authorization = '';
@@ -57,6 +58,7 @@ class FornecedorForm extends Component {
       cnpj: '',
       endereco: '',
       cnpjInvalidoMessage: false,
+      isPostLoading: false,
     };
     Authorization = `Bearer ${token}`;
     this.initilize();
@@ -75,6 +77,14 @@ class FornecedorForm extends Component {
             cnpj: res.data.cnpj,
             endereco: res.data.endereco,
           });
+        })
+        .catch(error => {
+          if (error.message.includes('401')) {
+            window.location.href = 'http://localhost:3000/#/login';
+          }
+          if (error.message.includes('404')) {
+            window.location.href = 'http://localhost:3000/#/fornecedores/listar';
+          }
         });
     }
   }
@@ -114,8 +124,8 @@ class FornecedorForm extends Component {
     );
   }
 
-  editar() {
-    axios
+  async editar() {
+    await axios
       .post(
         'https://vendas-analytics-api.herokuapp.com/api/fornecedores/salvar',
         {
@@ -132,17 +142,23 @@ class FornecedorForm extends Component {
       .then(res => {
         if (res.status === 200) {
           window.location.href = urlListarFornecedores;
+        } else {
+          this.setState({ isPostLoading: false });
         }
       })
       .catch(error => {
+        this.setState({ isPostLoading: false });
+        if (error.message.includes('401')) {
+          window.location.href = 'http://localhost:3000/#/login';
+        }
         this.setState = {
           error: true,
         };
       });
   }
 
-  salvar() {
-    axios
+  async salvar() {
+    await axios
       .post(
         'https://vendas-analytics-api.herokuapp.com/api/fornecedores/salvar',
         {
@@ -158,9 +174,15 @@ class FornecedorForm extends Component {
       .then(res => {
         if (res.status === 200) {
           window.location.href = urlListarFornecedores;
+        } else {
+          this.setState({ isPostLoading: false });
         }
       })
       .catch(error => {
+        this.setState({ isPostLoading: false });
+        if (error.message.includes('401')) {
+          window.location.href = 'http://localhost:3000/#/login';
+        }
         this.setState = {
           error: true,
         };
@@ -174,6 +196,7 @@ class FornecedorForm extends Component {
         cnpjInvalidoMessage: true,
       });
     } else {
+      this.setState({ isPostLoading: true });
       if (this.getUrlParameter()) {
         this.editar();
       } else {
@@ -272,9 +295,13 @@ class FornecedorForm extends Component {
                 </FormGroup>
 
                 <FormGroup row />
-                <Button size="sm" color="success">
-                  <i className="fa fa-dot-circle-o" /> Cadastrar
-                </Button>
+                {this.state.isPostLoading ? (
+                  <ReactLoading type={'spin'} color={'#59B459'} />
+                ) : (
+                  <Button size="sm" color="success">
+                    <i className="fa fa-dot-circle-o" /> Cadastrar
+                  </Button>
+                )}
               </Form>
             </CardBody>
             {this.state.cnpjInvalidoMessage && (

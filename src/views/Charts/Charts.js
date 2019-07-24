@@ -316,7 +316,7 @@ let token = '';
 class Charts extends Component {
   constructor(props) {
     super(props);
-    this.resetArrays()
+    this.resetArrays();
     let tokenCookie = document.cookie.includes('token')
       ? document.cookie
           .split('token=')[1]
@@ -380,6 +380,11 @@ class Charts extends Component {
           lucrosGrafico1[i] = res.data[i].lucro;
           quantidadesGrafico2[i] = res.data[i].quantidade;
           mediaGrafico2[i] = res.data[i].media;
+        }
+      })
+      .catch(error => {
+        if (error.message.includes('401')) {
+          window.location.href = 'http://localhost:3000/#/login';
         }
       });
 

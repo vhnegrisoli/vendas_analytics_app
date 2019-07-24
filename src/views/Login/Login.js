@@ -43,6 +43,7 @@ class Login extends Component {
       errors: [],
       token: '',
       successMessage: false,
+      isLogando: false,
     };
     delete_cookie(cookie_key);
     delete_cookie(cookie_key_role);
@@ -56,6 +57,7 @@ class Login extends Component {
   };
 
   async login() {
+    this.setState({ isLogando: true });
     const form = new FormData();
     form.append('client_id', 'vendas_analytics-client');
     form.append('client_secret', 'vendas_analytics-secret');
@@ -82,19 +84,19 @@ class Login extends Component {
           token = res.data.access_token;
         }
       })
-      .catch(error => {
+      .catch(() => {
         this.setState({
           isSucess: false,
           isLoading: false,
+          isLogando: false,
         });
-        this.forceUpdate();
       });
-
     await axios
       .get(getAuthenticatedUser, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(res => {
+        this.setState({ successMessage: true });
         this.props.setGlobalState({
           token: token,
           user: {
@@ -119,6 +121,7 @@ class Login extends Component {
       })
       .then(res => {
         if (res.status === 200) {
+          this.setState({ successMessage: true });
           if (res.data.ultimoAcesso === null && res.data.senha === 'alterar') {
             window.location.href = urlAlterarSenha + userId;
           } else {
@@ -149,8 +152,9 @@ class Login extends Component {
     e.preventDefault();
     this.setState({
       isLoading: true,
+      isLogando: true,
+      isSucess: true,
     });
-    this.forceUpdate();
     this.login();
   }
 
@@ -200,11 +204,13 @@ class Login extends Component {
                           onChange={e => this.onChange(e)}
                         />
                       </InputGroup>
-                      <Row>
-                        <Col xs="6">
-                          <Button color="primary">Login</Button>
-                        </Col>
-                      </Row>
+                      {!this.state.isLogando && (
+                        <Row>
+                          <Col xs="6">
+                            <Button color="primary">Login</Button>
+                          </Col>
+                        </Row>
+                      )}
                     </Form>
                   </CardBody>
                   {this.state.isLoading && this.state.isSucess && (

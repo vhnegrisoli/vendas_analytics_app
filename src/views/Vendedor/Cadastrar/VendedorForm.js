@@ -17,6 +17,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import InputMask from 'react-input-mask';
 import { validate } from 'cpf-check';
+import ReactLoading from 'react-loading';
 
 const urlListarClientes = 'https://vendas-analytics-app.herokuapp.com/#/vendedores/listar';
 let token = '';
@@ -26,17 +27,17 @@ class VendedorForm extends Component {
     super(props);
     let tokenCookie = document.cookie.includes('token')
       ? document.cookie
-        .split('token=')[1]
-        .replace('"', '')
-        .replace('"', '')
-        .split(';')[0]
+          .split('token=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
       : '';
     let permissao = document.cookie.includes('permissao')
       ? document.cookie
-        .split('permissao=')[1]
-        .replace('"', '')
-        .replace('"', '')
-        .split(';')[0]
+          .split('permissao=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
       : '';
     token = tokenCookie;
     if (permissao === 'USER') {
@@ -48,6 +49,7 @@ class VendedorForm extends Component {
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
     this.state = {
+      isLoading: false,
       collapse: true,
       fadeIn: true,
       timeout: 300,
@@ -66,6 +68,7 @@ class VendedorForm extends Component {
       estado: '',
       cpfInvalidoMessage: false,
       cepError: false,
+      startDate: '',
     };
     Authorization = `Bearer ${token}`;
     this.handleDataNascimento = this.handleDataNascimento.bind(this);
@@ -82,6 +85,11 @@ class VendedorForm extends Component {
         this.setState({
           estados: res.data,
         });
+      })
+      .catch(error => {
+        if (error.message.includes('401')) {
+          window.location.href = 'http://localhost:3000/#/login';
+        }
       });
     if (this.getUrlParameter()) {
       await axios
@@ -103,6 +111,14 @@ class VendedorForm extends Component {
             cidade: res.data.cidade,
             estado: res.data.estado.id,
           });
+        })
+        .catch(error => {
+          if (error.message.includes('401')) {
+            window.location.href = 'http://localhost:3000/#/login';
+          }
+          if (error.message.includes('404')) {
+            window.location.href = 'http://localhost:3000/#/vendedores/listar';
+          }
         });
     }
   }
@@ -117,13 +133,13 @@ class VendedorForm extends Component {
     });
   }
 
-  handleChange(e) { }
+  handleChange(e) {}
 
   onChange = e => {
     this.setState({
       [e.target.name]: e.target.value,
     });
-    this.forceUpdate()
+    this.forceUpdate();
     if (e.target.name === 'cep') {
       this.getDadosEndereco();
     }
@@ -145,8 +161,8 @@ class VendedorForm extends Component {
     }
   }
 
-  editar() {
-    axios
+  async editar() {
+    await axios
       .post(
         'https://vendas-analytics-api.herokuapp.com/api/vendedores/salvar',
         {
@@ -171,9 +187,12 @@ class VendedorForm extends Component {
       .then(res => {
         if (res.status === 200) {
           window.location.href = urlListarClientes;
+        } else {
+          this.setState({ isLoading: false });
         }
       })
       .catch(error => {
+        this.setState({ isLoading: false });
         this.setState = {
           error: true,
         };
@@ -185,8 +204,8 @@ class VendedorForm extends Component {
     return dateArr[2] + '-' + dateArr[0] + '-' + dateArr[1];
   }
 
-  salvar() {
-    axios
+  async salvar() {
+    await axios
       .post(
         'https://vendas-analytics-api.herokuapp.com/api/vendedores/salvar',
         {
@@ -210,9 +229,12 @@ class VendedorForm extends Component {
       .then(res => {
         if (res.status === 200) {
           window.location.href = urlListarClientes;
+        } else {
+          this.setState({ isLoading: false });
         }
       })
       .catch(error => {
+        this.setState({ isLoading: false });
         this.setState = {
           error: true,
         };
@@ -280,11 +302,14 @@ class VendedorForm extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    console.log(this.state)
+    this.setState({
+      isLoading: true,
+    });
     if (!this.state.cepError) {
       if (!validate(this.state.cpf)) {
         this.setState({
           cpfInvalidoMessage: true,
+          isLoading: false,
         });
       } else {
         if (this.getUrlParameter()) {
@@ -543,9 +568,12 @@ class VendedorForm extends Component {
                     </Input>
                   </Col>
                 </FormGroup>
-                <Button size="sm" color="success">
-                  <i className="fa fa-dot-circle-o" /> Salvar
-                </Button>
+                {this.state.isLoading && <ReactLoading type={'spin'} color={'#59B459'} />}
+                {!this.state.isLoading && (
+                  <Button size="sm" color="success">
+                    <i className="fa fa-dot-circle-o" /> Salvar
+                  </Button>
+                )}
               </Form>
             </CardBody>
             {this.state.cpfInvalidoMessage && (

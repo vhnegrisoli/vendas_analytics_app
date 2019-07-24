@@ -39,6 +39,7 @@ class AprovarVendaForm extends Component {
       timeout: 300,
       vendas: [],
       idVenda: '',
+      isPostLoading: false,
     };
     Authorization = `Bearer ${token}`;
     this.initialize();
@@ -54,7 +55,13 @@ class AprovarVendaForm extends Component {
           vendas: res.data,
           isLoading: false,
         });
+      })
+      .catch(error => {
+        if (error.message.includes('401')) {
+          window.location.href = 'http://localhost:3000/#/login';
+        }
       });
+    this.setState({ isPostLoading: false });
     this.forceUpdate();
   }
 
@@ -72,6 +79,7 @@ class AprovarVendaForm extends Component {
   }
 
   async aprovarVenda(id) {
+    this.setState({ isPostLoading: true });
     await axios.get(urlAprovar + id, {
       headers: { Authorization },
     });
@@ -80,6 +88,7 @@ class AprovarVendaForm extends Component {
   }
 
   async reprovarVenda(id) {
+    this.setState({ isPostLoading: true });
     await axios.get(urlReprovar + id, {
       headers: { Authorization },
     });
@@ -142,36 +151,56 @@ class AprovarVendaForm extends Component {
                               venda.dataCompra.substring(0, 4)}
                           </td>
                           <td>
-                            <Button href={'#/detalhar-venda/' + venda.id}>Detalhar </Button>
+                            {this.state.isPostLoading ? (
+                              <ReactLoading type={'spin'} color={'#E5E5FF'} />
+                            ) : (
+                              <Button href={'#/detalhar-venda/' + venda.id}>Detalhar </Button>
+                            )}
                           </td>
                           <td>
                             {venda.aprovacao === 'AGUARDANDO_APROVACAO' && (
                               <div>
-                                <Button
-                                  size="sm"
-                                  onClick={() => this.openModal(venda.id)}
-                                  color="primary"
-                                >
-                                  Aprovar/Rejeitar Venda {venda.id}
-                                </Button>
+                                {this.state.isPostLoading ? (
+                                  <ReactLoading type={'spin'} color={'#0080FF'} />
+                                ) : (
+                                  <Button
+                                    size="sm"
+                                    onClick={() => this.openModal(venda.id)}
+                                    color="primary"
+                                  >
+                                    Aprovar/Rejeitar Venda {venda.id}
+                                  </Button>
+                                )}
                                 <Modal isOpen={this.state.modal} className={this.props.className}>
                                   <ModalHeader>
                                     Deseja aprovar a venda {this.state.idVenda}?
                                   </ModalHeader>
                                   <ModalFooter>
-                                    <Button
-                                      color="primary"
-                                      onClick={() => this.aprovarVenda(this.state.idVenda)}
-                                    >
-                                      Aprovar
-                                    </Button>
-                                    <Button
-                                      color="danger"
-                                      onClick={() => this.reprovarVenda(this.state.idVenda)}
-                                    >
-                                      Rejeitar
-                                    </Button>
-                                    <Button onClick={() => this.closeModal()}>Voltar</Button>
+                                    {this.state.isPostLoading ? (
+                                      <ReactLoading type={'spin'} color={'#0080FF'} />
+                                    ) : (
+                                      <Button
+                                        color="primary"
+                                        onClick={() => this.aprovarVenda(this.state.idVenda)}
+                                      >
+                                        Aprovar
+                                      </Button>
+                                    )}
+                                    {this.state.isPostLoading ? (
+                                      <ReactLoading type={'spin'} color={'#FF0000'} />
+                                    ) : (
+                                      <Button
+                                        color="danger"
+                                        onClick={() => this.reprovarVenda(this.state.idVenda)}
+                                      >
+                                        Rejeitar
+                                      </Button>
+                                    )}
+                                    {this.state.isPostLoading ? (
+                                      <ReactLoading type={'spin'} color={'#E5E5FF'} />
+                                    ) : (
+                                      <Button onClick={() => this.closeModal()}>Voltar</Button>
+                                    )}
                                   </ModalFooter>
                                 </Modal>
                               </div>

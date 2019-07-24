@@ -187,7 +187,12 @@ class Custom extends Component {
             dadosMetrica[i] = res.data[i].media;
           }
         }
-      });
+      })
+      .catch(error => {
+        if (error.message.includes('401')) {
+          window.location.href = 'http://localhost:3000/#/login';
+        }
+      });;
     this.forceUpdate();
   }
 
@@ -213,7 +218,12 @@ class Custom extends Component {
             this.state.dadosMetrica[i] = res.data[i].media;
           }
         }
-      });
+      })
+      .catch(error => {
+        if (error.message.includes('401')) {
+          window.location.href = 'http://localhost:3000/#/login';
+        }
+      });;
     this.forceUpdate();
   }
 
@@ -239,7 +249,12 @@ class Custom extends Component {
             this.state.dadosMetrica[i] = res.data[i].media;
           }
         }
-      });
+      })
+      .catch(error => {
+        if (error.message.includes('401')) {
+          window.location.href = 'http://localhost:3000/#/login';
+        }
+      });;
     this.forceUpdate();
   }
 
@@ -265,7 +280,12 @@ class Custom extends Component {
             this.state.dadosMetrica[i] = res.data[i].media;
           }
         }
-      });
+      })
+      .catch(error => {
+        if (error.message.includes('401')) {
+          window.location.href = 'http://localhost:3000/#/login';
+        }
+      });;
     this.forceUpdate();
   }
 
@@ -291,7 +311,12 @@ class Custom extends Component {
             this.state.dadosMetrica[i] = res.data[i].media;
           }
         }
-      });
+      })
+      .catch(error => {
+        if (error.message.includes('401')) {
+          window.location.href = 'http://localhost:3000/#/login';
+        }
+      });;
     this.forceUpdate();
   }
 
@@ -317,7 +342,12 @@ class Custom extends Component {
             this.state.dadosMetrica[i] = res.data[i].media;
           }
         }
-      });
+      })
+      .catch(error => {
+        if (error.message.includes('401')) {
+          window.location.href = 'http://localhost:3000/#/login';
+        }
+      });;
     this.forceUpdate();
   }
 
@@ -343,7 +373,12 @@ class Custom extends Component {
             this.state.dadosMetrica[i] = res.data[i].media;
           }
         }
-      });
+      })
+      .catch(error => {
+        if (error.message.includes('401')) {
+          window.location.href = 'http://localhost:3000/#/login';
+        }
+      });;
     this.forceUpdate();
   }
 

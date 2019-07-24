@@ -12,6 +12,7 @@ import {
   Input,
   Label,
 } from 'reactstrap';
+import ReactLoading from 'react-loading';
 
 const urlListarCategorias = 'https://vendas-analytics-app.herokuapp.com/#/categorias/listar';
 let token = '';
@@ -49,6 +50,7 @@ class CategoriaForm extends Component {
       error: false,
       success: false,
       descricao: '',
+      isPostLoading: false,
     };
     Authorization = `Bearer ${token}`;
     this.getUrlParameter();
@@ -65,6 +67,14 @@ class CategoriaForm extends Component {
           this.setState({
             descricao: res.data.descricao,
           });
+        })
+        .catch(error => {
+          if (error.message.includes('401')) {
+            window.location.href = 'http://localhost:3000/#/login';
+          }
+          if (error.message.includes('404')) {
+            window.location.href = 'http://localhost:3000/#/categorias/listar';
+          }
         });
     }
   }
@@ -113,6 +123,10 @@ class CategoriaForm extends Component {
         }
       })
       .catch(error => {
+        if (error.message.includes('401')) {
+          window.location.href = 'http://localhost:3000/#/login';
+        }
+        this.setState({ isPostLoading: false, error: true });
         this.setState = {
           error: true,
         };
@@ -136,6 +150,10 @@ class CategoriaForm extends Component {
         }
       })
       .catch(error => {
+        if (error.message.includes('401')) {
+          window.location.href = 'http://localhost:3000/#/login';
+        }
+        this.setState({ isPostLoading: false });
         this.setState = {
           error: true,
         };
@@ -144,6 +162,7 @@ class CategoriaForm extends Component {
 
   onSubmit(e) {
     e.preventDefault();
+    this.setState({ isPostLoading: true });
     if (this.getUrlParameter()) {
       this.editar();
     } else {
@@ -178,9 +197,13 @@ class CategoriaForm extends Component {
                     <FormText color="muted">Descrição da categoria.</FormText>
                   </Col>
                 </FormGroup>
-                <Button size="sm" color="success">
-                  <i className="fa fa-dot-circle-o" /> Cadastrar
-                </Button>
+                {this.state.isPostLoading ? (
+                  <ReactLoading type={'spin'} color={'#59B459'} />
+                ) : (
+                  <Button size="sm" color="success">
+                    <i className="fa fa-dot-circle-o" /> Cadastrar
+                  </Button>
+                )}
                 <br />
               </Form>
             </CardBody>

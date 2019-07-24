@@ -125,6 +125,10 @@ class ExportarCsv extends Component {
         }
       })
       .catch(error => {
+        if (error.message.includes('401')) {
+          window.location.href = 'http://localhost:3000/#/login';
+        }
+
         this.setState({
           isLoading: false,
           gerouErro: true,

@@ -78,6 +78,7 @@ class TratarVendaFormAdmin extends Component {
       isLoading: true,
       detalheErro: [],
       cpfInvalidoMessage: false,
+      isPostLoading: false,
     };
     Authorization = `Bearer ${token}`;
     this.initialize();
@@ -92,6 +93,11 @@ class TratarVendaFormAdmin extends Component {
         this.setState({
           produtos: res.data,
         });
+      })
+      .catch(error => {
+        if (error.message.includes('401')) {
+          window.location.href = 'http://localhost:3000/#/login';
+        }
       });
 
     await axios
@@ -138,6 +144,7 @@ class TratarVendaFormAdmin extends Component {
   }
 
   async onSubmit() {
+    this.setState({ isPostLoading: true });
     if (!validate(this.state.cpf)) {
       this.setState({
         cpfInvalidoMessage: true,
@@ -161,12 +168,14 @@ class TratarVendaFormAdmin extends Component {
         .then(res => {
           if (res.status === 200) {
             window.location.href = urlAprovacaoVendas;
+          } else {
+            this.setState({ isPostLoading: false });
           }
         })
         .catch(res => {
+    this.setState({ isPostLoading: false });
           this.state.detalheErro = res.response.data;
         });
-      console.log(this.state.detalheErro);
       this.forceUpdate();
     }
   }
@@ -444,10 +453,13 @@ class TratarVendaFormAdmin extends Component {
                     </Card>
                   </FormGroup>
                   <br />
-                  <Button onClick={this.toggle} size="sm" color="success">
-                    <i className="fa fa-dot-circle-o" /> Tratar venda
-                  </Button>
-
+                  {this.state.isPostLoading ? (
+                    <ReactLoading type={'spin'} color={'#59B459'} />
+                  ) : (
+                    <Button onClick={this.toggle} size="sm" color="success">
+                      <i className="fa fa-dot-circle-o" /> Tratar venda
+                    </Button>
+                  )}
                   <Modal
                     isOpen={this.state.modal}
                     toggle={this.toggle}
@@ -455,12 +467,20 @@ class TratarVendaFormAdmin extends Component {
                   >
                     <ModalHeader toggle={this.toggle}>Deseja salvar a venda?</ModalHeader>
                     <ModalFooter>
-                      <Button color="primary" onClick={() => this.onSubmit()}>
-                        Salvar
-                      </Button>{' '}
-                      <Button color="secondary" onClick={this.toggle}>
-                        Cancelar
-                      </Button>
+                      {this.state.isPostLoading ? (
+                        <ReactLoading type={'spin'} color={'#0080FF'} />
+                      ) : (
+                        <Button color="primary" onClick={() => this.onSubmit()}>
+                          Salvar
+                        </Button>
+                      )}
+                      {this.state.isPostLoading ? (
+                        <ReactLoading type={'spin'} color={'#E5E5FF'} />
+                      ) : (
+                        <Button color="secondary" onClick={this.toggle}>
+                          Cancelar
+                        </Button>
+                      )}
                     </ModalFooter>
                   </Modal>
                   <Modal

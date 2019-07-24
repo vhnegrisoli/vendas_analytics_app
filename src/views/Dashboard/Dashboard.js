@@ -384,7 +384,7 @@ let token = '';
 class Dashboard extends Component {
   constructor(props) {
     super(props);
-    this.resetArrays()
+    this.resetArrays();
     let tokenCookie = document.cookie.includes('token')
       ? document.cookie
           .split('token=')[1]
@@ -438,6 +438,11 @@ class Dashboard extends Component {
           quantidadesGrafico[i] = res.data[i].quantidade;
           clientes[i] = res.data[i].vendedores;
           produtos[i] = res.data[i].produtos;
+        }
+      })
+      .catch(error => {
+        if (error.message.includes('401')) {
+          window.location.href = 'http://localhost:3000/#/login';
         }
       });
 
