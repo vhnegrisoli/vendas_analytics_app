@@ -20,6 +20,7 @@ import ReactLoading from 'react-loading';
 import { withGlobalState } from 'react-globally';
 import logo from '../../assets/img/brand/logo1.svg';
 import { bake_cookie, delete_cookie } from 'sfcookies';
+import { debug } from 'util';
 
 const getTokenUrl = 'https://vendas-analytics-api.herokuapp.com/oauth/token';
 const getAuthenticatedUser = 'https://vendas-analytics-api.herokuapp.com/api/autenticacao/usuario-logado';
@@ -38,12 +39,12 @@ class Login extends Component {
       isLoading: false,
       email: '',
       senha: '',
-      isSucess: true,
       successData: '',
       errors: [],
       token: '',
+      isError: false,
       successMessage: false,
-      isLogando: false,
+      exibeBotaoLogin: true,
     };
     delete_cookie(cookie_key);
     delete_cookie(cookie_key_role);
@@ -57,7 +58,6 @@ class Login extends Component {
   };
 
   async login() {
-    this.setState({ isLogando: true });
     const form = new FormData();
     form.append('client_id', 'vendas_analytics-client');
     form.append('client_secret', 'vendas_analytics-secret');
@@ -82,13 +82,15 @@ class Login extends Component {
         status = res.status;
         if (res.status === 200) {
           token = res.data.access_token;
+          this.setState({ isLoading: false, isError: false, successMessage: true })
         }
       })
       .catch(() => {
         this.setState({
-          isSucess: false,
+          isError: true,
           isLoading: false,
-          isLogando: false,
+          successMessage: false,
+          exibeBotaoLogin: true,
         });
       });
     await axios
@@ -96,17 +98,12 @@ class Login extends Component {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(res => {
-        this.setState({ successMessage: true });
-        this.props.setGlobalState({
-          token: token,
-          user: {
-            nome: res.data.nome,
-            permissao: res.data.permissao.permissao,
-          },
-        });
         permissao = res.data.permissao.permissao;
         user = res.data.nome;
         userId = res.data.id;
+      })
+      .catch(error => {
+        this.setState({ exibeBotaoLogin: true, successMessage: false, isError: true })
       });
     if (status === 200) {
       this.setCookie(token, permissao, user);
@@ -115,36 +112,37 @@ class Login extends Component {
   }
 
   async definirLoginOuAlteracaoDeSenha(userId, token) {
-    await axios
-      .get(getUser + userId, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+
+    await axios.get(getUser + userId, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then(res => {
         if (res.status === 200) {
-          this.setState({ successMessage: true });
           if (res.data.ultimoAcesso === null && res.data.senha === 'alterar') {
             window.location.href = urlAlterarSenha + userId;
           } else {
             this.atualizarUltimoAcesso(res.data.id, token);
           }
         }
+      })
+      .catch(error => {
+        this.setState({ exibeBotaoLogin: true })
       });
   }
 
   async atualizarUltimoAcesso(id, token) {
+
     await axios
       .get(ultimoAcesso + id, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(res => {
         if (res.status === 200) {
-          this.setState({
-            isLoading: false,
-            successMessage: true,
-            isSucess: true,
-          });
           window.location.href = urlHome;
         }
+      })
+      .catch(error => {
+        this.setState({ exibeBotaoLogin: true, successMessage: false })
       });
   }
 
@@ -152,8 +150,8 @@ class Login extends Component {
     e.preventDefault();
     this.setState({
       isLoading: true,
-      isLogando: true,
-      isSucess: true,
+      isError: false,
+      exibeBotaoLogin: false,
     });
     this.login();
   }
@@ -162,6 +160,7 @@ class Login extends Component {
     bake_cookie(cookie_key, token);
     bake_cookie(cookie_key_role, permissao);
     bake_cookie(cookie_key_user, user);
+    this.forceUpdate()
   }
 
   render() {
@@ -204,7 +203,7 @@ class Login extends Component {
                           onChange={e => this.onChange(e)}
                         />
                       </InputGroup>
-                      {!this.state.isLogando && (
+                      {this.state.exibeBotaoLogin && (
                         <Row>
                           <Col xs="6">
                             <Button color="primary">Login</Button>
@@ -213,7 +212,7 @@ class Login extends Component {
                       )}
                     </Form>
                   </CardBody>
-                  {this.state.isLoading && this.state.isSucess && (
+                  {this.state.isLoading && (
                     <Alert color="warning">
                       <div>
                         <ReactLoading type={'spin'} />
@@ -221,16 +220,17 @@ class Login extends Component {
                       </div>
                     </Alert>
                   )}
-                  {!this.state.isLoading && !this.state.isSucess && (
+                  {this.state.isError && (
                     <Alert color="danger">
                       <div>
                         <Label>Usuário ou senha inválidos.</Label>
                       </div>
                     </Alert>
                   )}
-                  {!this.state.isLoading && !this.state.isSucess && this.state.successMessage && (
+                  {this.state.successMessage && (
                     <Alert color="success">
                       <div>
+                        <ReactLoading type={'spin'} />
                         <Label>Autenticação concluída, aguarde...</Label>
                       </div>
                     </Alert>
