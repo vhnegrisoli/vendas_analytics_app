@@ -13,7 +13,7 @@ import {
   Input,
   Label,
 } from 'reactstrap';
-import {CNPJ} from 'cpf_cnpj';
+import { CNPJ } from 'cpf_cnpj';
 import InputMask from 'react-input-mask';
 
 let token = '';
@@ -135,6 +135,9 @@ class FornecedorForm extends Component {
         }
       })
       .catch(error => {
+        if (error.message.includes('401')) {
+          window.location.href = 'http://localhost:3000/#/login';
+        }
         this.setState = {
           error: true,
         };
@@ -161,6 +164,9 @@ class FornecedorForm extends Component {
         }
       })
       .catch(error => {
+        if (error.message.includes('401')) {
+          window.location.href = 'http://localhost:3000/#/login';
+        }
         this.setState = {
           error: true,
         };

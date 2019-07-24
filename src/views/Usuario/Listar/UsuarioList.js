@@ -65,6 +65,11 @@ class UsuarioList extends Component {
           usuarios: res.data,
           isLoading: false,
         });
+      })
+      .catch(error => {
+        if (error.message.includes('401')) {
+          window.location.href = 'http://localhost:3000/#/login';
+        }
       });
   }
   openModal(id, nome) {

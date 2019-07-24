@@ -43,8 +43,12 @@ class DetalharVendaForm extends Component {
         this.setState({
           vendas: res.data,
         });
+      })
+      .catch(error => {
+        if (error.message.includes('401')) {
+          window.location.href = 'http://localhost:3000/#/login';
+        }
       });
-
     await axios
       .get('http://localhost:8080/api/vendas/vendas-produtos/' + this.getUrlParameter(), {
         headers: { Authorization },

@@ -2,16 +2,16 @@ import React, { Component } from 'react';
 import ReactLoading from 'react-loading';
 import { Card, Button, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
 import axios from 'axios';
-let token = ''
+let token = '';
 class HistoricoVenda extends Component {
   constructor(props) {
     super(props);
     let tokenCookie = document.cookie.includes('token')
       ? document.cookie
-        .split('token=')[1]
-        .replace('"', '')
-        .replace('"', '')
-        .split(';')[0]
+          .split('token=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
       : '';
     token = tokenCookie;
     if (tokenCookie === '') {
@@ -25,14 +25,21 @@ class HistoricoVenda extends Component {
 
   componentDidMount = () => {
     const Authorization = `Bearer ${token}`;
-    axios.get('http://localhost:8080/api/vendas/historico-de-vendas', {
-      headers: { Authorization },
-    }).then(res => {
-      this.setState({
-        historico: res.data,
-        isLoading: false,
+    axios
+      .get('http://localhost:8080/api/vendas/historico-de-vendas', {
+        headers: { Authorization },
+      })
+      .then(res => {
+        this.setState({
+          historico: res.data,
+          isLoading: false,
+        });
+      })
+      .catch(error => {
+        if (error.message.includes('401')) {
+          window.location.href = 'http://localhost:3000/#/login';
+        }
       });
-    });
   };
 
   render() {

@@ -26,17 +26,17 @@ class VendedorForm extends Component {
     super(props);
     let tokenCookie = document.cookie.includes('token')
       ? document.cookie
-        .split('token=')[1]
-        .replace('"', '')
-        .replace('"', '')
-        .split(';')[0]
+          .split('token=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
       : '';
     let permissao = document.cookie.includes('permissao')
       ? document.cookie
-        .split('permissao=')[1]
-        .replace('"', '')
-        .replace('"', '')
-        .split(';')[0]
+          .split('permissao=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
       : '';
     token = tokenCookie;
     if (permissao === 'USER') {
@@ -82,6 +82,11 @@ class VendedorForm extends Component {
         this.setState({
           estados: res.data,
         });
+      })
+      .catch(error => {
+        if (error.message.includes('401')) {
+          window.location.href = 'http://localhost:3000/#/login';
+        }
       });
     if (this.getUrlParameter()) {
       await axios
@@ -117,13 +122,13 @@ class VendedorForm extends Component {
     });
   }
 
-  handleChange(e) { }
+  handleChange(e) {}
 
   onChange = e => {
     this.setState({
       [e.target.name]: e.target.value,
     });
-    this.forceUpdate()
+    this.forceUpdate();
     if (e.target.name === 'cep') {
       this.getDadosEndereco();
     }
@@ -280,7 +285,7 @@ class VendedorForm extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    console.log(this.state)
+    console.log(this.state);
     if (!this.state.cepError) {
       if (!validate(this.state.cpf)) {
         this.setState({

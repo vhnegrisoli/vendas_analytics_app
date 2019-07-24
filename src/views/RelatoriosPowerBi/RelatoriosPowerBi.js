@@ -1,7 +1,22 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Button, Card, CardBody, CardHeader, CardFooter, Col, Form, FormGroup, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label } from 'reactstrap';
-import powerBiLogo from './Power-BI-Logo.png'
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  CardFooter,
+  Col,
+  Form,
+  FormGroup,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Input,
+  Label,
+} from 'reactstrap';
+import powerBiLogo from './Power-BI-Logo.png';
 
 let usuarioId = null;
 let relatorioId = null;
@@ -13,17 +28,17 @@ class RelatoriosPowerBi extends Component {
     super(props);
     let tokenCookie = document.cookie.includes('token')
       ? document.cookie
-        .split('token=')[1]
-        .replace('"', '')
-        .replace('"', '')
-        .split(';')[0]
+          .split('token=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
       : '';
     let permissao = document.cookie.includes('permissao')
       ? document.cookie
-        .split('permissao=')[1]
-        .replace('"', '')
-        .replace('"', '')
-        .split(';')[0]
+          .split('permissao=')[1]
+          .replace('"', '')
+          .replace('"', '')
+          .split(';')[0]
       : '';
     token = tokenCookie;
     if (permissao === 'USER') {
@@ -41,7 +56,7 @@ class RelatoriosPowerBi extends Component {
       usuarios: [],
       relatorios: [],
       relatorioAberto: null,
-      exibirCards: false
+      exibirCards: false,
     };
     Authorization = `Bearer ${token}`;
     this.initialize();
@@ -57,6 +72,11 @@ class RelatoriosPowerBi extends Component {
         this.setState({
           usuarios: res.data,
         });
+      })
+      .catch(error => {
+        if (error.message.includes('401')) {
+          window.location.href = 'http://localhost:3000/#/login';
+        }
       });
   }
 
@@ -90,8 +110,8 @@ class RelatoriosPowerBi extends Component {
       .then(res => {
         this.setState({
           relatorios: res.data,
-          exibirCards: true
-        })
+          exibirCards: true,
+        });
       });
     this.forceUpdate();
   }
@@ -120,9 +140,9 @@ class RelatoriosPowerBi extends Component {
 
   onSubmit(relatorio) {
     this.setState({
-      relatorioAberto: relatorio
+      relatorioAberto: relatorio,
     });
-    this.openModal()
+    this.openModal();
   }
 
   render() {
@@ -160,30 +180,37 @@ class RelatoriosPowerBi extends Component {
                     <Col md="3">
                       <Label htmlFor="select">Selecione o Relatório: </Label>
                     </Col>
-                    {this.state.relatorios.map(
-                      relatorio => (
-                        <Col xs="12" sm="6" md="4">
-                          <Card>
-                            <CardHeader>
-                              {relatorio.titulo}
-                            </CardHeader>
-                            <CardBody>
-                              <img src={powerBiLogo} width="90%" height="90%" />
-                            </CardBody>
-                            <CardFooter>
-                              <Button color="success" onClick={() => this.onSubmit(relatorio)}>Visualizar Relatório</Button>
-                            </CardFooter>
-                          </Card>
-                        </Col>
-                      )
-                    )}
-                    <Modal size="xl" isOpen={this.state.modalOpen} toggle={() => this.closeModal()} className={this.props.className}>
-                      <ModalHeader toggle={() => this.openModal()}>{this.state.relatorioAberto && this.state.relatorioAberto.titulo}</ModalHeader>
+                    {this.state.relatorios.map(relatorio => (
+                      <Col xs="12" sm="6" md="4">
+                        <Card>
+                          <CardHeader>{relatorio.titulo}</CardHeader>
+                          <CardBody>
+                            <img src={powerBiLogo} width="90%" height="90%" />
+                          </CardBody>
+                          <CardFooter>
+                            <Button color="success" onClick={() => this.onSubmit(relatorio)}>
+                              Visualizar Relatório
+                            </Button>
+                          </CardFooter>
+                        </Card>
+                      </Col>
+                    ))}
+                    <Modal
+                      size="xl"
+                      isOpen={this.state.modalOpen}
+                      toggle={() => this.closeModal()}
+                      className={this.props.className}
+                    >
+                      <ModalHeader toggle={() => this.openModal()}>
+                        {this.state.relatorioAberto && this.state.relatorioAberto.titulo}
+                      </ModalHeader>
                       <ModalBody>
                         <div class="resp-container">
                           <iframe
                             class="resp-iframe"
-                            src={this.state.relatorioAberto && this.state.relatorioAberto.linkRelatorio}
+                            src={
+                              this.state.relatorioAberto && this.state.relatorioAberto.linkRelatorio
+                            }
                             gesture="media"
                             allow="encrypted-media"
                             width="1080"
@@ -193,13 +220,15 @@ class RelatoriosPowerBi extends Component {
                         </div>
                       </ModalBody>
                       <ModalFooter>
-                        <Button color="secondary" onClick={() => this.closeModal()}>Voltar</Button>
+                        <Button color="secondary" onClick={() => this.closeModal()}>
+                          Voltar
+                        </Button>
                       </ModalFooter>
                     </Modal>
                   </FormGroup>
                 ) : (
-                    <p>Você não tem relatórios. </p>
-                  )}
+                  <p>Você não tem relatórios. </p>
+                )}
               </Form>
             </CardBody>
           </Card>
