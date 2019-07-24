@@ -80,10 +80,10 @@ class FornecedorForm extends Component {
         })
         .catch(error => {
           if (error.message.includes('401')) {
-            window.location.href = 'http://localhost:3000/#/login';
+            window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
           }
           if (error.message.includes('404')) {
-            window.location.href = 'http://localhost:3000/#/fornecedores/listar';
+            window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/fornecedores/listar';
           }
         });
     }
@@ -149,7 +149,7 @@ class FornecedorForm extends Component {
       .catch(error => {
         this.setState({ isPostLoading: false });
         if (error.message.includes('401')) {
-          window.location.href = 'http://localhost:3000/#/login';
+          window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
         }
         this.setState = {
           error: true,
@@ -181,7 +181,7 @@ class FornecedorForm extends Component {
       .catch(error => {
         this.setState({ isPostLoading: false });
         if (error.message.includes('401')) {
-          window.location.href = 'http://localhost:3000/#/login';
+          window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
         }
         this.setState = {
           error: true,

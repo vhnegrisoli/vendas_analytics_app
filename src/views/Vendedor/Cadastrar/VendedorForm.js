@@ -88,7 +88,7 @@ class VendedorForm extends Component {
       })
       .catch(error => {
         if (error.message.includes('401')) {
-          window.location.href = 'http://localhost:3000/#/login';
+          window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
         }
       });
     if (this.getUrlParameter()) {
@@ -114,10 +114,10 @@ class VendedorForm extends Component {
         })
         .catch(error => {
           if (error.message.includes('401')) {
-            window.location.href = 'http://localhost:3000/#/login';
+            window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
           }
           if (error.message.includes('404')) {
-            window.location.href = 'http://localhost:3000/#/vendedores/listar';
+            window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/vendedores/listar';
           }
         });
     }

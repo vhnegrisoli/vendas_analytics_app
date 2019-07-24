@@ -26,7 +26,7 @@ class HistoricoVenda extends Component {
   componentDidMount = () => {
     const Authorization = `Bearer ${token}`;
     axios
-      .get('https://vendas-analytics-api.herokuapp.com//api/vendas/historico-de-vendas', {
+      .get('https://vendas-analytics-api.herokuapp.com/api/vendas/historico-de-vendas', {
         headers: { Authorization },
       })
       .then(res => {
@@ -37,7 +37,7 @@ class HistoricoVenda extends Component {
       })
       .catch(error => {
         if (error.message.includes('401')) {
-          window.location.href = 'http://localhost:3000/#/login';
+          window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
         }
       });
   };

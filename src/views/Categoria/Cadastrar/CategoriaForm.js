@@ -70,10 +70,10 @@ class CategoriaForm extends Component {
         })
         .catch(error => {
           if (error.message.includes('401')) {
-            window.location.href = 'http://localhost:3000/#/login';
+            window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
           }
           if (error.message.includes('404')) {
-            window.location.href = 'http://localhost:3000/#/categorias/listar';
+            window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/categorias/listar';
           }
         });
     }
@@ -124,7 +124,7 @@ class CategoriaForm extends Component {
       })
       .catch(error => {
         if (error.message.includes('401')) {
-          window.location.href = 'http://localhost:3000/#/login';
+          window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
         }
         this.setState({ isPostLoading: false, error: true });
         this.setState = {
@@ -151,7 +151,7 @@ class CategoriaForm extends Component {
       })
       .catch(error => {
         if (error.message.includes('401')) {
-          window.location.href = 'http://localhost:3000/#/login';
+          window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
         }
         this.setState({ isPostLoading: false });
         this.setState = {

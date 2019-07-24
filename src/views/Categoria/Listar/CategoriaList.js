@@ -69,7 +69,7 @@ class CategoriaList extends Component {
       })
       .catch(error => {
         if (error.message.includes('401')) {
-          window.location.href = 'http://localhost:3000/#/login';
+          window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
         }
       });
     this.setState({ isPostLoading: false });
