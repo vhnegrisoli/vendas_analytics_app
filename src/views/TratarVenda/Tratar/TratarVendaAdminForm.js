@@ -300,6 +300,7 @@ class TratarVendaFormAdmin extends Component {
                                 type="number"
                                 name="quantidade"
                                 id="quantidade"
+                                min="0"
                                 value={this.state.produtoVenda.quantidade}
                                 onChange={e => this.onChange(e)}
                               />

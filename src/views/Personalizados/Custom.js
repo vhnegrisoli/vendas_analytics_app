@@ -92,6 +92,9 @@ class Custom extends Component {
       dataFinal: '',
       dadosDimensao: [],
       dadosMetrica: [],
+      hideDimension: false,
+      hideFacts: true,
+      hideCharts: true,
     };
     const auth = `Bearer ${token}`;
     Authorization = auth;
@@ -122,7 +125,8 @@ class Custom extends Component {
       case 'AVG':
         tipo = 'média de vendas';
         break;
-      default: break
+      default:
+        break;
     }
     this.metrica = tipo;
     return tipo;
@@ -139,6 +143,15 @@ class Custom extends Component {
     this.setState({
       [e.target.name]: e.target.value,
     });
+    if (nomeCampo === 'dimensao') {
+      this.setState({ hideDimension: true, hideFacts: false, hideCharts: true });
+    }
+    if (nomeCampo === 'metrica') {
+      this.setState({ hideFacts: true, hideCharts: false });
+    }
+    if (nomeCampo === 'tipoGrafico') {
+      this.setState({ hideDimension: false });
+    }
     if (nomeCampo === 'dimensao' || nomeCampo === 'metrica') {
       switch (this.state.dimensao) {
         case 'VENDEDOR':
@@ -162,7 +175,8 @@ class Custom extends Component {
         case 'CATEGORIA':
           this.getChamadasCategoria();
           break;
-        default : break
+        default:
+          break;
       }
     }
     this.forceUpdate();
@@ -192,7 +206,7 @@ class Custom extends Component {
         if (error.message.includes('401')) {
           window.location.href = 'http://localhost:3000/#/login';
         }
-      });;
+      });
     this.forceUpdate();
   }
 
@@ -223,7 +237,7 @@ class Custom extends Component {
         if (error.message.includes('401')) {
           window.location.href = 'http://localhost:3000/#/login';
         }
-      });;
+      });
     this.forceUpdate();
   }
 
@@ -254,7 +268,7 @@ class Custom extends Component {
         if (error.message.includes('401')) {
           window.location.href = 'http://localhost:3000/#/login';
         }
-      });;
+      });
     this.forceUpdate();
   }
 
@@ -285,7 +299,7 @@ class Custom extends Component {
         if (error.message.includes('401')) {
           window.location.href = 'http://localhost:3000/#/login';
         }
-      });;
+      });
     this.forceUpdate();
   }
 
@@ -316,7 +330,7 @@ class Custom extends Component {
         if (error.message.includes('401')) {
           window.location.href = 'http://localhost:3000/#/login';
         }
-      });;
+      });
     this.forceUpdate();
   }
 
@@ -347,7 +361,7 @@ class Custom extends Component {
         if (error.message.includes('401')) {
           window.location.href = 'http://localhost:3000/#/login';
         }
-      });;
+      });
     this.forceUpdate();
   }
 
@@ -378,7 +392,7 @@ class Custom extends Component {
         if (error.message.includes('401')) {
           window.location.href = 'http://localhost:3000/#/login';
         }
-      });;
+      });
     this.forceUpdate();
   }
 
@@ -410,6 +424,7 @@ class Custom extends Component {
                                 onChange={e => this.onChange(e)}
                                 type="radio"
                                 name="dimensao"
+                                disabled={this.state.hideDimension}
                                 value="VENDEDOR"
                               />{' '}
                               Analisar por vendedores
@@ -423,6 +438,7 @@ class Custom extends Component {
                                 type="radio"
                                 name="dimensao"
                                 value="PRODUTO"
+                                disabled={this.state.hideDimension}
                               />{' '}
                               Analisar por produtos
                             </Label>
@@ -433,6 +449,7 @@ class Custom extends Component {
                               <Input
                                 value={this.state.descricao}
                                 onChange={e => this.onChange(e)}
+                                disabled={this.state.hideDimension}
                                 type="radio"
                                 name="dimensao"
                                 value="VENDAS MENSAIS"
@@ -445,6 +462,7 @@ class Custom extends Component {
                               <Input
                                 value={this.state.descricao}
                                 onChange={e => this.onChange(e)}
+                                disabled={this.state.hideDimension}
                                 type="radio"
                                 name="dimensao"
                                 value="REGIAO"
@@ -457,6 +475,7 @@ class Custom extends Component {
                               <Input
                                 value={this.state.descricao}
                                 onChange={e => this.onChange(e)}
+                                disabled={this.state.hideDimension}
                                 type="radio"
                                 name="dimensao"
                                 value="ESTADO"
@@ -469,6 +488,7 @@ class Custom extends Component {
                               <Input
                                 value={this.state.descricao}
                                 onChange={e => this.onChange(e)}
+                                disabled={this.state.hideDimension}
                                 type="radio"
                                 name="dimensao"
                                 value="FORNECEDOR"
@@ -481,6 +501,7 @@ class Custom extends Component {
                               <Input
                                 value={this.state.descricao}
                                 onChange={e => this.onChange(e)}
+                                disabled={this.state.hideDimension}
                                 type="radio"
                                 name="dimensao"
                                 value="CATEGORIA"
@@ -489,6 +510,7 @@ class Custom extends Component {
                             </Label>
                           </FormGroup>
                         </FormGroup>
+                        {/* )} */}
                       </Col>
                       <Col md={4}>
                         <FormGroup>
@@ -498,6 +520,7 @@ class Custom extends Component {
                               <Input
                                 value={this.state.descricao}
                                 onChange={e => this.onChange(e)}
+                                disabled={this.state.hideFacts}
                                 type="radio"
                                 name="metrica"
                                 value="SUM"
@@ -510,6 +533,7 @@ class Custom extends Component {
                               <Input
                                 value={this.state.descricao}
                                 onChange={e => this.onChange(e)}
+                                disabled={this.state.hideFacts}
                                 type="radio"
                                 name="metrica"
                                 value="AVG"
@@ -522,6 +546,7 @@ class Custom extends Component {
                               <Input
                                 value={this.state.descricao}
                                 onChange={e => this.onChange(e)}
+                                disabled={this.state.hideFacts}
                                 type="radio"
                                 name="metrica"
                                 value="COUNT"
@@ -539,6 +564,7 @@ class Custom extends Component {
                               <Input
                                 value={this.state.descricao}
                                 onChange={e => this.onChange(e)}
+                                disabled={this.state.hideCharts}
                                 type="radio"
                                 name="tipoGrafico"
                                 value="Bar"
@@ -551,6 +577,7 @@ class Custom extends Component {
                               <Input
                                 value={this.state.descricao}
                                 onChange={e => this.onChange(e)}
+                                disabled={this.state.hideCharts}
                                 type="radio"
                                 name="tipoGrafico"
                                 value="HorizontalBar"
@@ -563,6 +590,7 @@ class Custom extends Component {
                               <Input
                                 value={this.state.descricao}
                                 onChange={e => this.onChange(e)}
+                                disabled={this.state.hideCharts}
                                 type="radio"
                                 name="tipoGrafico"
                                 value="Pie"
@@ -575,6 +603,7 @@ class Custom extends Component {
                               <Input
                                 value={this.state.descricao}
                                 onChange={e => this.onChange(e)}
+                                disabled={this.state.hideCharts}
                                 type="radio"
                                 name="tipoGrafico"
                                 value="Doughnut"
@@ -587,6 +616,7 @@ class Custom extends Component {
                               <Input
                                 value={this.state.descricao}
                                 onChange={e => this.onChange(e)}
+                                disabled={this.state.hideCharts}
                                 type="radio"
                                 name="tipoGrafico"
                                 value="Line"
