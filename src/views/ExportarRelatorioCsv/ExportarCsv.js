@@ -18,7 +18,8 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 let token = '';
-const urlDownload = 'https://vendas-analytics-api.herokuapp.com/api/vendas/relatorio-csv?dataInicial=';
+const urlDownload =
+  'https://vendas-analytics-api.herokuapp.com/api/vendas/relatorio-csv?dataInicial=';
 class ExportarCsv extends Component {
   constructor(props) {
     super(props);
@@ -126,7 +127,7 @@ class ExportarCsv extends Component {
       })
       .catch(error => {
         if (error.message.includes('401')) {
-          window.location.href = 'http://localhost:3000/#/login';
+          window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
         }
 
         this.setState({
