@@ -30,7 +30,7 @@ export default {
     },
     {
       name: 'Histórico de Vendas',
-      url: 'historicovenda/historicovenda',
+      url: 'historico-venda',
       icon: 'icon-list',
     },
     {

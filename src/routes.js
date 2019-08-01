@@ -31,7 +31,7 @@ const routes = [
   { path: '/', exact: true, name: 'Home', component: DefaultLayout },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/charts', name: 'Charts', component: Charts },
-  { path: '/historicovenda', name: 'Histórico de Vendas', component: HistoricoVenda },
+  { path: '/historico-venda', name: 'Histórico de Vendas', component: HistoricoVenda },
   { path: '/vendedores/cadastrar', name: ' Cadastrar Vendedor', component: VendedorForm },
   { path: '/vendedores/listar', name: 'Listar Vendedores', component: VendedorList },
   { path: '/produtos/cadastrar', name: 'Cadastrar Produto', component: ProdutoForm },
