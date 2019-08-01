@@ -1,4 +1,3 @@
-
 export default {
   items: [
     {
@@ -31,7 +30,7 @@ export default {
     },
     {
       name: 'Histórico de Vendas',
-      url: 'historicovenda/historicovenda',
+      url: 'historico-venda',
       icon: 'icon-list',
     },
     {
@@ -54,7 +53,7 @@ export default {
           url: '/relatorios-personalizados',
           icon: 'fa fa-line-chart',
         },
-         {
+        {
           name: 'Microsoft Power BI',
           url: '/relatorios-power-bi',
           icon: 'fa fa-pie-chart',
@@ -74,7 +73,7 @@ export default {
       url: '/vendedores',
       icon: 'icon-people',
       children: [
-         {
+        {
           name: 'Cadastrar',
           url: '/vendedores/cadastrar',
           icon: 'icon-user-follow',
@@ -91,7 +90,7 @@ export default {
       url: '/produtos',
       icon: 'icon-basket-loaded',
       children: [
-         {
+        {
           name: 'Cadastrar',
           url: '/produtos/cadastrar',
           icon: 'icon-check',
@@ -125,7 +124,7 @@ export default {
       url: '/categorias',
       icon: 'cui-tags',
       children: [
-         {
+        {
           name: 'Cadastrar',
           url: '/categorias/cadastrar',
           icon: 'cui-task',
@@ -137,7 +136,7 @@ export default {
         },
       ],
     },
-     {
+    {
       name: 'Usuários',
       url: '/users',
       icon: 'icon-people',
