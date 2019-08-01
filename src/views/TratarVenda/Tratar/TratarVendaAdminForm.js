@@ -79,6 +79,9 @@ class TratarVendaFormAdmin extends Component {
       detalheErro: [],
       cpfInvalidoMessage: false,
       isPostLoading: false,
+      openProdutoModal: false,
+      closeProdutoModal: false,
+      produtoSelecionado: null,
     };
     Authorization = `Bearer ${token}`;
     this.initialize();
@@ -135,6 +138,18 @@ class TratarVendaFormAdmin extends Component {
     }));
   }
 
+  openProdutoModal(produto) {
+    this.setState({
+      openProdutoModal: true,
+      closeProdutoModal: false,
+      produtoSelecionado: produto,
+    });
+  }
+
+  closeProdutoModal() {
+    this.setState({ openProdutoModal: false, closeProdutoModal: true });
+  }
+
   cpfCompleto(cpf) {
     return (
       cpf.substring(cpf.length - 1) !== '_' &&
@@ -173,7 +188,7 @@ class TratarVendaFormAdmin extends Component {
           }
         })
         .catch(res => {
-    this.setState({ isPostLoading: false });
+          this.setState({ isPostLoading: false });
           this.state.detalheErro = res.response.data;
         });
       this.forceUpdate();
@@ -202,20 +217,49 @@ class TratarVendaFormAdmin extends Component {
 
   adicionaProduto(produto) {
     if (this.state.quantidade > 0) {
-      produto.quantidade = this.state.quantidade;
-      var produtoVendaAdd = {
-        id: { produtoId: produto.id },
-        quantidade: produto.quantidade,
-      };
-      this.state.produtoVenda.push(produtoVendaAdd);
-      this.state.produtosAdicionados.push(produto);
-      this.setState({
-        quantidade: 0,
-      });
+      if (this.produtoJaAdicionado(produto)) {
+        this.tratarProdutoJaAdicionado(produto);
+      } else {
+        produto.quantidade = this.state.quantidade;
+        var produtoVendaAdd = {
+          id: { produtoId: produto.id },
+          quantidade: produto.quantidade,
+        };
+        this.state.produtoVenda.push(produtoVendaAdd);
+        this.state.produtosAdicionados.push(produto);
+        this.setState({
+          quantidade: 0,
+        });
+      }
+      this.closeProdutoModal();
     } else {
       this.errorModal();
     }
     this.forceUpdate();
+  }
+
+  produtoJaAdicionado(produto) {
+    for (var i = 0; i < this.state.produtosAdicionados.length; i++) {
+      if (this.state.produtosAdicionados[i].id === produto.id) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  tratarProdutoJaAdicionado(produto) {
+    for (var i = 0; i < this.state.produtosAdicionados.length; i++) {
+      if (this.state.produtosAdicionados[i].id === produto.id) {
+        this.state.produtosAdicionados[i].quantidade =
+          parseInt(this.state.produtosAdicionados[i].quantidade) + parseInt(this.state.quantidade);
+      }
+    }
+    for (var i = 0; i < this.state.produtoVenda.length; i++) {
+      if (this.state.produtoVenda[i].id.produtoId === produto.id) {
+        this.state.produtoVenda[i].quantidade = this.state.produtosAdicionados[i].quantidade;
+      }
+    }
   }
 
   removerProduto(id) {
@@ -284,7 +328,6 @@ class TratarVendaFormAdmin extends Component {
                           <th scope="col">Descrição do Produto</th>
                           <th scope="col">Preço</th>
                           <th scope="col">Fornecedor</th>
-                          <th scope="col">Quantidade</th>
                           <th scope="col">Adicionar</th>
                         </tr>
                       </thead>
@@ -296,32 +339,59 @@ class TratarVendaFormAdmin extends Component {
                             <td>{'R$' + parseFloat(produto.preco).toFixed(2)}</td>
                             <td>{produto.fornecedor.nomeFantasia}</td>
                             <td>
-                              <Input
-                                type="number"
-                                name="quantidade"
-                                id="quantidade"
-                                value={this.state.produtoVenda.quantidade}
-                                onChange={e => this.onChange(e)}
-                              />
-                            </td>
-                            <td>
                               <Button
                                 color="primary"
                                 onClick={e =>
-                                  this.adicionaProduto(
-                                    {
-                                      id: produto.id,
-                                      nome: produto.nomeProduto,
-                                      descricao: produto.descricao,
-                                      preco: produto.preco,
-                                      quantidade: null,
-                                    },
-                                    e,
-                                  )
+                                  this.openProdutoModal({
+                                    id: produto.id,
+                                    nome: produto.nomeProduto,
+                                    descricao: produto.descricao,
+                                    preco: produto.preco,
+                                    quantidade: null,
+                                  })
                                 }
                               >
                                 <span class="cui-cart" aria-hidden="true" />
                               </Button>
+                              {this.state.produtoSelecionado && (
+                                <Modal
+                                  isOpen={this.state.openProdutoModal}
+                                  toggle={() => this.closeProdutoModal()}
+                                  className={this.props.className}
+                                >
+                                  <ModalHeader toggle={() => this.closeProdutoModal()}>
+                                    Deseja adicionar o produto {this.state.produtoSelecionado.nome}?
+                                  </ModalHeader>
+                                  <ModalFooter>
+                                    <Col md="9">
+                                      <Label>Digite a quantidade:</Label>
+                                      <Input
+                                        type="number"
+                                        name="quantidade"
+                                        id="quantidade"
+                                        min="1"
+                                        value={this.state.produtoVenda.quantidade}
+                                        onChange={e => this.onChange(e)}
+                                      />
+                                      <br />
+                                      <Button
+                                        color="primary"
+                                        onClick={e =>
+                                          this.adicionaProduto(this.state.produtoSelecionado, e)
+                                        }
+                                      >
+                                        Adicionar produto
+                                      </Button>{' '}
+                                      <Button
+                                        color="secondary"
+                                        onClick={() => this.closeProdutoModal()}
+                                      >
+                                        Cancelar
+                                      </Button>
+                                    </Col>
+                                  </ModalFooter>
+                                </Modal>
+                              )}
                             </td>
                           </tr>
                         ))}
