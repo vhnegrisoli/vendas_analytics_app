@@ -216,7 +216,9 @@ class TratarVendaFormAdmin extends Component {
   }
 
   adicionaProduto(produto) {
-    if (this.state.quantidade > 0) {
+    var quantidade = this.state.quantidade;
+    quantidade = this.validarQuantidade(quantidade);
+    if (quantidade > 0) {
       if (this.produtoJaAdicionado(produto)) {
         this.tratarProdutoJaAdicionado(produto);
       } else {
@@ -236,6 +238,14 @@ class TratarVendaFormAdmin extends Component {
       this.errorModal();
     }
     this.forceUpdate();
+  }
+
+  validarQuantidade(quantidade) {
+    if (quantidade.includes('.')) {
+      this.state.quantidade = parseInt(quantidade.split('.')[0]);
+      return parseInt(quantidade.split('.')[0]);
+    }
+    return quantidade;
   }
 
   produtoJaAdicionado(produto) {
