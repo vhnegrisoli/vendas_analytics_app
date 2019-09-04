@@ -69,6 +69,7 @@ class VendedorForm extends Component {
       cpfInvalidoMessage: false,
       cepError: false,
       startDate: '',
+      errors: '',
     };
     Authorization = `Bearer ${token}`;
     this.handleDataNascimento = this.handleDataNascimento.bind(this);
@@ -192,10 +193,10 @@ class VendedorForm extends Component {
         }
       })
       .catch(error => {
-        this.setState({ isLoading: false });
-        this.setState = {
-          error: true,
-        };
+        this.setState({
+          isLoading: false,
+          errors: error.response.data.details,
+        });
       });
   }
 
@@ -234,9 +235,9 @@ class VendedorForm extends Component {
         }
       })
       .catch(error => {
-        this.setState({ isLoading: false });
         this.setState = {
-          error: true,
+          isLoading: false,
+          errors: error.response.data.details,
         };
       });
   }
@@ -302,8 +303,10 @@ class VendedorForm extends Component {
 
   onSubmit(e) {
     e.preventDefault();
+    console.log(this.state);
     this.setState({
       isLoading: true,
+      errors: '',
     });
     if (!this.state.cepError) {
       if (!validate(this.state.cpf)) {
@@ -579,6 +582,11 @@ class VendedorForm extends Component {
             {this.state.cpfInvalidoMessage && (
               <Alert color="danger">
                 Não é possível salvar o vendedor pois o CPF está inválido!
+              </Alert>
+            )}
+            {this.state.errors !== '' && (
+              <Alert color="danger">
+                <strong>* Erro ao salvar vendedor: {this.state.errors}</strong>
               </Alert>
             )}
           </Card>
