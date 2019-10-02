@@ -44,7 +44,12 @@ class DefaultHeader extends Component {
         <Nav className="d-md-down-none" navbar>
           <NavItem className="px-3">
             <Link to="/" className="nav-link">
-              Usuário: {user} | {permissao !== 'USER' ? 'Administrador' : 'Vendedor'}
+              Usuário: {user} |{' '}
+              {permissao === 'USER'
+                ? 'Usuário Vendedor'
+                : permissao === 'ADMIN'
+                ? 'Administrador'
+                : 'Super Administrador'}
             </Link>
           </NavItem>
         </Nav>

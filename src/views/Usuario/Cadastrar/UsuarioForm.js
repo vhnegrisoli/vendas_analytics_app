@@ -6,6 +6,7 @@ import {
   Card,
   CardBody,
   CardHeader,
+  CardFooter,
   Col,
   Form,
   FormGroup,
@@ -145,16 +146,14 @@ class UsuarioForm extends Component {
   }
 
   onChange = e => {
-    if (this.state.permissoesUsuario && this.state.permissoesUsuario === '1') {
-      this.setState({ exibeProprietarios: true });
-    } else {
-      this.setState({ exibeProprietarios: false, usuarioProprietario: null });
+    if (e.target.name === 'permissoesUsuario' && e.target.value !== '1') {
+      this.setState({
+        usuarioProprietario: null,
+      });
     }
     this.setState({
       [e.target.name]: e.target.value,
     });
-    this.forceUpdate();
-    console.log(this.state);
   };
 
   getUrlParameter() {
@@ -256,6 +255,51 @@ class UsuarioForm extends Component {
             </CardHeader>
             <CardBody>
               <Form id="cliente-form" className="form-horizontal" onSubmit={e => this.onSubmit(e)}>
+                <CardBody>
+                  <Card>
+                    <CardFooter>
+                      <strong>Permissão </strong>
+                      <FormGroup check>
+                        <Label check>
+                          <Input
+                            value={this.state.descricao}
+                            onClickCapture={e => this.onChange(e)}
+                            type="radio"
+                            name="permissoesUsuario"
+                            value="1"
+                          />{' '}
+                          Usuário Vendedor
+                        </Label>
+                      </FormGroup>
+                      <FormGroup check>
+                        <Label check>
+                          <Input
+                            value={this.state.descricao}
+                            onClickCapture={e => this.onChange(e)}
+                            type="radio"
+                            name="permissoesUsuario"
+                            value="2"
+                          />{' '}
+                          Administrador
+                        </Label>
+                      </FormGroup>
+                      {permissao === 'SUPER_ADMIN' && (
+                        <FormGroup check>
+                          <Label check>
+                            <Input
+                              value={this.state.descricao}
+                              onClickCapture={e => this.onChange(e)}
+                              type="radio"
+                              name="permissoesUsuario"
+                              value="3"
+                            />{' '}
+                            Super Administrador
+                          </Label>
+                        </FormGroup>
+                      )}
+                    </CardFooter>
+                  </Card>
+                </CardBody>
                 <FormGroup row>
                   <Col md="3">
                     <Label htmlFor="text-input">Nome completo*</Label>
@@ -309,30 +353,6 @@ class UsuarioForm extends Component {
                     </Input>
                   </Col>
                 </FormGroup>
-                <FormGroup row>
-                  <Col md="3">
-                    <Label htmlFor="select">Permissão*</Label>
-                  </Col>
-                  <Col xs="12" md="9">
-                    <Input
-                      type="select"
-                      name="permissoesUsuario"
-                      required
-                      id="permissoesUsuario"
-                      value={this.state.permissoesUsuario}
-                      onChange={e => this.onChange(e)}
-                    >
-                      <option value="0">
-                        Por favor, selecione a permissão de acesso do usuário:
-                      </option>
-                      {this.state.permissoes.map(permissao => (
-                        <option value={permissao.id}>
-                          {permissao.permissao + ' - ' + permissao.descricao}
-                        </option>
-                      ))}
-                    </Input>
-                  </Col>
-                </FormGroup>
 
                 <FormGroup row>
                   <Col md="3">
@@ -351,7 +371,7 @@ class UsuarioForm extends Component {
                     <FormText className="help-block">Crie uma senha.</FormText>
                   </Col>
                 </FormGroup>
-                {this.state.exibeProprietarios && (
+                {this.state.permissoesUsuario && this.state.permissoesUsuario === '1' && (
                   <FormGroup row>
                     <Col md="3">
                       <Label htmlFor="select">Usuário Proprietário</Label>
