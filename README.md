@@ -86,11 +86,11 @@ see also:
 ### Basic usage
 
 ``` bash
-# dev server  with hot reload at https://vendas-analytics-app.herokuapp.com
+# dev server  with hot reload at https://vendas-analytics-app-hom.herokuapp.com
 $ npm start
 ```
 
-Navigate to [https://vendas-analytics-app.herokuapp.com](https://vendas-analytics-app.herokuapp.com). The app will automatically reload if you change any of the source files.
+Navigate to [https://vendas-analytics-app-hom.herokuapp.com](https://vendas-analytics-app-hom.herokuapp.com). The app will automatically reload if you change any of the source files.
 
 ### Build
 

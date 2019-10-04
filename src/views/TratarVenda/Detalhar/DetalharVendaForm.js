@@ -17,7 +17,7 @@ class DetalharVendaForm extends Component {
       : '';
     token = tokenCookie;
     if (tokenCookie === '') {
-      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
+      window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/login';
     }
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
@@ -36,7 +36,7 @@ class DetalharVendaForm extends Component {
 
   async initialize() {
     await axios
-      .get('https://vendas-analytics-api.herokuapp.com/api/vendas/' + this.getUrlParameter(), {
+      .get('https://vendas-analytics-api-postgres.herokuapp.com/api/vendas/' + this.getUrlParameter(), {
         headers: { Authorization },
       })
       .then(res => {
@@ -46,15 +46,15 @@ class DetalharVendaForm extends Component {
       })
       .catch(error => {
         if (error.message.includes('401')) {
-          window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
+          window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/login';
         }
         if (error.message.includes('404')) {
-          window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/aprovar-venda';
+          window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/aprovar-venda';
         }
       });
 
     await axios
-      .get('https://vendas-analytics-api.herokuapp.com/api/vendas/vendas-produtos/' + this.getUrlParameter(), {
+      .get('https://vendas-analytics-api-postgres.herokuapp.com/api/vendas/vendas-produtos/' + this.getUrlParameter(), {
         headers: { Authorization },
       })
       .then(res => {

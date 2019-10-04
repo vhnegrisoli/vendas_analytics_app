@@ -16,8 +16,8 @@ import {
 
 let token = '';
 let Authorization = '';
-const urlAprovar = 'https://vendas-analytics-api.herokuapp.com/api/vendas/aprovar-venda/';
-const urlReprovar = 'https://vendas-analytics-api.herokuapp.com/api/vendas/rejeitar-venda/';
+const urlAprovar = 'https://vendas-analytics-api-postgres.herokuapp.com/api/vendas/aprovar-venda/';
+const urlReprovar = 'https://vendas-analytics-api-postgres.herokuapp.com/api/vendas/rejeitar-venda/';
 class AprovarVendaForm extends Component {
   constructor(props) {
     super(props);
@@ -30,7 +30,7 @@ class AprovarVendaForm extends Component {
       : '';
     token = tokenCookie;
     if (tokenCookie === '') {
-      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
+      window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/login';
     }
     this.state = {
       modal: false,
@@ -47,7 +47,7 @@ class AprovarVendaForm extends Component {
 
   async initialize() {
     await axios
-      .get('https://vendas-analytics-api.herokuapp.com/api/vendas/todas', {
+      .get('https://vendas-analytics-api-postgres.herokuapp.com/api/vendas/todas', {
         headers: { Authorization },
       })
       .then(res => {
@@ -58,7 +58,7 @@ class AprovarVendaForm extends Component {
       })
       .catch(error => {
         if (error.message.includes('401')) {
-          window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
+          window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/login';
         }
       });
     this.setState({ isPostLoading: false });

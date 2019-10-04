@@ -15,8 +15,8 @@ import {
 import axios from 'axios';
 import ReactLoading from 'react-loading';
 
-const urlEditar = 'https://vendas-analytics-app.herokuapp.com/#/produtos/cadastrar/';
-const urlRemover = 'https://vendas-analytics-api.herokuapp.com/api/produtos/remover/';
+const urlEditar = 'https://vendas-analytics-app-hom.herokuapp.com/#/produtos/cadastrar/';
+const urlRemover = 'https://vendas-analytics-api-postgres.herokuapp.com/api/produtos/remover/';
 let token = '';
 let Authorization = '';
 let permissao = '';
@@ -39,7 +39,7 @@ class ProdutoList extends Component {
       : '';
     token = tokenCookie;
     if (tokenCookie === '') {
-      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
+      window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/login';
     }
     this.state = {
       produtos: [],
@@ -57,7 +57,7 @@ class ProdutoList extends Component {
   async initialize() {
     this.setState({ isPostLoading: true });
     await axios
-      .get('https://vendas-analytics-api.herokuapp.com/api/produtos/todos', {
+      .get('https://vendas-analytics-api-postgres.herokuapp.com/api/produtos/todos', {
         headers: { Authorization },
       })
       .then(res => {
@@ -68,7 +68,7 @@ class ProdutoList extends Component {
       })
       .catch(error => {
         if (error.message.includes('401')) {
-          window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
+          window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/login';
         }
       });
     this.setState({ isPostLoading: false });

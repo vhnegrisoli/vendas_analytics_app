@@ -19,7 +19,7 @@ import ReactLoading from 'react-loading';
 
 let token = '';
 let Authorization = '';
-const urlListarFornecedores = 'https://vendas-analytics-app.herokuapp.com/#/fornecedores/listar';
+const urlListarFornecedores = 'https://vendas-analytics-app-hom.herokuapp.com/#/fornecedores/listar';
 
 class FornecedorForm extends Component {
   constructor(props) {
@@ -40,10 +40,10 @@ class FornecedorForm extends Component {
       : '';
     token = tokenCookie;
     if (permissao === 'USER') {
-      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/403';
+      window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/403';
     }
     if (tokenCookie === '') {
-      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
+      window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/login';
     }
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
@@ -67,7 +67,7 @@ class FornecedorForm extends Component {
   async initilize() {
     if (this.getUrlParameter()) {
       await axios
-        .get('https://vendas-analytics-api.herokuapp.com/api/fornecedores/buscar/' + this.getUrlParameter(), {
+        .get('https://vendas-analytics-api-postgres.herokuapp.com/api/fornecedores/buscar/' + this.getUrlParameter(), {
           headers: { Authorization },
         })
         .then(res => {
@@ -80,10 +80,10 @@ class FornecedorForm extends Component {
         })
         .catch(error => {
           if (error.message.includes('401')) {
-            window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
+            window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/login';
           }
           if (error.message.includes('404')) {
-            window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/fornecedores/listar';
+            window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/fornecedores/listar';
           }
         });
     }
@@ -127,7 +127,7 @@ class FornecedorForm extends Component {
   async editar() {
     await axios
       .post(
-        'https://vendas-analytics-api.herokuapp.com/api/fornecedores/salvar',
+        'https://vendas-analytics-api-postgres.herokuapp.com/api/fornecedores/salvar',
         {
           id: this.getUrlParameter(),
           nomeFantasia: this.state.nomeFantasia,
@@ -149,7 +149,7 @@ class FornecedorForm extends Component {
       .catch(error => {
         this.setState({ isPostLoading: false });
         if (error.message.includes('401')) {
-          window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
+          window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/login';
         }
         this.setState = {
           error: true,
@@ -160,7 +160,7 @@ class FornecedorForm extends Component {
   async salvar() {
     await axios
       .post(
-        'https://vendas-analytics-api.herokuapp.com/api/fornecedores/salvar',
+        'https://vendas-analytics-api-postgres.herokuapp.com/api/fornecedores/salvar',
         {
           nomeFantasia: this.state.nomeFantasia,
           razaoSocial: this.state.razaoSocial,
@@ -181,7 +181,7 @@ class FornecedorForm extends Component {
       .catch(error => {
         this.setState({ isPostLoading: false });
         if (error.message.includes('401')) {
-          window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
+          window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/login';
         }
         this.setState = {
           error: true,

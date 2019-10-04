@@ -11,7 +11,7 @@ class Users extends Component {
   }
 
   componentDidMount = () => {
-    axios.get('https://vendas-analytics-api.herokuapp.com/api/usuarios/todos').then(res => {
+    axios.get('https://vendas-analytics-api-postgres.herokuapp.com/api/usuarios/todos').then(res => {
       this.setState({
         usuarios: res.data,
       });

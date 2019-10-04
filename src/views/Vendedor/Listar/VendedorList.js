@@ -17,8 +17,8 @@ import ReactLoading from 'react-loading';
 let token = '';
 let Authorization = '';
 let permissao = '';
-const urlEditar = 'https://vendas-analytics-app.herokuapp.com/#/vendedores/cadastrar/';
-const urlRemover = 'https://vendas-analytics-api.herokuapp.com/api/vendedores/remover/';
+const urlEditar = 'https://vendas-analytics-app-hom.herokuapp.com/#/vendedores/cadastrar/';
+const urlRemover = 'https://vendas-analytics-api-postgres.herokuapp.com/api/vendedores/remover/';
 
 class VendedorList extends Component {
   constructor(props) {
@@ -39,7 +39,7 @@ class VendedorList extends Component {
           .split(';')[0]
       : '';
     if (tokenCookie === '') {
-      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
+      window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/login';
     }
     this.state = {
       modal: false,
@@ -58,7 +58,7 @@ class VendedorList extends Component {
   async initialize() {
     this.setState({ isPostLoading: true });
     await axios
-      .get('https://vendas-analytics-api.herokuapp.com/api/vendedores/todos', {
+      .get('https://vendas-analytics-api-postgres.herokuapp.com/api/vendedores/todos', {
         headers: { Authorization },
       })
       .then(res => {
@@ -69,7 +69,7 @@ class VendedorList extends Component {
       })
       .catch(error => {
         if (error.message.includes('401')) {
-          window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
+          window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/login';
         }
       });
     this.setState({ isPostLoading: false });

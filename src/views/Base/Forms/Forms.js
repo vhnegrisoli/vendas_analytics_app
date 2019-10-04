@@ -32,7 +32,7 @@ class Forms extends Component {
   }
 
   componentDidMount() {
-    axios.get('https://vendas-analytics-api.herokuapp.com/api/estados/listar').then(res => {
+    axios.get('https://vendas-analytics-api-postgres.herokuapp.com/api/estados/listar').then(res => {
       this.setState({
         estados: res.data,
       });

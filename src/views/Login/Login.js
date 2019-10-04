@@ -22,15 +22,15 @@ import logo from '../../assets/img/brand/logo1.svg';
 import { bake_cookie, delete_cookie } from 'sfcookies';
 import { debug } from 'util';
 
-const getTokenUrl = 'https://vendas-analytics-api.herokuapp.com/oauth/token';
-const getAuthenticatedUser = 'https://vendas-analytics-api.herokuapp.com/api/autenticacao/usuario-logado';
-const getUser = 'https://vendas-analytics-api.herokuapp.com/api/usuarios/buscar/';
-const ultimoAcesso = 'https://vendas-analytics-api.herokuapp.com/api/usuarios/atualizar-ultimo-acesso/';
+const getTokenUrl = 'https://vendas-analytics-api-postgres.herokuapp.com/oauth/token';
+const getAuthenticatedUser = 'https://vendas-analytics-api-postgres.herokuapp.com/api/autenticacao/usuario-logado';
+const getUser = 'https://vendas-analytics-api-postgres.herokuapp.com/api/usuarios/buscar/';
+const ultimoAcesso = 'https://vendas-analytics-api-postgres.herokuapp.com/api/usuarios/atualizar-ultimo-acesso/';
 const cookie_key = 'token';
 const cookie_key_role = 'permissao';
 const cookie_key_user = 'user';
-const urlHome = 'https://vendas-analytics-app.herokuapp.com/#/dashboard';
-const urlAlterarSenha = 'https://vendas-analytics-app.herokuapp.com/#/alterar-senha/';
+const urlHome = 'https://vendas-analytics-app-hom.herokuapp.com/#/dashboard';
+const urlAlterarSenha = 'https://vendas-analytics-app-hom.herokuapp.com/#/alterar-senha/';
 
 class Login extends Component {
   constructor(props) {

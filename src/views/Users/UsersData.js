@@ -31,7 +31,7 @@ const usersData = [
 */
 ];
 
-axios.get('https://vendas-analytics-api.herokuapp.com/api/vendedores/todos').then(res => ({
+axios.get('https://vendas-analytics-api-postgres.herokuapp.com/api/vendedores/todos').then(res => ({
   userData: res.data,
 }));
 

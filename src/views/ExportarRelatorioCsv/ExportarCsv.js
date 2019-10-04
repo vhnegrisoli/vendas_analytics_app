@@ -19,7 +19,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 let token = '';
 const urlDownload =
-  'https://vendas-analytics-api.herokuapp.com/api/vendas/relatorio-csv?dataInicial=';
+  'https://vendas-analytics-api-postgres.herokuapp.com/api/vendas/relatorio-csv?dataInicial=';
 class ExportarCsv extends Component {
   constructor(props) {
     super(props);
@@ -32,7 +32,7 @@ class ExportarCsv extends Component {
       : '';
     token = tokenCookie;
     if (tokenCookie === '') {
-      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
+      window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/login';
     }
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
@@ -127,7 +127,7 @@ class ExportarCsv extends Component {
       })
       .catch(error => {
         if (error.message.includes('401')) {
-          window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
+          window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/login';
         }
 
         this.setState({

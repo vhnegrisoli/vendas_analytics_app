@@ -19,8 +19,8 @@ import axios from 'axios';
 import ReactLoading from 'react-loading';
 import { withGlobalState } from 'react-globally';
 
-const urlLogin = 'https://vendas-analytics-app.herokuapp.com/#/login';
-const urlAlterarSenha = 'https://vendas-analytics-api.herokuapp.com/api/usuarios/atualizar-senha';
+const urlLogin = 'https://vendas-analytics-app-hom.herokuapp.com/#/login';
+const urlAlterarSenha = 'https://vendas-analytics-api-postgres.herokuapp.com/api/usuarios/atualizar-senha';
 let token = '';
 class AtualizarSenha extends Component {
   constructor(props) {
@@ -33,7 +33,7 @@ class AtualizarSenha extends Component {
           .split(';')[0]
       : '';
     if (token === '') {
-      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
+      window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/login';
     }
     this.state = {
       isLoading: false,

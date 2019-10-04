@@ -15,8 +15,8 @@ import {
 import axios from 'axios';
 import ReactLoading from 'react-loading';
 
-const urlEditar = 'https://vendas-analytics-app.herokuapp.com/#/usuarios/cadastrar/';
-const urlRemover = 'https://vendas-analytics-api.herokuapp.com/api/usuarios/remover/';
+const urlEditar = 'https://vendas-analytics-app-hom.herokuapp.com/#/usuarios/cadastrar/';
+const urlRemover = 'https://vendas-analytics-api-postgres.herokuapp.com/api/usuarios/remover/';
 let token = '';
 let Authorization = '';
 class UsuarioList extends Component {
@@ -38,10 +38,10 @@ class UsuarioList extends Component {
       : '';
     token = tokenCookie;
     if (permissao === 'USER') {
-      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/403';
+      window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/403';
     }
     if (tokenCookie === '') {
-      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
+      window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/login';
     }
     this.state = {
       isLoading: true,
@@ -59,7 +59,7 @@ class UsuarioList extends Component {
   async initialize() {
     this.setState({ isPostLoading: true });
     await axios
-      .get('https://vendas-analytics-api.herokuapp.com/api/usuarios/todos', {
+      .get('https://vendas-analytics-api-postgres.herokuapp.com/api/usuarios/todos', {
         headers: { Authorization },
       })
       .then(res => {
@@ -70,7 +70,7 @@ class UsuarioList extends Component {
       })
       .catch(error => {
         if (error.message.includes('401')) {
-          window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
+          window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/login';
         }
       });
     this.setState({ isPostLoading: false });

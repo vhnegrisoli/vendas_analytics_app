@@ -19,7 +19,7 @@ import InputMask from 'react-input-mask';
 import { validate } from 'cpf-check';
 import ReactLoading from 'react-loading';
 
-const urlListarClientes = 'https://vendas-analytics-app.herokuapp.com/#/vendedores/listar';
+const urlListarClientes = 'https://vendas-analytics-app-hom.herokuapp.com/#/vendedores/listar';
 let token = '';
 let Authorization = '';
 class VendedorForm extends Component {
@@ -41,10 +41,10 @@ class VendedorForm extends Component {
       : '';
     token = tokenCookie;
     if (permissao === 'USER') {
-      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/403';
+      window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/403';
     }
     if (tokenCookie === '') {
-      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
+      window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/login';
     }
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
@@ -79,7 +79,7 @@ class VendedorForm extends Component {
 
   async initilize() {
     await axios
-      .get('https://vendas-analytics-api.herokuapp.com/api/estados/listar', {
+      .get('https://vendas-analytics-api-postgres.herokuapp.com/api/estados/listar', {
         headers: { Authorization },
       })
       .then(res => {
@@ -89,12 +89,12 @@ class VendedorForm extends Component {
       })
       .catch(error => {
         if (error.message.includes('401')) {
-          window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
+          window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/login';
         }
       });
     if (this.getUrlParameter()) {
       await axios
-        .get('https://vendas-analytics-api.herokuapp.com/api/vendedores/buscar/' + this.getUrlParameter(), {
+        .get('https://vendas-analytics-api-postgres.herokuapp.com/api/vendedores/buscar/' + this.getUrlParameter(), {
           headers: { Authorization },
         })
         .then(res => {
@@ -115,10 +115,10 @@ class VendedorForm extends Component {
         })
         .catch(error => {
           if (error.message.includes('401')) {
-            window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
+            window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/login';
           }
           if (error.message.includes('404')) {
-            window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/vendedores/listar';
+            window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/vendedores/listar';
           }
         });
     }
@@ -165,7 +165,7 @@ class VendedorForm extends Component {
   async editar() {
     await axios
       .post(
-        'https://vendas-analytics-api.herokuapp.com/api/vendedores/salvar',
+        'https://vendas-analytics-api-postgres.herokuapp.com/api/vendedores/salvar',
         {
           id: this.getUrlParameter(),
           nome: this.state.nome,
@@ -208,7 +208,7 @@ class VendedorForm extends Component {
   async salvar() {
     await axios
       .post(
-        'https://vendas-analytics-api.herokuapp.com/api/vendedores/salvar',
+        'https://vendas-analytics-api-postgres.herokuapp.com/api/vendedores/salvar',
         {
           nome: this.state.nome,
           email: this.state.email,

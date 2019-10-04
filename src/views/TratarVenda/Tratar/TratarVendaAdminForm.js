@@ -24,7 +24,7 @@ import { validate } from 'cpf-check';
 
 let token = '';
 let Authorization = '';
-const urlAprovacaoVendas = 'https://vendas-analytics-app.herokuapp.com/#/aprovar-venda';
+const urlAprovacaoVendas = 'https://vendas-analytics-app-hom.herokuapp.com/#/aprovar-venda';
 let usuario = '';
 let permissao = '';
 class TratarVendaFormAdmin extends Component {
@@ -53,7 +53,7 @@ class TratarVendaFormAdmin extends Component {
       : '';
     token = tokenCookie;
     if (tokenCookie === '') {
-      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
+      window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/login';
     }
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
@@ -89,7 +89,7 @@ class TratarVendaFormAdmin extends Component {
 
   async initialize() {
     await axios
-      .get('https://vendas-analytics-api.herokuapp.com/api/produtos/todos', {
+      .get('https://vendas-analytics-api-postgres.herokuapp.com/api/produtos/todos', {
         headers: { Authorization },
       })
       .then(res => {
@@ -99,12 +99,12 @@ class TratarVendaFormAdmin extends Component {
       })
       .catch(error => {
         if (error.message.includes('401')) {
-          window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
+          window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/login';
         }
       });
 
     await axios
-      .get('https://vendas-analytics-api.herokuapp.com/api/vendedores/todos', {
+      .get('https://vendas-analytics-api-postgres.herokuapp.com/api/vendedores/todos', {
         headers: { Authorization },
       })
       .then(res => {
@@ -168,7 +168,7 @@ class TratarVendaFormAdmin extends Component {
       this.toggle();
       await axios
         .post(
-          'https://vendas-analytics-api.herokuapp.com/api/vendas/salvar',
+          'https://vendas-analytics-api-postgres.herokuapp.com/api/vendas/salvar',
           {
             vendedor: { id: this.state.cliente },
             produtos: this.state.produtoVenda,

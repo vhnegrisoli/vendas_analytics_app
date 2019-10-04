@@ -326,7 +326,7 @@ class Charts extends Component {
       : '';
     token = tokenCookie;
     if (tokenCookie === '') {
-      window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
+      window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/login';
     }
     this.state = {
       relatorios: [],
@@ -367,7 +367,7 @@ class Charts extends Component {
   async initialize() {
     const Authorization = `Bearer ${token}`;
     await axios
-      .get('https://vendas-analytics-api.herokuapp.com/api/dashboard/vendas-por-periodo', {
+      .get('https://vendas-analytics-api-postgres.herokuapp.com/api/dashboard/vendas-por-periodo', {
         headers: { Authorization },
       })
       .then(res => {
@@ -384,12 +384,12 @@ class Charts extends Component {
       })
       .catch(error => {
         if (error.message.includes('401')) {
-          window.location.href = 'https://vendas-analytics-app.herokuapp.com/#/login';
+          window.location.href = 'https://vendas-analytics-app-hom.herokuapp.com/#/login';
         }
       });
 
     await axios
-      .get('https://vendas-analytics-api.herokuapp.com/api/analytics/vendas-por-categoria', {
+      .get('https://vendas-analytics-api-postgres.herokuapp.com/api/analytics/vendas-por-categoria', {
         headers: { Authorization },
       })
       .then(res => {
@@ -401,7 +401,7 @@ class Charts extends Component {
       });
 
     await axios
-      .get('https://vendas-analytics-api.herokuapp.com/api/analytics/geral-produtos', {
+      .get('https://vendas-analytics-api-postgres.herokuapp.com/api/analytics/geral-produtos', {
         headers: { Authorization },
       })
       .then(res => {
@@ -413,7 +413,7 @@ class Charts extends Component {
       });
 
     await axios
-      .get('https://vendas-analytics-api.herokuapp.com/api/analytics/geral-regioes', {
+      .get('https://vendas-analytics-api-postgres.herokuapp.com/api/analytics/geral-regioes', {
         headers: { Authorization },
       })
       .then(res => {
@@ -429,7 +429,7 @@ class Charts extends Component {
       });
 
     await axios
-      .get('https://vendas-analytics-api.herokuapp.com/api/analytics/geral-fornecedores', {
+      .get('https://vendas-analytics-api-postgres.herokuapp.com/api/analytics/geral-fornecedores', {
         headers: { Authorization },
       })
       .then(res => {
