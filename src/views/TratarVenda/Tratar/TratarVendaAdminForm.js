@@ -163,6 +163,7 @@ class TratarVendaFormAdmin extends Component {
     if (!validate(this.state.cpf)) {
       this.setState({
         cpfInvalidoMessage: true,
+        isPostLoading: false
       });
     } else {
       this.toggle();
@@ -494,6 +495,7 @@ class TratarVendaFormAdmin extends Component {
                             <Input
                               type="email"
                               id="email"
+                              required
                               name="email"
                               placeholder="Email"
                               autoComplete="email"
@@ -513,6 +515,7 @@ class TratarVendaFormAdmin extends Component {
                               mask="999.999.999-99"
                               tag={InputMask}
                               id="cpf"
+                              required
                               name="cpf"
                               placeholder="CPF"
                               autoComplete="cpf"
