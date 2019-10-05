@@ -326,6 +326,7 @@ class UsuarioForm extends Component {
                       type="email"
                       id="email"
                       name="email"
+                      required
                       placeholder="Email"
                       autoComplete="email"
                       value={this.state.email}
@@ -342,6 +343,7 @@ class UsuarioForm extends Component {
                     <Input
                       type="select"
                       name="cliente"
+                      required
                       id="cliente"
                       value={this.state.cliente}
                       onChange={e => this.onChange(e)}
@@ -363,6 +365,7 @@ class UsuarioForm extends Component {
                       type="password"
                       id="senha"
                       name="senha"
+                      required
                       placeholder="Senha"
                       autoComplete="email"
                       value={this.state.senha}
@@ -380,6 +383,7 @@ class UsuarioForm extends Component {
                       <Input
                         type="select"
                         name="usuarioProprietario"
+                        required
                         id="usuarioProprietario"
                         value={this.state.usuarioProprietario}
                         onChange={e => this.onChange(e)}
@@ -402,6 +406,7 @@ class UsuarioForm extends Component {
                         type="select"
                         name="situacao"
                         id="permissoesUsuario"
+                        required
                         value={this.state.situacao}
                         onChange={e => this.onChange(e)}
                       >
