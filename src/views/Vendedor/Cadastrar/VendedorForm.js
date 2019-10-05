@@ -360,6 +360,7 @@ class VendedorForm extends Component {
                       type="email"
                       id="email"
                       name="email"
+                      required
                       placeholder="Email"
                       autoComplete="email"
                       value={this.state.email}
@@ -380,6 +381,7 @@ class VendedorForm extends Component {
                       tag={InputMask}
                       name="cpf"
                       placeholder="CPF"
+                      required
                       autoComplete="cpf"
                       value={this.state.cpf}
                       onChange={e => this.onChange(e)}
@@ -402,6 +404,7 @@ class VendedorForm extends Component {
                     <Input
                       type="text"
                       id="rg"
+                      required
                       name="rg"
                       placeholder="RG"
                       autoComplete="rg"
@@ -421,6 +424,7 @@ class VendedorForm extends Component {
                       dateFormat="dd/MM/yyyy"
                       selected={this.state.startDate}
                       selectsStart
+                      required
                       maxDate={
                         new Date(
                           new Date().getFullYear() - 18,
@@ -443,6 +447,7 @@ class VendedorForm extends Component {
                       type="telefone"
                       id="telefone"
                       name="telefone"
+                      required
                       placeholder="Telefone"
                       autoComplete="telefone"
                       value={this.state.telefone}

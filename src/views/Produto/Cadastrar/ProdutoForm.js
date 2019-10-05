@@ -234,6 +234,7 @@ class ProdutoForm extends Component {
                   <Col xs="12" md="9">
                     <Input
                       type="text"
+                      required
                       id="descricao-input"
                       name="descricao"
                       placeholder="Descrição"
@@ -254,6 +255,7 @@ class ProdutoForm extends Component {
                       type="number"
                       id="descricao-input"
                       name="preco"
+                      required
                       placeholder="Preço"
                       autoComplete="descricao"
                       value={this.state.preco}

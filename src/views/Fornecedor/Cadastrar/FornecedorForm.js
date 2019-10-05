@@ -240,6 +240,7 @@ class FornecedorForm extends Component {
                     <Input
                       type="text"
                       id="descricao-input"
+                      required
                       name="nomeFantasia"
                       placeholder="Nome Fantasia"
                       autoComplete="descricao"
@@ -260,6 +261,7 @@ class FornecedorForm extends Component {
                       id="descricao-input"
                       name="cnpj"
                       placeholder="CNPJ"
+                      required
                       autoComplete="descricao"
                       mask="99.999.999/9999-99"
                       tag={InputMask}
@@ -283,6 +285,7 @@ class FornecedorForm extends Component {
                   <Col xs="12" md="9">
                     <Input
                       type="text"
+                      required
                       id="descricao-input"
                       name="endereco"
                       placeholder="Endereço"
