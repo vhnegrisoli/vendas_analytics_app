@@ -223,7 +223,7 @@ class ProdutoForm extends Component {
                       placeholder="Nome do Produto"
                       value={this.state.nomeProduto}
                       onChange={e => this.onChange(e)}
-                      pattern="\S+"
+                      pattern="^[^\s].+[^\s]$"
                     />
                     <FormText color="muted">Digite o nome do produto.</FormText>
                   </Col>
@@ -236,7 +236,7 @@ class ProdutoForm extends Component {
                     <Input
                       type="text"
                       required
-                      pattern="\S+"
+                      pattern="^[^\s].+[^\s]$"
                       id="descricao-input"
                       name="descricao"
                       placeholder="Descrição"
@@ -254,7 +254,7 @@ class ProdutoForm extends Component {
                   </Col>
                   <Col xs="12" md="9">
                     <Input
-                      pattern="\S+"
+                      pattern="^[^\s].+[^\s]$"
                       type="number"
                       id="descricao-input"
                       name="preco"
@@ -277,7 +277,7 @@ class ProdutoForm extends Component {
                       type="select"
                       name="categoria"
                       required
-                      pattern="\S+"
+                      pattern="^[^\s].+[^\s]$"
                       id="select"
                       value={this.state.categoria}
                       onChange={e => this.onChange(e)}
@@ -300,7 +300,7 @@ class ProdutoForm extends Component {
                       type="select"
                       name="fornecedor"
                       required
-                      pattern="\S+"
+                      pattern="^[^\s].+[^\s]$"
                       id="select"
                       value={this.state.fornecedor}
                       onChange={e => this.onChange(e)}

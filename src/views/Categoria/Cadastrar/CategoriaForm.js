@@ -189,7 +189,7 @@ class CategoriaForm extends Component {
                       type="text"
                       id="descricao"
                       required
-                      pattern="\S+"
+                      pattern="^[^\s].+[^\s]$"
                       name="descricao"
                       placeholder="Descrição."
                       value={this.state.descricao}

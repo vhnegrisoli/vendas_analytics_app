@@ -342,7 +342,7 @@ class VendedorForm extends Component {
                     <Input
                       type="text"
                       id="nome"
-                      pattern="\S+"
+                      pattern="^[^\s].+[^\s]$"
                       value={this.state.nome}
                       onChange={e => this.onChange(e)}
                       required
@@ -362,7 +362,7 @@ class VendedorForm extends Component {
                       id="email"
                       name="email"
                       required
-                      pattern="\S+"
+                      pattern="^[^\s].+[^\s]$"
                       placeholder="Email"
                       autoComplete="email"
                       value={this.state.email}
@@ -382,7 +382,7 @@ class VendedorForm extends Component {
                       mask="999.999.999-99"
                       tag={InputMask}
                       name="cpf"
-                      pattern="\S+"
+                      pattern="^[^\s].+[^\s]$"
                       placeholder="CPF"
                       required
                       autoComplete="cpf"
@@ -408,7 +408,7 @@ class VendedorForm extends Component {
                       type="text"
                       id="rg"
                       required
-                      pattern="\S+"
+                      pattern="^[^\s].+[^\s]$"
                       name="rg"
                       placeholder="RG"
                       autoComplete="rg"
@@ -429,7 +429,7 @@ class VendedorForm extends Component {
                       selected={this.state.startDate}
                       selectsStart
                       required
-                      pattern="\S+"
+                      pattern="^[^\s].+[^\s]$"
                       maxDate={
                         new Date(
                           new Date().getFullYear() - 18,
@@ -452,7 +452,7 @@ class VendedorForm extends Component {
                       type="telefone"
                       id="telefone"
                       name="telefone"
-                      pattern="\S+"
+                      pattern="^[^\s].+[^\s]$"
                       required
                       placeholder="Telefone"
                       autoComplete="telefone"
@@ -476,7 +476,7 @@ class VendedorForm extends Component {
                       mask="99.999-999"
                       tag={InputMask}
                       required
-                      pattern="\S+"
+                      pattern="^[^\s].+[^\s]$"
                       name="cep"
                       placeholder="CEP"
                       value={this.state.cep}
@@ -499,7 +499,7 @@ class VendedorForm extends Component {
                       type="text"
                       id="rua"
                       required
-                      pattern="\S+"
+                      pattern="^[^\s].+[^\s]$"
                       name="rua"
                       placeholder="Rua"
                       value={this.state.rua}
@@ -517,7 +517,7 @@ class VendedorForm extends Component {
                       type="number"
                       id="numero"
                       required
-                      pattern="\S+"
+                      pattern="^[^\s].+[^\s]$"
                       name="numero"
                       placeholder="Número"
                       value={this.state.numero}
@@ -534,7 +534,7 @@ class VendedorForm extends Component {
                   <Col xs="12" md="9">
                     <Input
                       type="text"
-                      pattern="\S+"
+                      pattern="^[^\s].+[^\s]$"
                       id="complemento"
                       name="complemento"
                       placeholder="Complemento"
@@ -552,7 +552,7 @@ class VendedorForm extends Component {
                     <Input
                       type="text"
                       id="cidade"
-                      pattern="\S+"
+                      pattern="^[^\s].+[^\s]$"
                       required
                       name="cidade"
                       value={this.state.cidade}
@@ -568,7 +568,7 @@ class VendedorForm extends Component {
                   </Col>
                   <Col xs="12" md="9">
                     <Input
-                      pattern="\S+"
+                      pattern="^[^\s].+[^\s]$"
                       type="select"
                       name="estado"
                       onClick={this.handleChange.bind(this)}
