@@ -481,7 +481,7 @@ class TratarVendaFormAdmin extends Component {
                               value={this.state.nome}
                               onChange={e => this.onChange(e)}
                               required
-                              pattern="\S+"
+                              pattern="^[^\s].+[^\s]$"
                               name="nome"
                               placeholder="Nome completo"
                             />
@@ -497,7 +497,7 @@ class TratarVendaFormAdmin extends Component {
                               type="email"
                               id="email"
                               required
-                              pattern="\S+"
+                              pattern="^[^\s].+[^\s]$"
                               name="email"
                               placeholder="Email"
                               autoComplete="email"
@@ -518,7 +518,7 @@ class TratarVendaFormAdmin extends Component {
                               tag={InputMask}
                               id="cpf"
                               required
-                              pattern="\S+"
+                              pattern="^[^\s].+[^\s]$"
                               name="cpf"
                               placeholder="CPF"
                               autoComplete="cpf"
