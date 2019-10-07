@@ -309,6 +309,7 @@ class UsuarioForm extends Component {
                       type="text"
                       id="nome"
                       required
+                      pattern="^[^\s].+[^\s]$"
                       name="nome"
                       placeholder="Nome completo"
                       value={this.state.nome}
@@ -325,6 +326,7 @@ class UsuarioForm extends Component {
                     <Input
                       type="email"
                       id="email"
+                      pattern="^[^\s].+[^\s]$"
                       name="email"
                       required
                       placeholder="Email"
@@ -363,6 +365,7 @@ class UsuarioForm extends Component {
                   <Col xs="12" md="9">
                     <Input
                       type="password"
+                      pattern="^[^\s].+[^\s]$"
                       id="senha"
                       name="senha"
                       required
