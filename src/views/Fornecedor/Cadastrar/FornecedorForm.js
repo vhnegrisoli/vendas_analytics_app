@@ -224,6 +224,7 @@ class FornecedorForm extends Component {
                       type="text"
                       id="text-input"
                       required
+                      pattern="\S+"
                       name="razaoSocial"
                       placeholder="Razão social"
                       value={this.state.razaoSocial}
@@ -241,6 +242,7 @@ class FornecedorForm extends Component {
                       type="text"
                       id="descricao-input"
                       required
+                      pattern="\S+"
                       name="nomeFantasia"
                       placeholder="Nome Fantasia"
                       autoComplete="descricao"
@@ -262,6 +264,7 @@ class FornecedorForm extends Component {
                       name="cnpj"
                       placeholder="CNPJ"
                       required
+                      pattern="\S+"
                       autoComplete="descricao"
                       mask="99.999.999/9999-99"
                       tag={InputMask}
@@ -286,6 +289,7 @@ class FornecedorForm extends Component {
                     <Input
                       type="text"
                       required
+                      pattern="\S+"
                       id="descricao-input"
                       name="endereco"
                       placeholder="Endereço"
