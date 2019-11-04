@@ -20,7 +20,6 @@ import ReactLoading from 'react-loading';
 import { withGlobalState } from 'react-globally';
 import logo from '../../assets/img/brand/logo1.svg';
 import { bake_cookie, delete_cookie } from 'sfcookies';
-import { debug } from 'util';
 
 const getTokenUrl = 'https://vendas-analytics-api.herokuapp.com/oauth/token';
 const getAuthenticatedUser = 'https://vendas-analytics-api.herokuapp.com/api/autenticacao/usuario-logado';
@@ -118,7 +117,7 @@ class Login extends Component {
     })
       .then(res => {
         if (res.status === 200) {
-          if (res.data.ultimoAcesso === null && res.data.senha === 'alterar') {
+          if (res.data.ultimoAcesso === null) {
             window.location.href = urlAlterarSenha + userId;
           } else {
             this.atualizarUltimoAcesso(res.data.id, token);
