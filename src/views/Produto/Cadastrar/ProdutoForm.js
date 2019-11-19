@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { Component } from "react";
+import axios from "axios";
 import {
   Button,
   Card,
@@ -10,36 +10,36 @@ import {
   FormGroup,
   FormText,
   Input,
-  Label,
-} from 'reactstrap';
-import ReactLoading from 'react-loading';
+  Label
+} from "reactstrap";
+import ReactLoading from "react-loading";
 
-const urlListarprodutos = 'http://localhost:3000/#/produtos/listar';
-let token = '';
-let Authorization = '';
+const urlListarprodutos = "http://localhost:3000/#/produtos/listar";
+let token = "";
+let Authorization = "";
 class ProdutoForm extends Component {
   constructor(props) {
     super(props);
-    let tokenCookie = document.cookie.includes('token')
+    let tokenCookie = document.cookie.includes("token")
       ? document.cookie
-          .split('token=')[1]
-          .replace('"', '')
-          .replace('"', '')
-          .split(';')[0]
-      : '';
-    let permissao = document.cookie.includes('permissao')
+          .split("token=")[1]
+          .replace('"', "")
+          .replace('"', "")
+          .split(";")[0]
+      : "";
+    let permissao = document.cookie.includes("permissao")
       ? document.cookie
-          .split('permissao=')[1]
-          .replace('"', '')
-          .replace('"', '')
-          .split(';')[0]
-      : '';
+          .split("permissao=")[1]
+          .replace('"', "")
+          .replace('"', "")
+          .split(";")[0]
+      : "";
     token = tokenCookie;
-    if (permissao === 'USER') {
-      window.location.href = 'http://localhost:3000/#/403';
+    if (permissao === "USER") {
+      window.location.href = "http://localhost:3000/#/403";
     }
-    if (tokenCookie === '') {
-      window.location.href = 'http://localhost:3000/#/login';
+    if (tokenCookie === "") {
+      window.location.href = "http://localhost:3000/#/login";
     }
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
@@ -49,12 +49,12 @@ class ProdutoForm extends Component {
       timeout: 300,
       categorias: [],
       fornecedores: [],
-      nomeProduto: '',
+      nomeProduto: "",
       preco: 0.0,
-      descricao: '',
-      categoria: '',
-      fornecedor: '',
-      isPostLoading: false,
+      descricao: "",
+      categoria: "",
+      fornecedor: "",
+      isPostLoading: false
     };
     Authorization = `Bearer ${token}`;
     this.initialize();
@@ -63,56 +63,59 @@ class ProdutoForm extends Component {
   async initialize() {
     if (this.getUrlParameter()) {
       await axios
-        .get('http://localhost:8080/api/produtos/buscar/' + this.getUrlParameter(), {
-          headers: { Authorization },
-        })
+        .get(
+          "http://localhost:8080/api/produtos/buscar/" + this.getUrlParameter(),
+          {
+            headers: { Authorization }
+          }
+        )
         .then(res => {
           this.setState({
             nomeProduto: res.data.nomeProduto,
             descricao: res.data.descricao,
             preco: res.data.preco,
             fornecedor: res.data.fornecedor.id,
-            categoria: res.data.categoria.id,
+            categoria: res.data.categoria.id
           });
         })
         .catch(error => {
-          if (error.message.includes('401')) {
-            window.location.href = 'http://localhost:3000/#/login';
+          if (error.message.includes("401")) {
+            window.location.href = "http://localhost:3000/#/login";
           }
-          if (error.message.includes('404')) {
-            window.location.href = 'http://localhost:3000/#/produtos/listar';
+          if (error.message.includes("404")) {
+            window.location.href = "http://localhost:3000/#/produtos/listar";
           }
         });
     }
 
     await axios
-      .get('http://localhost:8080/api/categorias/todas', {
-        headers: { Authorization },
+      .get("http://localhost:8080/api/categorias/todas", {
+        headers: { Authorization }
       })
       .then(res => {
         this.setState({
-          categorias: res.data,
+          categorias: res.data
         });
       });
 
     await axios
-      .get('http://localhost:8080/api/fornecedores/todos', {
-        headers: { Authorization },
+      .get("http://localhost:8080/api/fornecedores/todos", {
+        headers: { Authorization }
       })
       .then(res => {
         this.setState({
-          fornecedores: res.data,
+          fornecedores: res.data
         });
       });
   }
 
   getUrlParameter() {
-    var url = window.location.toString().split('/');
+    var url = window.location.toString().split("/");
     var id = url[url.length - 1];
     if (!isNaN(id)) {
       return parseInt(url[url.length - 1]);
     } else {
-      return '';
+      return "";
     }
   }
 
@@ -133,11 +136,11 @@ class ProdutoForm extends Component {
       descricao: this.state.descricao,
       preco: this.state.preco,
       fornecedor: { id: this.state.fornecedor },
-      categoria: { id: this.state.categoria },
+      categoria: { id: this.state.categoria }
     };
     axios
-      .post('http://localhost:8080/api/produtos/salvar', editar, {
-        headers: { Authorization },
+      .post("http://localhost:8080/api/produtos/salvar", editar, {
+        headers: { Authorization }
       })
       .then(res => {
         if (res.status === 200) {
@@ -149,7 +152,7 @@ class ProdutoForm extends Component {
       .catch(error => {
         this.setState({ isPostLoading: false });
         this.setState = {
-          error: true,
+          error: true
         };
       });
   }
@@ -157,17 +160,17 @@ class ProdutoForm extends Component {
   salvar() {
     axios
       .post(
-        'http://localhost:8080/api/produtos/salvar',
+        "http://localhost:8080/api/produtos/salvar",
         {
           nomeProduto: this.state.nomeProduto,
           descricao: this.state.descricao,
           preco: this.state.preco,
           fornecedor: { id: this.state.fornecedor },
-          categoria: { id: this.state.categoria },
+          categoria: { id: this.state.categoria }
         },
         {
-          headers: { Authorization },
-        },
+          headers: { Authorization }
+        }
       )
       .then(res => {
         if (res.status === 200) {
@@ -179,14 +182,14 @@ class ProdutoForm extends Component {
       .catch(error => {
         this.setState({ isPostLoading: false });
         this.setState = {
-          error: true,
+          error: true
         };
       });
   }
 
   onChange = e => {
     this.setState({
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     });
   };
 
@@ -209,7 +212,11 @@ class ProdutoForm extends Component {
               <strong>Produtos </strong> - Cadastrar
             </CardHeader>
             <CardBody>
-              <Form id="cliente-form" onSubmit={e => this.onSubmit(e)} className="form-horizontal">
+              <Form
+                id="cliente-form"
+                onSubmit={e => this.onSubmit(e)}
+                className="form-horizontal"
+              >
                 <FormGroup row>
                   <Col md="3">
                     <Label htmlFor="text-input">Nome do Produto*</Label>
@@ -244,7 +251,9 @@ class ProdutoForm extends Component {
                       value={this.state.descricao}
                       onChange={e => this.onChange(e)}
                     />
-                    <FormText className="help-block">Adicione uma breve descrição.</FormText>
+                    <FormText className="help-block">
+                      Adicione uma breve descrição.
+                    </FormText>
                   </Col>
                 </FormGroup>
 
@@ -258,13 +267,16 @@ class ProdutoForm extends Component {
                       type="number"
                       id="descricao-input"
                       name="preco"
+                      step=".01"
                       required
                       placeholder="Preço"
                       autoComplete="descricao"
                       value={this.state.preco}
                       onChange={e => this.onChange(e)}
                     />
-                    <FormText className="help-block">Informe o preço do produto.</FormText>
+                    <FormText className="help-block">
+                      Informe o preço do produto.
+                    </FormText>
                   </Col>
                 </FormGroup>
 
@@ -282,9 +294,13 @@ class ProdutoForm extends Component {
                       value={this.state.categoria}
                       onChange={e => this.onChange(e)}
                     >
-                      <option value="0">Por favor, selecione uma categoria:</option>
+                      <option value="0">
+                        Por favor, selecione uma categoria:
+                      </option>
                       {this.state.categorias.map(categoria => (
-                        <option value={categoria.id}>{categoria.descricao}</option>
+                        <option value={categoria.id}>
+                          {categoria.descricao}
+                        </option>
                       ))}
                     </Input>
                   </Col>
@@ -305,16 +321,20 @@ class ProdutoForm extends Component {
                       value={this.state.fornecedor}
                       onChange={e => this.onChange(e)}
                     >
-                      <option value="0">Por favor, selecione o fornecedor:</option>
+                      <option value="0">
+                        Por favor, selecione o fornecedor:
+                      </option>
                       {this.state.fornecedores.map(fornecedor => (
-                        <option value={fornecedor.id}>{fornecedor.nomeFantasia}</option>
+                        <option value={fornecedor.id}>
+                          {fornecedor.nomeFantasia}
+                        </option>
                       ))}
                     </Input>
                   </Col>
                 </FormGroup>
                 <FormGroup row />
                 {this.state.isPostLoading ? (
-                  <ReactLoading type={'spin'} color={'#59B459'} />
+                  <ReactLoading type={"spin"} color={"#59B459"} />
                 ) : (
                   <Button type="submit" size="sm" color="success">
                     <i className="fa fa-dot-circle-o" /> Cadastrar
