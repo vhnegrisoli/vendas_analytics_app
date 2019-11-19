@@ -256,6 +256,7 @@ class ProdutoForm extends Component {
                     <Input
                       pattern="^[^\s].+[^\s]$"
                       type="number"
+                      step=".01"
                       id="descricao-input"
                       name="preco"
                       required
